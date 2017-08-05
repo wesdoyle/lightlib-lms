@@ -1,0 +1,203 @@
+﻿.logo{
+    font-family: "Coda";
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.logo > a {
+    color: #ddd; 
+    text-decoration: none;
+    transition-duration: 0.5s;
+}
+
+.logo > a:hover{
+    color: #fff; 
+    transition: ease;
+    text-decoration: none;
+    transition-duration: 0.5s;
+}
+
+.page-content{
+    padding: 20px;
+    margin: 10px auto;
+}
+
+.page-heading{
+    color: #e9e8e7;
+}
+
+.splash{
+    background-image: url("/images/catalog.png");
+    background-repeat: no-repeat;
+    min-height: 200px;
+}
+
+.card-icon{
+    color: #777;
+    font-size: 40px;
+    padding: 24px;
+    -webkit-border-radius: 1100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    vertical-align: middle;
+    width: 60px;
+    height: 60px;
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    -o-transition: .5s;
+    transition: .5s;
+}
+
+.icon-wrapper {
+    display: table-cell;
+}
+
+.demo-card-square.mdl-card {
+    width: 320px;
+    height: 320px;
+}
+
+.demo-card-square > .mdl-card__title {
+    color: #fff;
+}
+
+.homeLabel{
+    background-color: rgba(0,0,0,0.3);
+    padding: 4px;
+}
+
+#catalog {
+    background: url('/images/books.jpg') bottom right 15% no-repeat #555;
+}
+
+#catalogIndexTable {
+    font-size: 1.3em;
+}
+
+#catalogIndexTable td{
+    vertical-align:middle;
+}
+
+#catalogIndexTable tr:hover{
+    background-color: #eee;
+}
+
+#patrons{
+    background: url('/images/patron.jpeg') bottom left 15% no-repeat #555;
+}
+
+.branchInfo{
+    padding-top: 30px;
+}
+
+#branches{
+    background: url('/images/bldg.jpeg') bottom right 15% no-repeat #555;
+}
+
+#assets{
+    margin: 0 auto;
+}
+
+.customTable td {
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.strongTd{
+    font-weight: bold;
+}
+
+.customTable th {
+    text-align: left;
+    color: black;
+    font-size: 1.3em;
+}
+
+.imageCell {
+    width: 128px;
+    padding: 10px;
+}
+
+#assetsTable td{
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.authorLabel{
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.titleLabel{
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+#itemTitle{
+    font-size: 2.3em;
+}
+
+#itemAuthor{
+    font-size: 1.6em;
+}
+
+#itemStatus{
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+#itemType{
+    font-size: 1.6em;
+    color: #888;
+}
+
+.itemLabel{
+    font-weight:bold;
+}
+
+
+.itemValue{
+    text-align:right;
+    font-size: 0.8em;
+}
+
+.availability{
+    padding-top: 20px;
+    font-size: 1.2em;
+}
+
+.detailImage{
+    width: 200px;
+    padding-bottom: 6px;
+}
+
+.detailInfo{
+    padding: 10px;
+    font-size: 1.3em;
+    color: #555;
+}
+
+.detailHeading{
+    padding: 10px;
+}
+
+#branchDescription{
+    width: 500px;
+    padding: 18px 0 12px 4px;
+}
+
+.branchContact{
+    padding: 12px 0 16px 0;
+    font-size: 1.2em;
+}
+
+#patronHasFees{
+    color: #c62222;
+    font-weight: bold;
+}
+
+#patronNoFees{
+    color: #2f6fc7;
+    font-weight: bold;
+}
