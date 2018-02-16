@@ -1,0 +1,8 @@
+.vs/
+Library/bin/*
+Library/obj/*
+LibraryData/bin/*
+LibraryData/obj/*
+LibraryService/bin/*
+LibraryService/obj/*
+Library/Scaffolding*
