@@ -8,7 +8,7 @@ namespace Library.Tests
         [Test]
         public void UpdateItemStatusToCheckedOut_When_ItemCheckedOut()
         {
-
+            Assert.Fail("Finish test");
         }
     }
 }
