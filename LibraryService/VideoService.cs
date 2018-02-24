@@ -12,7 +12,7 @@ namespace LibraryService
         // save that off into a private field where we can store the dbContext.
         // then, implment IBook interface.
 
-        private LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context; // private field to store the context.
 
         public VideoService(LibraryDbContext context)
         {
