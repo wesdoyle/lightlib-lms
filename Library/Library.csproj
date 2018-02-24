@@ -9,33 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\css\styles.css" />
-    <Content Include="wwwroot\images\1.png" />
-    <Content Include="wwwroot\images\2.png" />
-    <Content Include="wwwroot\images\3.png" />
-    <Content Include="wwwroot\images\bldg.jpeg" />
-    <Content Include="wwwroot\images\books.jpg" />
-    <Content Include="wwwroot\images\catalog.png" />
-    <Content Include="wwwroot\images\dracula.png" />
-    <Content Include="wwwroot\images\emma.png" />
-    <Content Include="wwwroot\images\janeeyre.png" />
-    <Content Include="wwwroot\images\lake1.png" />
-    <Content Include="wwwroot\images\lib.png" />
-    <Content Include="wwwroot\images\lib1.png" />
-    <Content Include="wwwroot\images\libraries\1.png" />
-    <Content Include="wwwroot\images\libraries\2.png" />
-    <Content Include="wwwroot\images\libraries\3.png" />
-    <Content Include="wwwroot\images\mobydick.png" />
-    <Content Include="wwwroot\images\mrsdalloway.png" />
-    <Content Include="wwwroot\images\nocover.png" />
-    <Content Include="wwwroot\images\patron.jpeg" />
-    <Content Include="wwwroot\images\patron1.jpeg" />
-    <Content Include="wwwroot\images\republic.png" />
-    <Content Include="wwwroot\images\thewaves.png" />
-    <Content Include="wwwroot\images\tothelighthouse.png" />
-    <Content Include="wwwroot\images\ulysses.png" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
