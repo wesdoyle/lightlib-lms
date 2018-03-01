@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using LibraryData.Models;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using LibraryData;
+using LibraryData.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryService
 {
     public class LibraryAssetService : ILibraryAsset
     {
-        private LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context; // private field to store the context.
 
         public LibraryAssetService(LibraryDbContext context)
         {
@@ -24,16 +24,16 @@ namespace LibraryService
         public LibraryAsset Get(int id)
         {
             return _context.LibraryAssets
-                .Include(a=>a.Status)
-                .Include(a=>a.Location)
+                .Include(a => a.Status)
+                .Include(a => a.Location)
                 .FirstOrDefault(a => a.Id == id);
         }
 
         public IEnumerable<LibraryAsset> GetAll()
         {
             return _context.LibraryAssets
-                .Include(a=>a.Status)
-                .Include(a=>a.Location);
+                .Include(a => a.Status)
+                .Include(a => a.Location);
         }
 
         public string GetAuthorOrDirector(int id)
@@ -44,10 +44,10 @@ namespace LibraryService
             var isVideo = _context.LibraryAssets.OfType<Video>()
                 .Where(a => a.Id == id).Any();
 
-            return isBook ? 
-                _context.Books.FirstOrDefault(a => a.Id == id).Author : 
-                _context.Videos.FirstOrDefault(a => a.Id == id).Director 
-                ?? "Unknown";
+            return isBook
+                ? _context.Books.FirstOrDefault(a => a.Id == id).Author
+                : _context.Videos.FirstOrDefault(a => a.Id == id).Director
+                  ?? "Unknown";
         }
 
         public LibraryBranch GetCurrentLocation(int id)
@@ -59,31 +59,27 @@ namespace LibraryService
         public string GetDeweyIndex(int id)
         {
             if (_context.Books.Any(a => a.Id == id))
-            {
                 return _context.Books
                     .FirstOrDefault(a => a.Id == id).DeweyIndex;
-            }
 
-            else return "";
+            return "";
         }
 
         public string GetIsbn(int id)
         {
             if (_context.Books.Any(a => a.Id == id))
-            {
                 return _context.Books
                     .FirstOrDefault(a => a.Id == id).ISBN;
-            }
 
-            else return "";
+            return "";
         }
 
         public LibraryCard GetLibraryCardByAssetId(int id)
         {
             return _context.LibraryCards
                 .Where(c => c.Checkouts
-                .Select(a=>a.LibraryAsset)
-                .Select(v => v.Id).Contains(id))
+                    .Select(a => a.LibraryAsset)
+                    .Select(v => v.Id).Contains(id))
                 .FirstOrDefault();
         }
 

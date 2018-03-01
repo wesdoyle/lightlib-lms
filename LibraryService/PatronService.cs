@@ -1,14 +1,14 @@
-﻿using LibraryData;
-using System.Collections.Generic;
-using LibraryData.Models;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LibraryData;
+using LibraryData.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryService
 {
     public class PatronService : IPatron
     {
-        private LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context; // private field to store the context.
 
         public PatronService(LibraryDbContext context)
         {
@@ -32,23 +32,23 @@ namespace LibraryService
         public IEnumerable<Patron> GetAll()
         {
             return _context.Patrons
-                .Include(a=>a.LibraryCard)
-                .Include(a=>a.HomeLibraryBranch);
+                .Include(a => a.LibraryCard)
+                .Include(a => a.HomeLibraryBranch);
             // Eager load this data.
         }
 
         public IEnumerable<CheckoutHistory> GetCheckoutHistory(int patronId)
         {
             var cardId = _context.Patrons
-                .Include(a=>a.LibraryCard)
+                .Include(a => a.LibraryCard)
                 .FirstOrDefault(a => a.Id == patronId)
                 .LibraryCard.Id;
 
             return _context.CheckoutHistories
-                .Include(a=>a.LibraryCard)
-                .Include(a=>a.LibraryAsset)
+                .Include(a => a.LibraryCard)
+                .Include(a => a.LibraryAsset)
                 .Where(a => a.LibraryCard.Id == cardId)
-                .OrderByDescending(a=>a.CheckedOut);
+                .OrderByDescending(a => a.CheckedOut);
         }
 
         public IEnumerable<Checkout> GetCheckouts(int id)
@@ -63,13 +63,13 @@ namespace LibraryService
         public IEnumerable<Hold> GetHolds(int patronId)
         {
             var cardId = _context.Patrons
-                .Include(a=>a.LibraryCard)
+                .Include(a => a.LibraryCard)
                 .FirstOrDefault(a => a.Id == patronId)
                 .LibraryCard.Id;
 
             return _context.Holds
-                .Include(a=>a.LibraryCard)
-                .Include(a=>a.LibraryAsset)
+                .Include(a => a.LibraryCard)
+                .Include(a => a.LibraryAsset)
                 .Where(a => a.LibraryCard.Id == cardId)
                 .OrderByDescending(a => a.HoldPlaced);
         }

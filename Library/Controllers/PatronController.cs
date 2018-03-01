@@ -1,7 +1,7 @@
-﻿using Library.Models.Patron;
+﻿using System.Linq;
+using Library.Models.Patron;
 using LibraryData;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace Library.Controllers
 {
@@ -18,7 +18,7 @@ namespace Library.Controllers
         {
             var allPatrons = _patron.GetAll();
 
-            var patronModels = allPatrons 
+            var patronModels = allPatrons
                 .Select(p => new PatronDetailModel
                 {
                     Id = p.Id,
@@ -29,9 +29,9 @@ namespace Library.Controllers
                     HomeLibrary = p.HomeLibraryBranch.Name
                 }).ToList();
 
-            var model = new PatronIndexModel()
+            var model = new PatronIndexModel
             {
-                Patrons = patronModels 
+                Patrons = patronModels
             };
 
             return View(model);

@@ -1,22 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using LibraryData;
+using LibraryService;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using LibraryData;
-using LibraryService;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Library
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
         public Startup(IConfiguration config)
         {
             Configuration = config;
         }
+
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -24,12 +24,12 @@ namespace Library
             services.AddSingleton(Configuration);
             services.AddScoped<ILibraryCard, LibraryCardService>();
             services.AddScoped<ILibraryBranch, LibraryBranchService>();
-            services.AddScoped<IPatron, PatronService>(); 
-            services.AddScoped<ICheckout, CheckoutService>(); 
-            services.AddScoped<ILibraryAsset, LibraryAssetService>(); 
-            services.AddScoped<IBook, BookService>(); 
-            services.AddScoped<IVideo, VideoService>(); 
-            services.AddScoped<IStatus, StatusService>(); 
+            services.AddScoped<IPatron, PatronService>();
+            services.AddScoped<ICheckout, CheckoutService>();
+            services.AddScoped<ILibraryAsset, LibraryAssetService>();
+            services.AddScoped<IBook, BookService>();
+            services.AddScoped<IVideo, VideoService>();
+            services.AddScoped<IStatus, StatusService>();
 
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));
@@ -55,8 +55,8 @@ namespace Library
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
