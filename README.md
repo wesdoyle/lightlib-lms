@@ -1,6 +1,6 @@
 # LightLib Library Management System
 
-[![Build Status](https://travis-ci.org/wesdoyle/library-management-system.svg?branch=master)](https://travis-ci.org/wesdoyle/library-management-system) [![Coverage Status](https://coveralls.io/repos/github/wesdoyle/library-management-system/badge.svg?branch=master)](https://coveralls.io/github/wesdoyle/library-management-system?branch=master)
+[![Build Status](https://travis-ci.org/wesdoyle/library-management-system.svg?branch=master)](https://travis-ci.org/wesdoyle/library-management-system) [![Test Coverage](https://api.codeclimate.com/v1/badges/1d4483c742ba40b9dc00/test_coverage)](https://codeclimate.com/github/wesdoyle/library-management-system/test_coverage)
 
 A lightweight library management system built in ASP.NET Core 2.0
 
