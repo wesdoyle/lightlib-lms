@@ -660,7 +660,7 @@
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {
         "type": "package"
       },
-      "Microsoft.TestPlatform.ObjectModel/15.6.0": {
+      "Microsoft.TestPlatform.ObjectModel/15.7.0-preview-20180221-13": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
@@ -769,11 +769,11 @@
           }
         }
       },
-      "Microsoft.TestPlatform.TestHost/15.6.0": {
+      "Microsoft.TestPlatform.TestHost/15.7.0-preview-20180221-13": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.DependencyModel": "1.0.3",
-          "Microsoft.TestPlatform.ObjectModel": "15.6.0",
+          "Microsoft.TestPlatform.ObjectModel": "15.7.0-preview-20180221-13",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -3470,7 +3470,8 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "1.1.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "1.1.2",
-          "Microsoft.EntityFrameworkCore.Tools": "1.1.1"
+          "Microsoft.EntityFrameworkCore.Tools": "1.1.1",
+          "Microsoft.NETCore.App": "1.1.2"
         },
         "compile": {
           "bin/placeholder/LibraryData.dll": {}
@@ -3483,7 +3484,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v1.1",
         "dependencies": {
-          "LibraryData": "1.0.0"
+          "LibraryData": "1.0.0",
+          "Microsoft.NETCore.App": "1.1.2",
+          "Microsoft.TestPlatform.TestHost": "15.7.0-preview-20180221-13"
         },
         "compile": {
           "bin/placeholder/LibraryService.dll": {}
@@ -4094,10 +4097,10 @@
         "runtime.json"
       ]
     },
-    "Microsoft.TestPlatform.ObjectModel/15.6.0": {
-      "sha512": "p9Ln24HvUASoyS03rpGJqj1JXfMosQXJuT+rt4vxktFjegVK6AAcLQLyk9aUB/SetaiB9KB/V/6YRz8tlxqeGQ==",
+    "Microsoft.TestPlatform.ObjectModel/15.7.0-preview-20180221-13": {
+      "sha512": "zqq2RArz6DPIRAFrmNGE/jzB67I7FYFZWYu6sp5qIw6T0FUMibQua6/9ykTuxt6nYd81JXwYQ5yQE7E380Ee6Q==",
       "type": "package",
-      "path": "microsoft.testplatform.objectmodel/15.6.0",
+      "path": "microsoft.testplatform.objectmodel/15.7.0-preview-20180221-13",
       "files": [
         "lib/net451/Microsoft.TestPlatform.CoreUtilities.dll",
         "lib/net451/Microsoft.TestPlatform.PlatformAbstractions.dll",
@@ -4160,14 +4163,14 @@
         "lib/netstandard1.5/zh-Hans/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
         "lib/netstandard1.5/zh-Hant/Microsoft.TestPlatform.CoreUtilities.resources.dll",
         "lib/netstandard1.5/zh-Hant/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "microsoft.testplatform.objectmodel.15.6.0.nupkg.sha512",
+        "microsoft.testplatform.objectmodel.15.7.0-preview-20180221-13.nupkg.sha512",
         "microsoft.testplatform.objectmodel.nuspec"
       ]
     },
-    "Microsoft.TestPlatform.TestHost/15.6.0": {
-      "sha512": "a72dAct/33fnunyHP2H29MUr/RkqyOXq5KjKLfXlwyAeGmSTo79H4LDanOJ+EZImF/JEYx/FL4SDph080X+4tQ==",
+    "Microsoft.TestPlatform.TestHost/15.7.0-preview-20180221-13": {
+      "sha512": "a7tfGelvozkb5mqLJGhpQjGYEwJ4pNiUTPABmr3ha/aYNN4cO0BpuOWgIecwIHJesSS5dQSLcJu4NKi3y1wn5g==",
       "type": "package",
-      "path": "microsoft.testplatform.testhost/15.6.0",
+      "path": "microsoft.testplatform.testhost/15.7.0-preview-20180221-13",
       "files": [
         "ThirdPartyNotices.txt",
         "build/uap10.0/Microsoft.TestPlatform.TestHost.props",
@@ -4304,7 +4307,7 @@
         "lib/uap10.0/Microsoft.TestPlatform.Utilities.dll",
         "lib/uap10.0/Microsoft.VisualStudio.TestPlatform.Common.dll",
         "lib/uap10.0/testhost.dll",
-        "microsoft.testplatform.testhost.15.6.0.nupkg.sha512",
+        "microsoft.testplatform.testhost.15.7.0-preview-20180221-13.nupkg.sha512",
         "microsoft.testplatform.testhost.nuspec"
       ]
     },
@@ -9808,7 +9811,7 @@
       "FluentAssertions >= 5.1.2",
       "LibraryService >= 1.0.0",
       "Microsoft.NETCore.App >= 1.1.2",
-      "Microsoft.TestPlatform.TestHost >= 15.6.0",
+      "Microsoft.TestPlatform.TestHost >= 15.7.0-preview-20180221-13",
       "Moq >= 4.8.2",
       "NUnit >= 3.9.0",
       "NUnit.Extension.NUnitProjectLoader >= 3.6.0",
@@ -9822,6 +9825,9 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
       "projectUniqueName": "C:\\Users\\Wes\\Projects\\library-management-system\\Library.Tests\\Library.Tests.csproj",
       "projectName": "Library.Tests",
@@ -9838,6 +9844,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -9863,14 +9870,13 @@
             "version": "[5.1.2, )"
           },
           "Microsoft.NETCore.App": {
-            "suppressParent": "All",
             "target": "Package",
             "version": "[1.1.2, )",
             "autoReferenced": true
           },
           "Microsoft.TestPlatform.TestHost": {
             "target": "Package",
-            "version": "[15.6.0, )"
+            "version": "[15.7.0-preview-20180221-13, )"
           },
           "Moq": {
             "target": "Package",
