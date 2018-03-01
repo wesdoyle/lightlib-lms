@@ -1,4 +1,5 @@
 .vs/
+.sonarqube/
 Library/bin/*
 Library/obj/*
 LibraryData/bin/*
