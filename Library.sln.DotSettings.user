@@ -1,0 +1,6 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/ContinuousTesting/ScopeCriterion/@EntryValue">z+IxaA8AAAA8AEwAaQBiAHIAYQByAHkALgBUAGUAcwB0AHMAPgA9AAAAQwA6AFwAVQBzAGUAcgBzAFwAVwBlAHMAXABQAHIAbwBqAGUAYwB0AHMAXABsAGkAYgByAGEAcgB5AC0AbQBhAG4AYQBnAGUAbQBlAG4AdAAtAHMAeQBzAHQAZQBtAFwATABpAGIAcgBhAHIAeQAuAFQAZQBzAHQAcwA=</s:String>
+	<s:Int64 x:Key="/Default/Environment/ContinuousTestingSessionDescriptor/GroupingIndex/@EntryValue">0</s:Int64>
+	<s:String x:Key="/Default/Environment/Hierarchy/Build/SolBuilderDuo/UseMsbuildSolutionBuilder/@EntryValue">NewVersion</s:String>
+	
+	</wpf:ResourceDictionary>

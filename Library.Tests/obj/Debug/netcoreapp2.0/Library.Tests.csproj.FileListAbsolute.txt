@@ -1,6 +1,16 @@
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\NUnit3.TestAdapter.dll
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\nunit.engine.netstandard.dll
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\Mono.Cecil.dll
 C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\Library.Tests.deps.json
 C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\Library.Tests.dll
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\Library.Tests.pdb
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\LibraryData.dll
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\LibraryService.dll
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\LibraryService.pdb
+C:\Users\Wes\Projects\library-management-system\Library.Tests\bin\Debug\netcoreapp2.0\LibraryData.pdb
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.csprojResolveAssemblyReference.cache
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.csproj.CoreCompileInputs.cache
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.AssemblyInfoInputs.cache
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.AssemblyInfo.cs
+C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.dll
+C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.pdb

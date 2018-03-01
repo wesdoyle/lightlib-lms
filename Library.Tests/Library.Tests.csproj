@@ -6,10 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.1.2" />
-    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.7.0-preview-20180221-13" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.6.0" />
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="NUnit" Version="3.9.0" />
-    <PackageReference Include="NUnitTestAdapter" Version="2.1.1" />
+    <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
+    <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.7.0" />
+    <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
   </ItemGroup>
 
   <ItemGroup>

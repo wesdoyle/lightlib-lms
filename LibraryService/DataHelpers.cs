@@ -4,10 +4,9 @@ using System.Collections.Generic;
 
 namespace LibraryService
 {
-    public class DataHelpers
+    public static class DataHelpers
     {
-        public static IEnumerable<string> 
-            HumanizeBusinessHours(IEnumerable<BranchHours> branchHours)
+        public static IEnumerable<string> HumanizeBusinessHours(IEnumerable<BranchHours> branchHours)
         {
             var hours = new List<string>();
 
@@ -18,7 +17,7 @@ namespace LibraryService
                 var closeTime = HumanizeTime(time.CloseTime);
                 var timeEntry = $"{day} {openTime} to {closeTime}";
                 hours.Add(timeEntry);
-            };
+            }
 
             return hours;
         }
@@ -30,7 +29,7 @@ namespace LibraryService
 
         private static string HumanizeTime(int time)
         {
-            TimeSpan result = TimeSpan.FromHours(time);
+            var result = TimeSpan.FromHours(time);
             return result.ToString("hh':'mm");
         }
     }

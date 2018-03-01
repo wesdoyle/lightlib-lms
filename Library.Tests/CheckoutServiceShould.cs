@@ -2,10 +2,8 @@
 
 namespace Library.Tests
 {
-    [TestFixture]
-    public class CheckoutServiceShould 
+    public class CheckoutServiceShould
     {
-        [Test]
         public void UpdateItemStatusToCheckedOut_When_ItemCheckedOut()
         {
             Assert.Fail("Finish test");
