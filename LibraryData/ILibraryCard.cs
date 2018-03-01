@@ -1,9 +1,9 @@
-﻿using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface ILibraryCard 
+    public interface ILibraryCard
     {
         IEnumerable<LibraryCard> GetAll();
         LibraryCard Get(int id);

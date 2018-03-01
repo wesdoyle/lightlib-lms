@@ -5,9 +5,9 @@ namespace LibraryData
 {
     public class LibraryDbContext : DbContext
     {
-
         // add a constructor
-        public LibraryDbContext(DbContextOptions options) : base(options) // take the options and pass to the base class constructor (DbContext)
+        public LibraryDbContext(DbContextOptions options) :
+            base(options) // take the options and pass to the base class constructor (DbContext)
         {
             // where will you use this class? Could inject directly into controllers, but
             // we already have an abstraction injected into controllers - the interfaces.

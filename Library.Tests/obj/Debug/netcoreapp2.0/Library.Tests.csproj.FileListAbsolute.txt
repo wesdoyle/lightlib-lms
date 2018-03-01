@@ -15,3 +15,4 @@ C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcorea
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.AssemblyInfo.cs
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.dll
 C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.pdb
+C:\Users\Wes\Projects\library-management-system\Library.Tests\obj\Debug\netcoreapp2.0\Library.Tests.csprojResolveAssemblyReference.cache

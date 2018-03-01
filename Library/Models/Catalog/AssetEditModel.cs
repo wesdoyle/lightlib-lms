@@ -1,5 +1,5 @@
-﻿using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LibraryData.Models;
 
 namespace Library.Models.Catalog
 {

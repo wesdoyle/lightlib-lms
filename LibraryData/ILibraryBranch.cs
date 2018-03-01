@@ -1,9 +1,9 @@
-﻿using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface ILibraryBranch 
+    public interface ILibraryBranch
     {
         IEnumerable<LibraryBranch> GetAll();
         IEnumerable<Patron> GetPatrons(int branchId);

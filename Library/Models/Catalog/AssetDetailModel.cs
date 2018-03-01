@@ -1,5 +1,5 @@
-﻿using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LibraryData.Models;
 
 namespace Library.Models.Catalog
 {
@@ -23,7 +23,7 @@ namespace Library.Models.Catalog
         public IEnumerable<AssetHoldModel> CurrentHolds { get; set; }
     }
 
-    public class AssetHoldModel 
+    public class AssetHoldModel
     {
         public string PatronName { get; set; }
         public string HoldPlaced { get; set; }

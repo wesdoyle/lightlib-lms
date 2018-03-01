@@ -1,9 +1,9 @@
-﻿using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface ILibraryAsset 
+    public interface ILibraryAsset
     {
         IEnumerable<LibraryAsset> GetAll();
         LibraryAsset Get(int id);
