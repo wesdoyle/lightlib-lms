@@ -1,7 +1,7 @@
-﻿using LibraryData;
-using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LibraryData;
+using LibraryData.Models;
 
 namespace LibraryService
 {
@@ -11,7 +11,7 @@ namespace LibraryService
         // save that off into a private field where we can store the dbContext.
         // then, implment IBook interface.
 
-        private LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context; // private field to store the context.
 
         public BookService(LibraryDbContext context)
         {
@@ -21,21 +21,15 @@ namespace LibraryService
         public void Add(Book newBook)
         {
             _context.Add(newBook);
-            _context.SaveChanges(); 
-            // Could move this elsewhere to group multiple add or update operations
-            // into a single transaction, you'll only want to call savechanges once
-            // after all work is complete.
+            _context.SaveChanges();
         }
 
-        public Book Get(int assetId)
+        public Book Get(int id)
         {
-            return _context.Books.FirstOrDefault(book => book.Id == assetId);
+            return _context.Books.FirstOrDefault(book => book.Id == id);
         }
 
-        // Maybe want this to be IQueryable to allow other parts
-        // of the software to perform additional operations for paging, filtering, joining, etc.
-        // in linq.
-        public IEnumerable<Book> GetAll() 
+        public IEnumerable<Book> GetAll()
         {
             return _context.Books;
         }
