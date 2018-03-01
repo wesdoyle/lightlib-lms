@@ -9,13 +9,10 @@ namespace Library.Controllers
 {
     public class PatronController : Controller
     {
-        private IPatron _patron;
+        private readonly IPatron _patron;
 
-        // create a constructor takes branchservice
         public PatronController(IPatron patron)
         {
-            // save branchService param off into a private field 
-            // to have access in the rest of the controller
             _patron = patron;
         }
 
@@ -57,7 +54,7 @@ namespace Library.Controllers
                 OverdueFees = patron.LibraryCard.Fees,
                 LibraryCardId = patron.LibraryCard.Id,
                 Telephone = patron.Telephone,
-                AssetsCheckedOut = _patron.GetCheckouts(id).ToList() ?? new List<Checkout>(),
+                AssetsCheckedOut = _patron.GetCheckouts(id).ToList(),
                 CheckoutHistory = _patron.GetCheckoutHistory(id),
                 Holds = _patron.GetHolds(id)
             };

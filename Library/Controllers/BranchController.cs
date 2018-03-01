@@ -7,7 +7,7 @@ namespace Library.Controllers
 {
     public class BranchController : Controller
     {
-        private ILibraryBranch _branch;
+        private readonly ILibraryBranch _branch;
 
         // create a constructor takes branchservice
         public BranchController(ILibraryBranch branch)

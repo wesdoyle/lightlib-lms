@@ -2,15 +2,14 @@
 using Library.Models.CheckoutModels;
 using LibraryData;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Library.Controllers
 {
     public class CatalogController : Controller
     {
-        private ILibraryAsset _assets;
-        private ICheckout _checkouts;
+        private readonly ILibraryAsset _assets;
+        private readonly ICheckout _checkouts;
 
         // create a constructor
         public CatalogController(ILibraryAsset assets, ICheckout checkouts)
@@ -79,17 +78,7 @@ namespace Library.Controllers
             return View(model);
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         public IActionResult Edit()
-        {
-            return View();
-        }
-
-        public IActionResult Delete()
         {
             return View();
         }
@@ -125,19 +114,19 @@ namespace Library.Controllers
         public IActionResult CheckIn(int id)
         {
             _checkouts.CheckInItem(id);
-            return RedirectToAction("Detail", new { id = id });
+            return RedirectToAction("Detail", new { id });
         }
 
         public IActionResult MarkLost(int id)
         {
             _checkouts.MarkLost(id);
-            return RedirectToAction("Detail", new { id = id });
+            return RedirectToAction("Detail", new { id });
         }
 
         public IActionResult MarkFound(int id)
         {
             _checkouts.MarkFound(id);
-            return RedirectToAction("Detail", new { id = id });
+            return RedirectToAction("Detail", new { id });
         }
 
         [HttpPost]
