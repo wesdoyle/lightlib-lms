@@ -10,8 +10,8 @@ namespace LibraryData
         void Add(Checkout newCheckout);
         IEnumerable<CheckoutHistory> GetCheckoutHistory(int id);
         void PlaceHold(int assetId, int libraryCardId);
-        void CheckoutItem(int assetId, int libraryCardId);
-        void CheckInItem(int assetId);
+        void CheckoutItem(int id, int libraryCardId);
+        void CheckInItem(int id);
         Checkout GetLatestCheckout(int id);
         int GetNumberOfCopies(int id);
         int GetAvailableCopies(int id);

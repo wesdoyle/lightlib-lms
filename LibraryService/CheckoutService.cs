@@ -33,13 +33,13 @@ namespace LibraryService
             return _context.Checkouts;
         }
 
-        public void CheckoutItem(int assetId, int libraryCardId)
+        public void CheckoutItem(int id, int libraryCardId)
         {
-            if (IsCheckedOut(assetId)) return;
+            if (IsCheckedOut(id)) return;
 
             var item = _context.LibraryAssets
                 .Include(a => a.Status)
-                .FirstOrDefault(a => a.Id == assetId);
+                .FirstOrDefault(a => a.Id == id);
 
             _context.Update(item ?? throw new InvalidOperationException());
 
@@ -73,10 +73,10 @@ namespace LibraryService
             _context.SaveChanges();
         }
 
-        public void MarkLost(int assetId)
+        public void MarkLost(int id)
         {
             var item = _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == assetId);
+                .FirstOrDefault(a => a.Id == id);
 
             _context.Update(item ?? throw new InvalidOperationException());
 
@@ -85,10 +85,10 @@ namespace LibraryService
             _context.SaveChanges();
         }
 
-        public void MarkFound(int assetId)
+        public void MarkFound(int id)
         {
             var item = _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == assetId);
+                .FirstOrDefault(a => a.Id == id);
 
             _context.Update(item ?? throw new InvalidOperationException());
             item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
@@ -96,13 +96,13 @@ namespace LibraryService
 
             // remove any existing checkouts on the item
             var checkout = _context.Checkouts
-                .FirstOrDefault(a => a.LibraryAsset.Id == assetId);
+                .FirstOrDefault(a => a.LibraryAsset.Id == id);
             if (checkout != null) _context.Remove(checkout);
 
             // close any existing checkout history
             var history = _context.CheckoutHistories
                 .FirstOrDefault(h =>
-                    h.LibraryAsset.Id == assetId
+                    h.LibraryAsset.Id == id
                     && h.CheckedIn == null);
             if (history != null)
             {
@@ -140,12 +140,12 @@ namespace LibraryService
             _context.SaveChanges();
         }
 
-        public void CheckInItem(int assetId)
+        public void CheckInItem(int id)
         {
             var now = DateTime.Now;
 
             var item = _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == assetId);
+                .FirstOrDefault(a => a.Id == id);
 
             _context.Update(item ?? throw new InvalidOperationException());
 
@@ -153,7 +153,7 @@ namespace LibraryService
             var checkout = _context.Checkouts
                 .Include(c => c.LibraryAsset)
                 .Include(c => c.LibraryCard)
-                .FirstOrDefault(a => a.LibraryAsset.Id == assetId);
+                .FirstOrDefault(a => a.LibraryAsset.Id == id);
             if (checkout != null) _context.Remove(checkout);
 
             // close any existing checkout history
@@ -161,7 +161,7 @@ namespace LibraryService
                 .Include(h => h.LibraryAsset)
                 .Include(h => h.LibraryCard)
                 .FirstOrDefault(h =>
-                    h.LibraryAsset.Id == assetId
+                    h.LibraryAsset.Id == id
                     && h.CheckedIn == null);
             if (history != null)
             {
@@ -173,12 +173,12 @@ namespace LibraryService
             var currentHolds = _context.Holds
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
-                .Where(a => a.LibraryAsset.Id == assetId);
+                .Where(a => a.LibraryAsset.Id == id);
 
             // if there are current holds, check out the item to the earliest
             if (currentHolds.Any())
             {
-                CheckoutToEarliestHold(assetId, currentHolds);
+                CheckoutToEarliestHold(id, currentHolds);
                 return;
             }
 
@@ -229,12 +229,12 @@ namespace LibraryService
             return isCheckedOut;
         }
 
-        public string GetCurrentHoldPatron(int holdId)
+        public string GetCurrentHoldPatron(int id)
         {
             var hold = _context.Holds
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
-                .Where(v => v.Id == holdId);
+                .Where(v => v.Id == id);
 
             var cardId = hold
                 .Include(a => a.LibraryCard)
@@ -248,12 +248,12 @@ namespace LibraryService
             return patron.FirstName + " " + patron.LastName;
         }
 
-        public string GetCurrentHoldPlaced(int holdId)
+        public string GetCurrentHoldPlaced(int id)
         {
             var hold = _context.Holds
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
-                .Where(v => v.Id == holdId);
+                .Where(v => v.Id == id);
 
             return hold.Select(a => a.HoldPlaced)
                 .FirstOrDefault().ToString(CultureInfo.InvariantCulture);
