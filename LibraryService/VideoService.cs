@@ -1,18 +1,13 @@
-﻿using LibraryData;
-using LibraryData.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System;
+using LibraryData;
+using LibraryData.Models;
 
 namespace LibraryService
 {
-    public class VideoService : IVideo 
+    public class VideoService : IVideo
     {
-        // need to give the class a constructor that takes a dbContext.
-        // save that off into a private field where we can store the dbContext.
-        // then, implment IBook interface.
-
-        private readonly LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context;
 
         public VideoService(LibraryDbContext context)
         {

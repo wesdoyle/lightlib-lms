@@ -1,13 +1,13 @@
-﻿using LibraryData;
-using System.Collections.Generic;
-using LibraryData.Models;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LibraryData;
+using LibraryData.Models;
 
 namespace LibraryService
 {
-    public class LibraryCardService: ILibraryCard
+    public class LibraryCardService : ILibraryCard
     {
-        private LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context;
 
         public LibraryCardService(LibraryDbContext context)
         {

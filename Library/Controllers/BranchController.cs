@@ -1,7 +1,7 @@
-﻿using Library.Models.Branch;
+﻿using System.Linq;
+using Library.Models.Branch;
 using LibraryData;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace Library.Controllers
 {
@@ -29,7 +29,7 @@ namespace Library.Controllers
                     IsOpen = _branch.IsBranchOpen(br.Id)
                 }).ToList();
 
-            var model = new BranchIndexModel()
+            var model = new BranchIndexModel
             {
                 Branches = branchModels
             };

@@ -1,8 +1,8 @@
-﻿using Library.Models.Catalog;
+﻿using System.Linq;
+using Library.Models.Catalog;
 using Library.Models.CheckoutModels;
 using LibraryData;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace Library.Controllers
 {
@@ -37,7 +37,7 @@ namespace Library.Controllers
                     NumberOfCopies = _checkouts.GetNumberOfCopies(a.Id)
                 }).ToList();
 
-            var model = new AssetIndexModel()
+            var model = new AssetIndexModel
             {
                 Assets = listingResult
             };
@@ -52,7 +52,7 @@ namespace Library.Controllers
             var currentHolds = _checkouts.GetCurrentHolds(id).Select(a => new AssetHoldModel
             {
                 HoldPlaced = _checkouts.GetCurrentHoldPlaced(a.Id),
-                PatronName = _checkouts.GetCurrentHoldPatron(a.Id) 
+                PatronName = _checkouts.GetCurrentHoldPatron(a.Id)
             });
 
             var model = new AssetDetailModel
@@ -87,7 +87,8 @@ namespace Library.Controllers
         {
             var asset = _assets.Get(id);
 
-            var model = new CheckoutModel {
+            var model = new CheckoutModel
+            {
                 AssetId = id,
                 ImageUrl = asset.ImageUrl,
                 Title = asset.Title,
@@ -101,7 +102,8 @@ namespace Library.Controllers
         {
             var asset = _assets.Get(id);
 
-            var model = new CheckoutModel {
+            var model = new CheckoutModel
+            {
                 AssetId = id,
                 ImageUrl = asset.ImageUrl,
                 Title = asset.Title,
@@ -114,33 +116,33 @@ namespace Library.Controllers
         public IActionResult CheckIn(int id)
         {
             _checkouts.CheckInItem(id);
-            return RedirectToAction("Detail", new { id });
+            return RedirectToAction("Detail", new {id});
         }
 
         public IActionResult MarkLost(int id)
         {
             _checkouts.MarkLost(id);
-            return RedirectToAction("Detail", new { id });
+            return RedirectToAction("Detail", new {id});
         }
 
         public IActionResult MarkFound(int id)
         {
             _checkouts.MarkFound(id);
-            return RedirectToAction("Detail", new { id });
+            return RedirectToAction("Detail", new {id});
         }
 
         [HttpPost]
         public IActionResult PlaceCheckout(int assetId, int libraryCardId)
         {
             _checkouts.CheckoutItem(assetId, libraryCardId);
-            return RedirectToAction("Detail", new { id = assetId });
+            return RedirectToAction("Detail", new {id = assetId});
         }
 
         [HttpPost]
         public IActionResult PlaceHold(int assetId, int libraryCardId)
         {
             _checkouts.PlaceHold(assetId, libraryCardId);
-            return RedirectToAction("Detail", new { id = assetId });
+            return RedirectToAction("Detail", new {id = assetId});
         }
     }
 }

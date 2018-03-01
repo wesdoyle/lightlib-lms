@@ -1,8 +1,6 @@
 ﻿using Library.Models.Patron;
 using LibraryData;
-using LibraryData.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Library.Controllers
