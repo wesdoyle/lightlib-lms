@@ -31,7 +31,7 @@ namespace Library.Tests
                 Id = 1234,
             });
 
-            mockSet.Verify(s => s.Add(It.IsAny<Book>()), Times.Once());
+            mockCtx.Verify(s => s.Add(It.IsAny<Book>()), Times.Once());
             mockCtx.Verify(c => c.SaveChanges(), Times.Once());
         }
 
