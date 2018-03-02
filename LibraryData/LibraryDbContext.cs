@@ -5,25 +5,24 @@ namespace LibraryData
 {
     public class LibraryDbContext : DbContext
     {
-        // add a constructor
-        public LibraryDbContext(DbContextOptions options) :
-            base(options) // take the options and pass to the base class constructor (DbContext)
+        public LibraryDbContext()
         {
-            // where will you use this class? Could inject directly into controllers, but
-            // we already have an abstraction injected into controllers - the interfaces.
-            // we should create an interface that can talk to the databse.
         }
 
-        public DbSet<Book> Books { get; set; }
-        public DbSet<Video> Videos { get; set; }
-        public DbSet<Checkout> Checkouts { get; set; }
-        public DbSet<CheckoutHistory> CheckoutHistories { get; set; }
-        public DbSet<LibraryBranch> LibraryBranches { get; set; }
-        public DbSet<BranchHours> BranchHours { get; set; }
-        public DbSet<LibraryCard> LibraryCards { get; set; }
-        public DbSet<Patron> Patrons { get; set; }
-        public DbSet<Status> Statuses { get; set; }
-        public DbSet<LibraryAsset> LibraryAssets { get; set; }
-        public DbSet<Hold> Holds { get; set; }
+        public LibraryDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public virtual DbSet<Book> Books { get; set; }
+        public virtual DbSet<Video> Videos { get; set; }
+        public virtual DbSet<Checkout> Checkouts { get; set; }
+        public virtual DbSet<CheckoutHistory> CheckoutHistories { get; set; }
+        public virtual DbSet<LibraryBranch> LibraryBranches { get; set; }
+        public virtual DbSet<BranchHours> BranchHours { get; set; }
+        public virtual DbSet<LibraryCard> LibraryCards { get; set; }
+        public virtual DbSet<Patron> Patrons { get; set; }
+        public virtual DbSet<Status> Statuses { get; set; }
+        public virtual DbSet<LibraryAsset> LibraryAssets { get; set; }
+        public virtual DbSet<Hold> Holds { get; set; }
     }
 }

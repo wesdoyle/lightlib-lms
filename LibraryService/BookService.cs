@@ -5,11 +5,11 @@ using LibraryData.Models;
 
 namespace LibraryService
 {
-    public class BookServiceService : IBookService
+    public class BookService : IBookService
     {
         private readonly LibraryDbContext _context;
 
-        public BookServiceService(LibraryDbContext context)
+        public BookService(LibraryDbContext context)
         {
             _context = context;
         }

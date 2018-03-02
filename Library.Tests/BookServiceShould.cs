@@ -18,8 +18,9 @@ namespace Library.Tests
         {
             var mockSet = new Mock<DbSet<Book>>();
             var mockCtx = new Mock<LibraryDbContext>();
+
             mockCtx.Setup(c => c.Books).Returns(mockSet.Object);
-            var sut = new BookServiceService(mockCtx.Object);
+            var sut = new BookService(mockCtx.Object);
 
             sut.Add(new Book
             {
@@ -67,7 +68,7 @@ namespace Library.Tests
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.Books).Returns(mockSet.Object);
 
-            var sut = new BookServiceService(mockCtx.Object);
+            var sut = new BookService(mockCtx.Object);
             var book = sut.Get(-6);
 
             book.Title.Should().Be("The Snow Leopard");
@@ -106,7 +107,7 @@ namespace Library.Tests
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.Books).Returns(mockSet.Object);
 
-            var sut = new BookServiceService(mockCtx.Object);
+            var sut = new BookService(mockCtx.Object);
             var queryResult = sut.GetAll().ToList();
 
             queryResult.Should().AllBeOfType(typeof(Book));
