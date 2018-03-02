@@ -22,14 +22,14 @@ namespace Library
         {
             services.AddMvc();
             services.AddSingleton(Configuration);
-            services.AddScoped<ILibraryCard, LibraryCardService>();
-            services.AddScoped<ILibraryBranch, LibraryBranchService>();
-            services.AddScoped<IPatron, PatronService>();
-            services.AddScoped<ICheckout, CheckoutService>();
-            services.AddScoped<ILibraryAsset, LibraryAssetService>();
-            services.AddScoped<IBook, BookService>();
-            services.AddScoped<IVideo, VideoService>();
-            services.AddScoped<IStatus, StatusService>();
+            services.AddScoped<ILibraryCardService, LibraryCardServiceService>();
+            services.AddScoped<ILibraryBranchService, LibraryBranchServiceService>();
+            services.AddScoped<IPatronService, PatronServiceService>();
+            services.AddScoped<ICheckoutService, CheckoutServiceService>();
+            services.AddScoped<ILibraryAssetService, LibraryAssetServiceService>();
+            services.AddScoped<IBookService, BookServiceService>();
+            services.AddScoped<IVideoService, VideoServiceService>();
+            services.AddScoped<IStatusService, StatusServiceService>();
 
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));

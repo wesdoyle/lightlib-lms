@@ -7,16 +7,16 @@ namespace Library.Controllers
 {
     public class PatronController : Controller
     {
-        private readonly IPatron _patron;
+        private readonly IPatronService _patronService;
 
-        public PatronController(IPatron patron)
+        public PatronController(IPatronService patronService)
         {
-            _patron = patron;
+            _patronService = patronService;
         }
 
         public IActionResult Index()
         {
-            var allPatrons = _patron.GetAll();
+            var allPatrons = _patronService.GetAll();
 
             var patronModels = allPatrons
                 .Select(p => new PatronDetailModel
@@ -39,7 +39,7 @@ namespace Library.Controllers
 
         public IActionResult Detail(int id)
         {
-            var patron = _patron.Get(id);
+            var patron = _patronService.Get(id);
 
             var model = new PatronDetailModel
             {
@@ -52,9 +52,9 @@ namespace Library.Controllers
                 OverdueFees = patron.LibraryCard.Fees,
                 LibraryCardId = patron.LibraryCard.Id,
                 Telephone = patron.Telephone,
-                AssetsCheckedOut = _patron.GetCheckouts(id).ToList(),
-                CheckoutHistory = _patron.GetCheckoutHistory(id),
-                Holds = _patron.GetHolds(id)
+                AssetsCheckedOut = _patronService.GetCheckouts(id).ToList(),
+                CheckoutHistory = _patronService.GetCheckoutHistory(id),
+                Holds = _patronService.GetHolds(id)
             };
 
             return View(model);

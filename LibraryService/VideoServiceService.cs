@@ -5,16 +5,16 @@ using LibraryData.Models;
 
 namespace LibraryService
 {
-    public class VideoService : IVideo
+    public class VideoServiceService : IVideoService
     {
         private readonly LibraryDbContext _context;
 
-        public VideoService(LibraryDbContext context)
+        public VideoServiceService(LibraryDbContext context)
         {
             _context = context;
         }
 
-        IEnumerable<Video> IVideo.GetAll()
+        IEnumerable<Video> IVideoService.GetAll()
         {
             return _context.Videos;
         }

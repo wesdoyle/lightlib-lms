@@ -7,26 +7,26 @@ namespace Library.Controllers
 {
     public class BranchController : Controller
     {
-        private readonly ILibraryBranch _branch;
+        private readonly ILibraryBranchService _branchService;
 
         // create a constructor takes branchservice
-        public BranchController(ILibraryBranch branch)
+        public BranchController(ILibraryBranchService branchService)
         {
             // save branchService param off into a private field 
             // to have access in the rest of the controller
-            _branch = branch;
+            _branchService = branchService;
         }
 
         public IActionResult Index()
         {
-            var branchModels = _branch.GetAll()
+            var branchModels = _branchService.GetAll()
                 .Select(br => new BranchDetailModel
                 {
                     Id = br.Id,
                     BranchName = br.Name,
-                    NumberOfAssets = _branch.GetAssetCount(br.LibraryAssets),
-                    NumberOfPatrons = _branch.GetPatronCount(br.Patrons),
-                    IsOpen = _branch.IsBranchOpen(br.Id)
+                    NumberOfAssets = _branchService.GetAssetCount(br.LibraryAssets),
+                    NumberOfPatrons = _branchService.GetPatronCount(br.Patrons),
+                    IsOpen = _branchService.IsBranchOpen(br.Id)
                 }).ToList();
 
             var model = new BranchIndexModel
@@ -39,7 +39,7 @@ namespace Library.Controllers
 
         public IActionResult Detail(int id)
         {
-            var branch = _branch.Get(id);
+            var branch = _branchService.Get(id);
             var model = new BranchDetailModel
             {
                 BranchName = branch.Name,
@@ -47,11 +47,11 @@ namespace Library.Controllers
                 Address = branch.Address,
                 Telephone = branch.Telephone,
                 BranchOpenedDate = branch.OpenDate.ToString("yyyy-MM-dd"),
-                NumberOfPatrons = _branch.GetPatronCount(branch.Patrons),
-                NumberOfAssets = _branch.GetAssetCount(branch.LibraryAssets),
-                TotalAssetValue = _branch.GetAssetsValue(id),
+                NumberOfPatrons = _branchService.GetPatronCount(branch.Patrons),
+                NumberOfAssets = _branchService.GetAssetCount(branch.LibraryAssets),
+                TotalAssetValue = _branchService.GetAssetsValue(id),
                 ImageUrl = branch.ImageUrl,
-                HoursOpen = _branch.GetBranchHours(id)
+                HoursOpen = _branchService.GetBranchHours(id)
             };
 
             return View(model);

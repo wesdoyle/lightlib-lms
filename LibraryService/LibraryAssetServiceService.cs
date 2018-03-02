@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryService
 {
-    public class LibraryAssetService : ILibraryAsset
+    public class LibraryAssetServiceService : ILibraryAssetService
     {
         private readonly LibraryDbContext _context; // private field to store the context.
 
-        public LibraryAssetService(LibraryDbContext context)
+        public LibraryAssetServiceService(LibraryDbContext context)
         {
             _context = context;
         }

@@ -3,11 +3,11 @@ using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface IBook
+    public interface IBookService
     {
         IEnumerable<Book> GetAll();
         IEnumerable<Book> GetByAuthor(string author);
-        IEnumerable<Book> GetByISBN(string isbn);
+        IEnumerable<Book> GetByIsbn(string isbn);
         Book Get(int id);
         void Add(Book newBook);
     }

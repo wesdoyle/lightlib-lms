@@ -7,11 +7,7 @@ namespace LibraryService
 {
     public class BookService : IBook
     {
-        // need to give the class a constructor that takes a dbContext.
-        // save that off into a private field where we can store the dbContext.
-        // then, implment IBook interface.
-
-        private readonly LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context;
 
         public BookService(LibraryDbContext context)
         {

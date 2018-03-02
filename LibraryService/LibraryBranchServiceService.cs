@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryService
 {
-    public class LibraryBranchService : ILibraryBranch
+    public class LibraryBranchServiceService : ILibraryBranchService
     {
         private readonly LibraryDbContext _context;
 
-        public LibraryBranchService(LibraryDbContext context)
+        public LibraryBranchServiceService(LibraryDbContext context)
         {
             _context = context;
         }
