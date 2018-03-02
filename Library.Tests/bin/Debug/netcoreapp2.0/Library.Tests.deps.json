@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "3932efc18265a890b8763805fac7faf2831cea8c"
+    "signature": "39f44ceda70bd97075960f44183d30f73c097145"
   },
   "compilationOptions": {},
   "targets": {
@@ -17,7 +17,8 @@
           "NUnit.Extension.NUnitProjectLoader": "3.6.0",
           "NUnit.Extension.NUnitV2Driver": "3.7.0",
           "NUnit.Extension.VSProjectLoader": "3.7.0",
-          "NUnit3TestAdapter": "3.9.0"
+          "NUnit3TestAdapter": "3.9.0",
+          "OpenCover": "4.6.519"
         },
         "runtime": {
           "Library.Tests.dll": {}
@@ -1445,6 +1446,7 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
+      "OpenCover/4.6.519": {},
       "Remotion.Linq/2.1.1": {
         "dependencies": {
           "System.Collections": "4.3.0",
@@ -2610,7 +2612,8 @@
           "Microsoft.AspNetCore.StaticFiles": "2.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.0.0",
           "Microsoft.TestPlatform.TestHost": "15.7.0-preview-20180221-13",
-          "Microsoft.VisualStudio.Web.BrowserLink": "2.0.0"
+          "Microsoft.VisualStudio.Web.BrowserLink": "2.0.0",
+          "OpenCover": "4.6.519"
         },
         "runtime": {
           "LibraryData.dll": {}
@@ -3466,6 +3469,13 @@
       "sha512": "sha512-mtJZ7ejIVZliD0NI0HA3z1VgvBQVmwbnMOF2Lvg7j0MBJYXFOdBgNZcNZHFa8/lbgeckGxV4H93e+njHRbBtpQ==",
       "path": "nunit3testadapter/3.9.0",
       "hashPath": "nunit3testadapter.3.9.0.nupkg.sha512"
+    },
+    "OpenCover/4.6.519": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oReudTijK4ghbd1GNTzl7Su2KzOufj2evTS5PTGAGC5ThfrThcInB/t9w2ISkcEacOsgLQTdG+PO0UUUGZ+zTw==",
+      "path": "opencover/4.6.519",
+      "hashPath": "opencover.4.6.519.nupkg.sha512"
     },
     "Remotion.Linq/2.1.1": {
       "type": "package",

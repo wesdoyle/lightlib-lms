@@ -2113,6 +2113,9 @@
           "build/netcoreapp1.0/NUnit3TestAdapter.props": {}
         }
       },
+      "OpenCover/4.6.519": {
+        "type": "package"
+      },
       "Remotion.Linq/2.1.1": {
         "type": "package",
         "dependencies": {
@@ -3889,7 +3892,8 @@
           "Microsoft.AspNetCore.StaticFiles": "2.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.0.0",
           "Microsoft.TestPlatform.TestHost": "15.7.0-preview-20180221-13",
-          "Microsoft.VisualStudio.Web.BrowserLink": "2.0.0"
+          "Microsoft.VisualStudio.Web.BrowserLink": "2.0.0",
+          "OpenCover": "4.6.519"
         },
         "compile": {
           "bin/placeholder/LibraryData.dll": {}
@@ -6081,6 +6085,57 @@
         "build/netcoreapp1.0/nunit.engine.netstandard.dll",
         "nunit3testadapter.3.9.0.nupkg.sha512",
         "nunit3testadapter.nuspec"
+      ]
+    },
+    "OpenCover/4.6.519": {
+      "sha512": "oReudTijK4ghbd1GNTzl7Su2KzOufj2evTS5PTGAGC5ThfrThcInB/t9w2ISkcEacOsgLQTdG+PO0UUUGZ+zTw==",
+      "type": "package",
+      "path": "opencover/4.6.519",
+      "files": [
+        "License.rtf",
+        "MSBuild/OpenCover.MSBuild.dll",
+        "MSBuild/OpenCover.targets",
+        "SampleSln/.nuget/packages.config",
+        "SampleSln/Bom/Bom.csproj",
+        "SampleSln/Bom/BomManager.cs",
+        "SampleSln/Bom/Properties/AssemblyInfo.cs",
+        "SampleSln/BomSample.sln",
+        "SampleSln/BomTest/BomManagerTests.cs",
+        "SampleSln/BomTest/BomTest.csproj",
+        "SampleSln/BomTest/Properties/AssemblyInfo.cs",
+        "SampleSln/BomTest/packages.config",
+        "SampleSln/coverage.bat",
+        "SampleSln/packages/repositories.config",
+        "Samples/x64/OpenCover.Simple.Target.exe",
+        "Samples/x64/OpenCover.Simple.Target.pdb",
+        "Samples/x86/OpenCover.Simple.Target.exe",
+        "Samples/x86/OpenCover.Simple.Target.pdb",
+        "docs/ReleaseNotes.txt",
+        "docs/Usage.rtf",
+        "opencover.4.6.519.nupkg.sha512",
+        "opencover.nuspec",
+        "readme.txt",
+        "tools/Autofac.Configuration.dll",
+        "tools/Autofac.dll",
+        "tools/CrashReporter.NET.dll",
+        "tools/Gendarme.Framework.dll",
+        "tools/Gendarme.Rules.Maintainability.dll",
+        "tools/Mono.Cecil.Mdb.dll",
+        "tools/Mono.Cecil.Pdb.dll",
+        "tools/Mono.Cecil.dll",
+        "tools/OpenCover.Console.exe",
+        "tools/OpenCover.Console.exe.config",
+        "tools/OpenCover.Console.pdb",
+        "tools/OpenCover.Extensions.dll",
+        "tools/OpenCover.Extensions.pdb",
+        "tools/OpenCover.Framework.dll",
+        "tools/OpenCover.Framework.pdb",
+        "tools/log4net.config",
+        "tools/log4net.dll",
+        "tools/x64/OpenCover.Profiler.dll",
+        "tools/x86/OpenCover.Profiler.dll",
+        "transform/simple_report.xslt",
+        "transform/transform.ps1"
       ]
     },
     "Remotion.Linq/2.1.1": {
@@ -10667,7 +10722,8 @@
       "NUnit.Extension.NUnitProjectLoader >= 3.6.0",
       "NUnit.Extension.NUnitV2Driver >= 3.7.0",
       "NUnit.Extension.VSProjectLoader >= 3.7.0",
-      "NUnit3TestAdapter >= 3.9.0"
+      "NUnit3TestAdapter >= 3.9.0",
+      "OpenCover >= 4.6.519"
     ]
   },
   "packageFolders": {
@@ -10727,7 +10783,6 @@
             "version": "[15.6.0, )"
           },
           "Microsoft.NETCore.App": {
-            "suppressParent": "All",
             "target": "Package",
             "version": "[2.0.0, )",
             "autoReferenced": true
@@ -10759,6 +10814,10 @@
           "NUnit3TestAdapter": {
             "target": "Package",
             "version": "[3.9.0, )"
+          },
+          "OpenCover": {
+            "target": "Package",
+            "version": "[4.6.519, )"
           }
         },
         "imports": [

@@ -22,14 +22,7 @@ namespace Library.Tests
             mockCtx.Setup(c => c.Books).Returns(mockSet.Object);
             var sut = new BookService(mockCtx.Object);
 
-            sut.Add(new Book
-            {
-                Author = "Virginia Woolf",
-                Cost = 12.00M,
-                Title = "The Waves",
-                DeweyIndex = "ABC",
-                Id = 1234,
-            });
+            sut.Add(new Book{});
 
             mockCtx.Verify(s => s.Add(It.IsAny<Book>()), Times.Once());
             mockCtx.Verify(c => c.SaveChanges(), Times.Once());
@@ -42,19 +35,13 @@ namespace Library.Tests
             {
                 new Book
                 {
-                    Author = "Virginia Woolf",
-                    Cost = 12.00M,
                     Title = "The Waves",
-                    DeweyIndex = "ABC",
                     Id = 1234,
                 },
 
                 new Book
                 {
-                    Author = "Peter Matthiessen",
-                    Cost = 11.00M,
                     Title = "The Snow Leopard",
-                    DeweyIndex = "SNO",
                     Id = -6,
                 }
             }.AsQueryable();
@@ -81,18 +68,12 @@ namespace Library.Tests
             {
                 new Book
                 {
-                    Author = "Virginia Woolf",
-                    Cost = 12.00M,
-                    Title = "The Waves",
                     DeweyIndex = "ABC",
                     Id = 1234,
                 },
 
                 new Book
                 {
-                    Author = "Peter Matthiessen",
-                    Cost = 11.00M,
-                    Title = "The Snow Leopard",
                     DeweyIndex = "SNO",
                     Id = -6,
                 }
@@ -113,6 +94,7 @@ namespace Library.Tests
             queryResult.Should().AllBeOfType(typeof(Book));
             queryResult.Should().HaveCount(2);
             queryResult.Should().Contain(a => a.DeweyIndex == "SNO");
+            queryResult.Should().Contain(a => a.DeweyIndex == "ABC");
         }
 
         [Test]

@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.7.0-preview-20180221-13" />
+    <PackageReference Include="OpenCover" Version="4.6.519" />
   </ItemGroup>
 
   <ItemGroup>
