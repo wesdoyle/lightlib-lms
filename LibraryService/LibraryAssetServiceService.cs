@@ -8,7 +8,7 @@ namespace LibraryService
 {
     public class LibraryAssetServiceService : ILibraryAssetService
     {
-        private readonly LibraryDbContext _context; // private field to store the context.
+        private readonly LibraryDbContext _context;
 
         public LibraryAssetServiceService(LibraryDbContext context)
         {
