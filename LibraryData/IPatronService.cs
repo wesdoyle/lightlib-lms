@@ -3,7 +3,7 @@ using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface IPatron
+    public interface IPatronService
     {
         IEnumerable<Patron> GetAll();
         Patron Get(int id);

@@ -23,12 +23,12 @@ namespace Library
             services.AddMvc();
             services.AddSingleton(Configuration);
             services.AddScoped<ILibraryCardService, LibraryCardServiceService>();
-            services.AddScoped<ILibraryBranchService, LibraryBranchServiceService>();
-            services.AddScoped<IPatronService, PatronServiceService>();
-            services.AddScoped<ICheckoutService, CheckoutServiceService>();
+            services.AddScoped<ILibraryBranchService, LibraryBranchService>();
+            services.AddScoped<IPatronService, PatronService>();
+            services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<ILibraryAssetService, LibraryAssetServiceService>();
             services.AddScoped<IBookService, BookServiceService>();
-            services.AddScoped<IVideoService, VideoServiceService>();
+            services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<IStatusService, StatusServiceService>();
 
             services.AddDbContext<LibraryDbContext>(options =>

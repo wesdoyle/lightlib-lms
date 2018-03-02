@@ -3,7 +3,7 @@ using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface ICheckout
+    public interface ICheckoutService
     {
         IEnumerable<Checkout> GetAll();
         Checkout Get(int id);

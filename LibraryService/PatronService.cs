@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryService
 {
-    public class PatronServiceService : IPatronService
+    public class PatronService : IPatronService
     {
         private readonly LibraryDbContext _context; // private field to store the context.
 
-        public PatronServiceService(LibraryDbContext context)
+        public PatronService(LibraryDbContext context)
         {
             _context = context;
         }

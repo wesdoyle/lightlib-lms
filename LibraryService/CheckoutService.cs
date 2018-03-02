@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryService
 {
-    public class CheckoutServiceService : ICheckoutService
+    public class CheckoutService : ICheckoutService
     {
         private readonly LibraryDbContext _context;
 
-        public CheckoutServiceService(LibraryDbContext context)
+        public CheckoutService(LibraryDbContext context)
         {
             _context = context;
         }
@@ -94,7 +94,7 @@ namespace LibraryService
             item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
             var now = DateTime.Now;
 
-            // remove any existing checkoutsService on the item
+            // remove any existing checkouts on the item
             var checkout = _context.Checkouts
                 .FirstOrDefault(a => a.LibraryAsset.Id == id);
             if (checkout != null) _context.Remove(checkout);
@@ -149,7 +149,7 @@ namespace LibraryService
 
             _context.Update(item ?? throw new InvalidOperationException());
 
-            // remove any existing checkoutsService on the item
+            // remove any existing checkouts on the item
             var checkout = _context.Checkouts
                 .Include(c => c.LibraryAsset)
                 .Include(c => c.LibraryCard)

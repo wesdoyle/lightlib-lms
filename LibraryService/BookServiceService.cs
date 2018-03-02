@@ -5,11 +5,11 @@ using LibraryData.Models;
 
 namespace LibraryService
 {
-    public class BookService : IBook
+    public class BookServiceService : IBookService
     {
         private readonly LibraryDbContext _context;
 
-        public BookService(LibraryDbContext context)
+        public BookServiceService(LibraryDbContext context)
         {
             _context = context;
         }
@@ -35,7 +35,7 @@ namespace LibraryService
             return _context.Books.Where(a => a.Author == author);
         }
 
-        public IEnumerable<Book> GetByISBN(string isbn)
+        public IEnumerable<Book> GetByIsbn(string isbn)
         {
             return _context.Books.Where(a => a.ISBN == isbn);
         }

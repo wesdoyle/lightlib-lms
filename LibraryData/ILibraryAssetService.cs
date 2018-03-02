@@ -3,7 +3,7 @@ using LibraryData.Models;
 
 namespace LibraryData
 {
-    public interface ILibraryAsset
+    public interface ILibraryAssetService
     {
         IEnumerable<LibraryAsset> GetAll();
         LibraryAsset Get(int id);

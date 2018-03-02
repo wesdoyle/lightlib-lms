@@ -5,11 +5,11 @@ using LibraryData.Models;
 
 namespace LibraryService
 {
-    public class VideoServiceService : IVideoService
+    public class VideoService : IVideoService
     {
         private readonly LibraryDbContext _context;
 
-        public VideoServiceService(LibraryDbContext context)
+        public VideoService(LibraryDbContext context)
         {
             _context = context;
         }
