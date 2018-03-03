@@ -11,3 +11,4 @@ Library/wwwroot/lib/
 Library.Tests/bin/
 Library.Tests/obj/
 .coveralls.*
+appveyor.yml
