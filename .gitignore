@@ -12,3 +12,4 @@ Library.Tests/bin/
 Library.Tests/obj/
 .coveralls.*
 appveyor.yml
+coverage/
