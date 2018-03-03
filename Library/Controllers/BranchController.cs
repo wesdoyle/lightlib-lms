@@ -9,11 +9,8 @@ namespace Library.Controllers
     {
         private readonly ILibraryBranchService _branchService;
 
-        // create a constructor takes branchservice
         public BranchController(ILibraryBranchService branchService)
         {
-            // save branchService param off into a private field 
-            // to have access in the rest of the controller
             _branchService = branchService;
         }
 

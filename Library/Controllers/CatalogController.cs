@@ -11,11 +11,8 @@ namespace Library.Controllers
         private readonly ILibraryAssetService _assetsService;
         private readonly ICheckoutService _checkoutsService;
 
-        // create a constructor
         public CatalogController(ILibraryAssetService assetsService, ICheckoutService checkoutsService)
         {
-            // save assetsService param off into a private field 
-            // to have access in the rest of the controller
             _assetsService = assetsService;
             _checkoutsService = checkoutsService;
         }
