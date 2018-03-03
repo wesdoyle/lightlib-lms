@@ -22,7 +22,7 @@ namespace Library.Tests
             mockCtx.Setup(c => c.Books).Returns(mockSet.Object);
             var sut = new BookService(mockCtx.Object);
 
-            sut.Add(new Book{});
+            sut.Add(new Book());
 
             mockCtx.Verify(s => s.Add(It.IsAny<Book>()), Times.Once());
             mockCtx.Verify(c => c.SaveChanges(), Times.Once());
@@ -36,13 +36,13 @@ namespace Library.Tests
                 new Book
                 {
                     Title = "The Waves",
-                    Id = 1234,
+                    Id = 1234
                 },
 
                 new Book
                 {
                     Title = "The Snow Leopard",
-                    Id = -6,
+                    Id = -6
                 }
             }.AsQueryable();
 
@@ -69,13 +69,13 @@ namespace Library.Tests
                 new Book
                 {
                     DeweyIndex = "ABC",
-                    Id = 1234,
+                    Id = 1234
                 },
 
                 new Book
                 {
                     DeweyIndex = "SNO",
-                    Id = -6,
+                    Id = -6
                 }
             }.AsQueryable();
 
@@ -119,7 +119,6 @@ namespace Library.Tests
                     Author = "Thomas Mann",
                     Title = "The Magic Mountain"
                 }
-
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<Book>>();
