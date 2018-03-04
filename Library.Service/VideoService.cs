@@ -14,7 +14,7 @@ namespace Library.Service
             _context = context;
         }
 
-        IEnumerable<Video> IVideoService.GetAll()
+        public IEnumerable<Video> GetAll()
         {
             return _context.Videos;
         }

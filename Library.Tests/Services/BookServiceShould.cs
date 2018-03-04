@@ -14,7 +14,7 @@ namespace Library.Tests.Services
     public class BookServiceShould
     {
         [Test]
-        public void Add_NewBook_To_Context()
+        public void Add_New_Book_To_Context()
         {
             var mockSet = new Mock<DbSet<Book>>();
             var mockCtx = new Mock<LibraryDbContext>();
@@ -29,7 +29,7 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Get_Book_From_Context()
+        public void Get_Book_By_Id()
         {
             var books = new List<Book>
             {
@@ -62,7 +62,7 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Return_All_Books()
+        public void Get_All_Books()
         {
             var books = new List<Book>
             {
@@ -98,7 +98,7 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Return_Book_By_Author()
+        public void Get_Book_By_Author_Partial_Match()
         {
             var books = new List<Book>
             {
@@ -122,6 +122,7 @@ namespace Library.Tests.Services
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<Book>>();
+
             mockSet.As<IQueryable<Book>>().Setup(b => b.Provider).Returns(books.Provider);
             mockSet.As<IQueryable<Book>>().Setup(b => b.Expression).Returns(books.Expression);
             mockSet.As<IQueryable<Book>>().Setup(b => b.ElementType).Returns(books.ElementType);
@@ -131,7 +132,7 @@ namespace Library.Tests.Services
             mockCtx.Setup(c => c.Books).Returns(mockSet.Object);
 
             var sut = new BookService(mockCtx.Object);
-            var queryResult = sut.GetByAuthor("Herman Hesse").ToList();
+            var queryResult = sut.GetByAuthor("Hesse").ToList();
 
             queryResult.Should().AllBeOfType(typeof(Book));
             queryResult.Should().HaveCount(2);
@@ -140,7 +141,7 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Return_Book_By_ISBN()
+        public void Get_Book_By_Isbn()
         {
             var books = new List<Book>
             {

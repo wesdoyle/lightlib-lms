@@ -32,7 +32,7 @@ namespace Library.Service
 
         public IEnumerable<Book> GetByAuthor(string author)
         {
-            return _context.Books.Where(a => a.Author == author);
+            return _context.Books.Where(a => a.Author.Contains(author));
         }
 
         public IEnumerable<Book> GetByIsbn(string isbn)
