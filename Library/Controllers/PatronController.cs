@@ -22,11 +22,11 @@ namespace Library.Controllers
                 .Select(p => new PatronDetailModel
                 {
                     Id = p.Id,
-                    LastName = p.LastName,
-                    FirstName = p.FirstName,
-                    LibraryCardId = p.LibraryCard.Id,
-                    OverdueFees = p.LibraryCard.Fees,
-                    HomeLibrary = p.HomeLibraryBranch.Name
+                    LastName = p.LastName ?? "No First Name Provided",
+                    FirstName = p.FirstName ?? "No Last Name Provided",
+                    LibraryCardId = p.LibraryCard?.Id,
+                    OverdueFees = p.LibraryCard?.Fees,
+                    HomeLibrary = p.HomeLibraryBranch?.Name
                 }).ToList();
 
             var model = new PatronIndexModel
@@ -43,36 +43,21 @@ namespace Library.Controllers
 
             var model = new PatronDetailModel
             {
-                LastName = patron.LastName,
-                FirstName = patron.FirstName,
-                Address = patron.Address,
-                Gender = patron.Gender,
-                HomeLibrary = patron.HomeLibraryBranch.Name,
-                MemberSince = patron.LibraryCard.Created,
-                OverdueFees = patron.LibraryCard.Fees,
-                LibraryCardId = patron.LibraryCard.Id,
-                Telephone = patron.Telephone,
+                Id = patron.Id,
+                LastName = patron.LastName ?? "No First Name Provided",
+                FirstName = patron.FirstName ?? "No Last Name Provided",
+                Address = patron.Address ?? "No Address Provided",
+                HomeLibrary = patron.HomeLibraryBranch?.Name ?? "No Home Library",
+                MemberSince = patron.LibraryCard?.Created,
+                OverdueFees = patron.LibraryCard?.Fees,
+                LibraryCardId = patron.LibraryCard?.Id,
+                Telephone = string.IsNullOrEmpty(patron.Telephone) ? "No Telephone Number Provided" : patron.Telephone,
                 AssetsCheckedOut = _patronService.GetCheckouts(id).ToList(),
                 CheckoutHistory = _patronService.GetCheckoutHistory(id),
                 Holds = _patronService.GetHolds(id)
             };
 
             return View(model);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        public IActionResult Edit()
-        {
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View();
         }
     }
 }

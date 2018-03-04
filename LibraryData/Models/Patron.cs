@@ -27,7 +27,6 @@ namespace LibraryData.Models
         [Required]
         [Display(Name = "Library Card")]
         public LibraryCard LibraryCard { get; set; }
-
         public LibraryBranch HomeLibraryBranch { get; set; }
     }
 }
