@@ -21,8 +21,8 @@ namespace Library.Web.Controllers
                 {
                     Id = br.Id,
                     BranchName = br.Name,
-                    NumberOfAssets = _branchService.GetAssetCount(br.LibraryAssets),
-                    NumberOfPatrons = _branchService.GetPatronCount(br.Patrons),
+                    NumberOfAssets = _branchService.GetAssetCount(br.Id),
+                    NumberOfPatrons = _branchService.GetPatronCount(br.Id),
                     IsOpen = _branchService.IsBranchOpen(br.Id)
                 }).ToList();
 
@@ -44,8 +44,8 @@ namespace Library.Web.Controllers
                 Address = branch.Address,
                 Telephone = branch.Telephone,
                 BranchOpenedDate = branch.OpenDate.ToString("yyyy-MM-dd"),
-                NumberOfPatrons = _branchService.GetPatronCount(branch.Patrons),
-                NumberOfAssets = _branchService.GetAssetCount(branch.LibraryAssets),
+                NumberOfPatrons = _branchService.GetPatronCount(id),
+                NumberOfAssets = _branchService.GetAssetCount(id),
                 TotalAssetValue = _branchService.GetAssetsValue(id),
                 ImageUrl = branch.ImageUrl,
                 HoursOpen = _branchService.GetBranchHours(id)

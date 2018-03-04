@@ -34,12 +34,9 @@ namespace Library.Service
             return _context.LibraryBranches.Include(a => a.Patrons).Include(a => a.LibraryAssets);
         }
 
-        public int GetAssetCount(IEnumerable<LibraryAsset> libraryAssets)
+        public int GetAssetCount(int branchId)
         {
-            if (libraryAssets == null)
-                return 0;
-
-            return libraryAssets.Count();
+            return Get(branchId)?.LibraryAssets?.Count() ?? 0;
         }
 
         public IEnumerable<LibraryAsset> GetAssets(int branchId)
@@ -64,9 +61,9 @@ namespace Library.Service
             return displayHours;
         }
 
-        public int GetPatronCount(IEnumerable<Patron> patrons)
+        public int GetPatronCount(int branchId)
         {
-            return patrons?.Count() ?? 0;
+            return Get(branchId)?.Patrons?.Count() ?? 0;
         }
 
         public IEnumerable<Patron> GetPatrons(int branchId)
