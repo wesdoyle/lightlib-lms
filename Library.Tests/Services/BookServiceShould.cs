@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 
-namespace Library.Tests
+namespace Library.Tests.Services
 {
     [TestFixture]
     public class BookServiceShould

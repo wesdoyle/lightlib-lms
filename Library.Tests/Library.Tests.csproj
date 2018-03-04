@@ -2,9 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
-    <OutputType>Exe</OutputType>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +21,6 @@
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.7.0" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
-    <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="ReportGenerator" Version="3.1.2" />
   </ItemGroup>
 
@@ -31,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibraryService\LibraryService.csproj" />
+    <ProjectReference Include="..\Library\Library.csproj" />
   </ItemGroup>
 
 </Project>

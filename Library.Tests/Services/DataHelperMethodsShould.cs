@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using LibraryData.Models;
 using LibraryService;
 using NUnit.Framework;
-using System.Collections.Generic;
 
-namespace Library.Tests
+namespace Library.Tests.Services
 {
     [TestFixture]
     public class DataHelperMethodsShould
