@@ -3,5 +3,5 @@ OpenCover.Console.exe  -target:"c:\program files\dotnet\dotnet.exe" ^
 -mergeoutput -hideskipped:File ^
 -output:coverage\coverage.xml ^
 -oldStyle ^
--filter:"+[Lib*]* -[Library.Tests*]* -[LibraryData*]*" ^
+-filter:"+[Lib*]* -[Library.Tests*]* -[Library.Data*]*" ^
 -register:user
