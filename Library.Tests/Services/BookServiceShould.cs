@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using LibraryData;
-using LibraryData.Models;
-using LibraryService;
+using Library.Data;
+using Library.Data.Models;
+using Library.Service;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;

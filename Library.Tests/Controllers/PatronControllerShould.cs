@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Library.Controllers;
-using Library.Models.Patron;
-using LibraryData;
-using LibraryData.Models;
+using Library.Data;
+using Library.Data.Models;
+using Library.Web.Controllers;
+using Library.Web.Models.Patron;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;

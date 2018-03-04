@@ -1,0 +1,94 @@
+﻿@using Library.Web.Models.Patron
+@model Library.Web.Models.Patron.PatronDetailModel
+@{
+    ViewBag.Title = @Model.LastName + ", " + @Model.FirstName;
+}
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+}
+
+@section Styles{
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+}
+
+<div class="container">
+    <div class="header clearfix detailHeading">
+        <h2 class="text-muted">Patron Information</h2>
+    </div>
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-4">
+                <div>
+                    <h2>@Model.FirstName @Model.LastName</h2>
+                    <div class="patronContact">
+                        <div id="patronTel">Library Card ID: @Model.LibraryCardId</div>
+                        <div id="patronAddress">Address: @Model.Address</div>
+                        <div id="patronTel">Telephone: @Model.Telephone</div>
+                        <div id="patronDate">Member Since: @Model.MemberSince</div>
+                        <div id="patronLibrary">Home Library: @Model.HomeLibrary</div>
+                        @if (@Model.OverdueFees > 0)
+                        {
+                            <div id="patronHasFees">Current Fees Due: $@Model.OverdueFees</div>
+                        }
+                        else
+                        {
+                            <div id="patronNoFees">No Fees Currently Due.</div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h4>Assets Currently Checked Out</h4>
+                @if (@Model.AssetsCheckedOut.Any())
+                {
+                    <div id="patronAssets">
+                        <ul>
+                            @foreach (var checkout in @Model.AssetsCheckedOut)
+                            {
+                                <li>
+                                    @checkout.LibraryAsset.Title - (Library Asset ID: @checkout.LibraryAsset.Id)
+                                    <ul>
+                                        <li>
+                                            Since: @checkout.Since
+                                        </li>
+                                        <li>
+                                            Due: @checkout.Until
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div>No items currently checked out.</div>
+
+                }
+            </div>
+
+            <div class="col-md-4">
+                <h4>Assets Currently On Hold</h4>
+                @if (@Model.Holds.Any())
+                {
+                    <div id="patronHolds">
+                        <ul>
+                            @foreach (var hold in @Model.Holds)
+                            {
+                                <li>@hold.LibraryAsset.Title - Placed @hold.HoldPlaced.ToString("yy-dd-MM - HH:mm")</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div>No items on hold.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

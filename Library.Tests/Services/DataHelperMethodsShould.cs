@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
-using LibraryData.Models;
-using LibraryService;
+using Library.Data.Models;
+using Library.Service;
 using NUnit.Framework;
 
 namespace Library.Tests.Services

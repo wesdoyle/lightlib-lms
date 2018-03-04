@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Library.Controllers;
+using Library.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 

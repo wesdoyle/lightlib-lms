@@ -1,0 +1,199 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "2.6.0.0",
+        "fileVersion": "2.6.0.62309 (d3f6b8e7)",
+        "semanticVersion": "2.6.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "S1135",
+          "level": "warning",
+          "message": "Complete the task associated to this 'TODO' comment.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/LibraryBranchService.cs",
+                "region": {
+                  "startLine": 77,
+                  "startColumn": 11,
+                  "endLine": 77,
+                  "endColumn": 15
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S927",
+          "level": "warning",
+          "message": "Rename parameter 'newPatron' to 'newBook' to match the interface declaration.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/PatronService.cs",
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 32,
+                  "endLine": 18,
+                  "endColumn": 41
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S927",
+          "level": "warning",
+          "message": "Rename parameter 'newLibraryCard' to 'newCard' to match the interface declaration.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/LibraryCardService.cs",
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 37,
+                  "endLine": 17,
+                  "endColumn": 51
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S927",
+          "level": "warning",
+          "message": "Rename parameter 'director' to 'author' to match the interface declaration.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/VideoService.cs",
+                "region": {
+                  "startLine": 22,
+                  "startColumn": 56,
+                  "endLine": 22,
+                  "endColumn": 64
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S927",
+          "level": "warning",
+          "message": "Rename parameter 'cardId' to 'id' to match the interface declaration.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/LibraryCardService.cs",
+                "region": {
+                  "startLine": 23,
+                  "startColumn": 36,
+                  "endLine": 23,
+                  "endColumn": 42
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S927",
+          "level": "warning",
+          "message": "Rename parameter 'branchId' to 'id' to match the interface declaration.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/LibraryBranchService.cs",
+                "region": {
+                  "startLine": 51,
+                  "startColumn": 43,
+                  "endLine": 51,
+                  "endColumn": 51
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S1481",
+          "level": "warning",
+          "message": "Remove this unused 'isVideo' local variable.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Wes/Projects/library-management-system/LibraryService/LibraryAssetService.cs",
+                "region": {
+                  "startLine": 44,
+                  "startColumn": 17,
+                  "endLine": 44,
+                  "endColumn": 24
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        }
+      ],
+      "rules": {
+        "S1135": {
+          "id": "S1135",
+          "shortDescription": "Track uses of \"TODO\" tags",
+          "fullDescription": "TODO tags are commonly used to mark places where some more code is required, but which the developer wants to implement later.",
+          "defaultLevel": "note",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-1135",
+          "properties": {
+            "category": "Info Code Smell",
+            "isEnabledByDefault": false
+          }
+        },
+        "S1481": {
+          "id": "S1481",
+          "shortDescription": "Unused local variables should be removed",
+          "fullDescription": "If a local variable is declared but not used, it is dead code and should be removed. Doing so will improve maintainability because developers will not wonder what the variable is used for.",
+          "defaultLevel": "warning",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-1481",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true
+          }
+        },
+        "S927": {
+          "id": "S927",
+          "shortDescription": "parameter names should match base declaration and other partial definitions",
+          "fullDescription": "The name of a parameter in an externally visible method override does not match the name of the parameter in the base declaration of the method, or the name of the parameter in the interface declaration of the method or the name of any other partial definition.",
+          "defaultLevel": "warning",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-927",
+          "properties": {
+            "category": "Critical Code Smell",
+            "isEnabledByDefault": true
+          }
+        }
+      }
+    }
+  ]
+}

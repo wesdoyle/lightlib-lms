@@ -1,0 +1,8 @@
+C:\Users\Wes\Projects\library-management-system\LibraryData\bin\Release\netcoreapp2.0\LibraryData.deps.json
+C:\Users\Wes\Projects\library-management-system\LibraryData\bin\Release\netcoreapp2.0\LibraryData.dll
+C:\Users\Wes\Projects\library-management-system\LibraryData\bin\Release\netcoreapp2.0\LibraryData.pdb
+C:\Users\Wes\Projects\library-management-system\LibraryData\obj\Release\netcoreapp2.0\LibraryData.csproj.CoreCompileInputs.cache
+C:\Users\Wes\Projects\library-management-system\LibraryData\obj\Release\netcoreapp2.0\LibraryData.AssemblyInfoInputs.cache
+C:\Users\Wes\Projects\library-management-system\LibraryData\obj\Release\netcoreapp2.0\LibraryData.AssemblyInfo.cs
+C:\Users\Wes\Projects\library-management-system\LibraryData\obj\Release\netcoreapp2.0\LibraryData.dll
+C:\Users\Wes\Projects\library-management-system\LibraryData\obj\Release\netcoreapp2.0\LibraryData.pdb

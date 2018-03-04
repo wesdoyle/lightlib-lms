@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Web", "Library\Library.Web.csproj", "{64A85479-A6E6-4666-A2FA-58F794CD7C7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Web", "Library.Web\Library.Web.csproj", "{64A85479-A6E6-4666-A2FA-58F794CD7C7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Data", "LibraryData\Library.Data.csproj", "{A6B7DE80-EFB7-406D-9BBD-38B5C9BE5C7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Data", "Library.Data\Library.Data.csproj", "{A6B7DE80-EFB7-406D-9BBD-38B5C9BE5C7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Service", "LibraryService\Library.Service.csproj", "{2A370C5A-E09F-4F53-B776-99DD2FF96628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Service", "Library.Service\Library.Service.csproj", "{2A370C5A-E09F-4F53-B776-99DD2FF96628}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Tests", "Library.Tests\Library.Tests.csproj", "{35ABA919-2067-4868-9DF5-5C140F601B7D}"
 EndProject

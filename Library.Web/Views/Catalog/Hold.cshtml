@@ -1,0 +1,51 @@
+﻿@using Library.Web.Models.CheckoutModels
+@model Library.Web.Models.CheckoutModels.CheckoutModel
+@{
+    ViewBag.Title = @Model.Title;
+}
+
+@*@model is the model directive*@
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+}
+
+@section Styles{
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+}
+
+<div class="container">
+    <div class="header clearfix detailHeading">
+        <h2 class="text-muted">Place Hold on Library Item</h2>
+    </div>
+
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-3">
+                <div>
+                    <p id="itemTitle">@Model.Title</p>
+                    <img class="detailImage" src="@Model.ImageUrl" />
+                </div>
+            </div>
+            @*you could also use tag helpers.*@
+            <div class="col-md-9">
+                <p>There are currently @Model.HoldCount holds in the queue for this item.</p>
+                @*this is an html helper - it creates an object that implements idisposable*@
+                @using (Html.BeginForm("PlaceHold", "Catalog", FormMethod.Post))
+                {
+                    @Html.HiddenFor(a=>a.AssetId)
+                    <div>
+                        Please insert a Library Card ID.
+                        @Html.TextBoxFor(a=> a.LibraryCardId) 
+                        @*write out a text box and set attributes according to info in the model*@
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-info btn-lg">Place Hold</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
