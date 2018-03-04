@@ -38,29 +38,28 @@ namespace Library.Service
 
         public string GetAuthorOrDirector(int id)
         {
-            var isBook = _context.LibraryAssets.OfType<Book>()
-                .Where(a => a.Id == id).Any();
-
-            var isVideo = _context.LibraryAssets.OfType<Video>()
-                .Where(a => a.Id == id).Any();
+            var isBook = _context.LibraryAssets
+                .OfType<Book>().Any(a => a.Id == id);
 
             return isBook
-                ? _context.Books.FirstOrDefault(a => a.Id == id).Author
-                : _context.Videos.FirstOrDefault(a => a.Id == id).Director
+                ? _context.Books.FirstOrDefault(a => a.Id == id)?.Author
+                : _context.Videos.FirstOrDefault(a => a.Id == id)?.Director
                   ?? "Unknown";
         }
 
         public LibraryBranch GetCurrentLocation(int id)
         {
             return _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == id).Location;
+                .FirstOrDefault(a => a.Id == id)
+                ?.Location;
         }
 
         public string GetDeweyIndex(int id)
         {
             if (_context.Books.Any(a => a.Id == id))
                 return _context.Books
-                    .FirstOrDefault(a => a.Id == id).DeweyIndex;
+                    .FirstOrDefault(a => a.Id == id)
+                    ?.DeweyIndex;
 
             return "";
         }
@@ -69,7 +68,8 @@ namespace Library.Service
         {
             if (_context.Books.Any(a => a.Id == id))
                 return _context.Books
-                    .FirstOrDefault(a => a.Id == id).ISBN;
+                    .FirstOrDefault(a => a.Id == id)
+                    ?.ISBN;
 
             return "";
         }
@@ -77,10 +77,9 @@ namespace Library.Service
         public LibraryCard GetLibraryCardByAssetId(int id)
         {
             return _context.LibraryCards
-                .Where(c => c.Checkouts
+                .FirstOrDefault(c => c.Checkouts
                     .Select(a => a.LibraryAsset)
-                    .Select(v => v.Id).Contains(id))
-                .FirstOrDefault();
+                    .Select(v => v.Id).Contains(id));
         }
 
         // cannot access discriminator value directly without
@@ -89,7 +88,7 @@ namespace Library.Service
         // perhaps we don't need to implement inheritance
         public string GetTitle(int id)
         {
-            return _context.LibraryAssets.FirstOrDefault(a => a.Id == id).Title;
+            return _context.LibraryAssets.FirstOrDefault(a => a.Id == id)?.Title;
         }
 
         public string GetType(int id)

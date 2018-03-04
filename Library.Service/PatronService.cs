@@ -41,7 +41,7 @@ namespace Library.Service
         {
             var cardId = _context.Patrons
                 .Include(a => a.LibraryCard)
-                .FirstOrDefault(a => a.Id == patronId)
+                .FirstOrDefault(a => a.Id == patronId)?
                 .LibraryCard.Id;
 
             return _context.CheckoutHistories
@@ -64,7 +64,7 @@ namespace Library.Service
         {
             var cardId = _context.Patrons
                 .Include(a => a.LibraryCard)
-                .FirstOrDefault(a => a.Id == patronId)
+                .FirstOrDefault(a => a.Id == patronId)?
                 .LibraryCard.Id;
 
             return _context.Holds
