@@ -74,7 +74,7 @@ namespace Library.Tests.Controllers
         public void Return_PatronDetailModel()
         {
             var mockPatronService = new Mock<IPatronService>();
-            mockPatronService.Setup(r => r.Get(1)).Returns(GetPatron());
+            mockPatronService.Setup(r => r.Get(888)).Returns(GetPatron());
             var controller = new PatronController(mockPatronService.Object);
 
             var result = controller.Detail(888);
