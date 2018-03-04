@@ -42,6 +42,47 @@ namespace Library.Tests.Controllers
             viewResult.Subject.Model.Should().BeOfType<PatronIndexModel>();
         }
 
+        [Test]
+        public void Return_Patron_Detail_View()
+        {
+            var mockPatronService= new Mock<IPatronService>();
+            mockPatronService.Setup(r => r.Get(1)).Returns(GetPatron());
+            var controller = new PatronController(mockPatronService.Object);
+
+            var result = controller.Detail(1);
+
+            var viewResult = result.Should().BeOfType<ViewResult>();
+            var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<PatronDetailModel>();
+            viewModel.Subject.FirstName.Should().Be("Abc Def");
+        }
+
+        [Test]
+        public void Return_Default_Message_For_Patrons_With_No_Name()
+        {
+            var mockPatronService= new Mock<IPatronService>();
+            mockPatronService.Setup(r => r.Get(1)).Returns(GetPatron());
+            var controller = new PatronController(mockPatronService.Object);
+
+            var result = controller.Detail(1);
+
+            var viewResult = result.Should().BeOfType<ViewResult>();
+            var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<PatronDetailModel>();
+            viewModel.Subject.LastName.Should().Be("No Last Name Provided");
+        }
+
+        [Test]
+        public void Return_PatronDetailModel()
+        {
+            var mockPatronService = new Mock<IPatronService>();
+            mockPatronService.Setup(r => r.Get(1)).Returns(GetPatron());
+            var controller = new PatronController(mockPatronService.Object);
+
+            var result = controller.Detail(888);
+
+            var viewResult = result.Should().BeOfType<ViewResult>();
+            viewResult.Subject.Model.Should().BeOfType<PatronDetailModel>();
+        }
+
         private static IEnumerable<Patron> GetAllPatrons()
         {
             return new List<Patron>
@@ -70,8 +111,6 @@ namespace Library.Tests.Controllers
             {
                 Id = 888,
                 FirstName = "Abc Def",
-                Address = "3 Commerce St",
-                Telephone = "123",
             };
         }
     }

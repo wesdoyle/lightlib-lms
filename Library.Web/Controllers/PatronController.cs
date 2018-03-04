@@ -44,8 +44,8 @@ namespace Library.Web.Controllers
             var model = new PatronDetailModel
             {
                 Id = patron.Id,
-                LastName = patron.LastName ?? "No First Name Provided",
-                FirstName = patron.FirstName ?? "No Last Name Provided",
+                LastName = patron.LastName ?? "No Last Name Provided",
+                FirstName = patron.FirstName ?? "No First Name Provided",
                 Address = patron.Address ?? "No Address Provided",
                 HomeLibrary = patron.HomeLibraryBranch?.Name ?? "No Home Library",
                 MemberSince = patron.LibraryCard?.Created,
