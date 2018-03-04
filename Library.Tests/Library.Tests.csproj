@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryService\LibraryService.csproj" />
-    <ProjectReference Include="..\Library\Library.csproj" />
+    <ProjectReference Include="..\LibraryService\Library.Service.csproj" />
+    <ProjectReference Include="..\Library\Library.Web.csproj" />
   </ItemGroup>
 
 </Project>

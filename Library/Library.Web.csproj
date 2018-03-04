@@ -37,8 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryData\LibraryData.csproj" />
-    <ProjectReference Include="..\LibraryService\LibraryService.csproj" />
+    <ProjectReference Include="..\LibraryData\Library.Data.csproj" />
+    <ProjectReference Include="..\LibraryService\Library.Service.csproj" />
   </ItemGroup>
 
 </Project>
