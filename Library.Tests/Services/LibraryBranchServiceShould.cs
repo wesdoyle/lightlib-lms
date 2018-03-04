@@ -136,7 +136,7 @@ namespace Library.Tests.Services
             mockCtx.Setup(c => c.LibraryBranches).Returns(mockSet.Object);
 
             var sut = new LibraryBranchService(mockCtx.Object);
-            var queryResult = sut.GetAssetCount(branches.First().LibraryAssets);
+            var queryResult = sut.GetAssetCount(branches.First().Id);
             queryResult.Should().Be(3);
         }
 
