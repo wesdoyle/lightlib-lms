@@ -45,11 +45,14 @@ namespace Library.Tests.Controllers
         [Test]
         public void Return_Patron_Detail_View()
         {
-            var mockPatronService= new Mock<IPatronService>();
+            var mockPatronService = new Mock<IPatronService>();
             mockPatronService.Setup(r => r.Get(1)).Returns(GetPatron());
-            var controller = new PatronController(mockPatronService.Object);
+            mockPatronService.Setup(r => r.GetCheckouts(1)).Returns(new List<Checkout>{});
+            mockPatronService.Setup(r => r.GetCheckoutHistory(1)).Returns(new List<CheckoutHistory>{});
+            mockPatronService.Setup(r => r.GetHolds(1)).Returns(new List<Hold>{});
+            var sut = new PatronController(mockPatronService.Object);
 
-            var result = controller.Detail(1);
+            var result = sut.Detail(1);
 
             var viewResult = result.Should().BeOfType<ViewResult>();
             var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<PatronDetailModel>();
@@ -111,6 +114,7 @@ namespace Library.Tests.Controllers
             {
                 Id = 888,
                 FirstName = "Abc Def",
+                Telephone = "2134",
             };
         }
     }
