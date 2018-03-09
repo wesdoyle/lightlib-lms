@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Library.Data;
@@ -63,7 +64,7 @@ namespace Library.Tests.Controllers
         public void Return_Default_Message_For_Patrons_With_No_Name()
         {
             var mockPatronService= new Mock<IPatronService>();
-            mockPatronService.Setup(r => r.Get(1)).Returns(GetPatron());
+            mockPatronService.Setup(r => r.Get(1)).Returns(GetNamelessPatron());
             var controller = new PatronController(mockPatronService.Object);
 
             var result = controller.Detail(1);
@@ -114,7 +115,39 @@ namespace Library.Tests.Controllers
             {
                 Id = 888,
                 FirstName = "Abc Def",
+                LastName = "Last",
                 Telephone = "2134",
+                Address = "898 Fox Run",
+                LibraryCard = new LibraryCard()
+                {
+                    Id = -123,
+                    Created = new DateTime(2018, 2, 12),
+                },
+                HomeLibraryBranch = new LibraryBranch
+                {
+                    Id = 14,
+                    Name = "Hawkins",
+                }
+            };
+        }
+
+        private static Patron GetNamelessPatron()
+        {
+            return new Patron 
+            {
+                Id = 888,
+                Telephone = "2134",
+                Address = "898 Fox Run",
+                LibraryCard = new LibraryCard()
+                {
+                    Id = -123,
+                    Created = new DateTime(2018, 2, 12),
+                },
+                HomeLibraryBranch = new LibraryBranch
+                {
+                    Id = 14,
+                    Name = "Hawkins",
+                }
             };
         }
     }
