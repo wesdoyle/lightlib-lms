@@ -53,6 +53,7 @@ namespace Library.Tests.Controllers
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            mockLibraryAssetService.Setup(r => r.GetType(24)).Returns("Book");
             mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
             {
                 Name = "Hawkins Library"
