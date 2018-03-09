@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Library.Data;
 using Library.Data.Models;
 using Library.Web.Controllers;
 using Library.Web.Models.Catalog;
+using Library.Web.Models.CheckoutModels;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -50,16 +52,26 @@ namespace Library.Tests.Controllers
         {
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
-
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
             mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
             {
-                Name = "Main St. Library"
+                Name = "Hawkins Library"
             });
+            mockLibraryAssetService.Setup(r => r.GetAuthorOrDirector(24)).Returns("Virginia Woolf");
+            mockLibraryAssetService.Setup(r => r.GetLibraryCardByAssetId(24)).Returns(new LibraryCard()
+            {
+                Id = 1
+            });
+            mockLibraryAssetService.Setup(r => r.GetDeweyIndex(24)).Returns("ELEVEN");
+            mockCheckoutService.Setup(r => r.GetCheckoutHistory(24)).Returns(new List<CheckoutHistory>()
+            {
+                new CheckoutHistory()
+            });
+            mockCheckoutService.Setup(r => r.GetLatestCheckout(24)).Returns(new Checkout());
+            mockCheckoutService.Setup(r => r.GetCurrentPatron(24)).Returns("NANCY");
+            var sut= new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
 
-            var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
-
-            var result = controller.Detail(24);
+            var result = sut.Detail(24);
 
             var viewResult = result.Should().BeOfType<ViewResult>();
             var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<AssetDetailModel>();
@@ -72,14 +84,26 @@ namespace Library.Tests.Controllers
         {
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
-
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
             mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
             {
-                Name = "Main St. Library"
+                Name = "Hawkins Library"
+            });
+            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
+            {
+                Name = "Hawkins Library"
+            });
+            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
+            {
+                Name = "Hawkins Library"
+            });
+            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
+            {
+                Name = "Hawkins Library"
             });
             var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
             var result = controller.Detail(24);
+
             var viewResult = result.Should().BeOfType<ViewResult>();
 
             viewResult.Subject.Model.Should().BeOfType<AssetDetailModel>();
@@ -94,7 +118,7 @@ namespace Library.Tests.Controllers
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
             mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
             {
-                Name = "Main St. Library"
+                Name = "Hawkins Library"
             });
 
             var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
@@ -193,21 +217,27 @@ namespace Library.Tests.Controllers
         {
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
-
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
-            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
-            {
-                Name = "Main St. Library"
-            });
+            var sut = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
 
-            var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
-
-            var result = controller.Detail(24);
+            var result = sut.Checkout(24);
 
             var viewResult = result.Should().BeOfType<ViewResult>();
-            var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<AssetDetailModel>();
-
+            var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<CheckoutModel>();
             viewModel.Subject.Title.Should().Be("Orlando");
+        }
+
+        [Test]
+        public void Call_Get_In_Service_When_Checkout_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var sut= new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            sut.Checkout(24);
+
+            mockLibraryAssetService.Verify(s => s.Get(24), Times.Once());
         }
 
         [Test]
@@ -215,17 +245,95 @@ namespace Library.Tests.Controllers
         {
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
-
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
-            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
-            {
-                Name = "Main St. Library"
-            });
-            var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
-            var result = controller.Detail(24);
-            var viewResult = result.Should().BeOfType<ViewResult>();
+            var sut = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
 
-            viewResult.Subject.Model.Should().BeOfType<AssetDetailModel>();
+            var result = sut.Checkout(24);
+
+            var viewResult = result.Should().BeOfType<ViewResult>();
+            viewResult.Subject.Model.Should().BeOfType<CheckoutModel>();
+        }
+
+        [Test]
+        public void Call_Get_In_Service_When_Hold_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var sut= new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            sut.Hold(24);
+
+            mockLibraryAssetService.Verify(s => s.Get(24), Times.Once());
+        }
+
+        [Test]
+        public void Return_CheckOutModel_When_Hold_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var sut = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            var result = sut.Hold(24);
+
+            var viewResult = result.Should().BeOfType<ViewResult>();
+            viewResult.Subject.Model.Should().BeOfType<CheckoutModel>();
+        }
+
+        [Test]
+        public void Redirect_To_Detail_When_PlaceCheckout_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            var result = controller.PlaceCheckout(24, 1);
+            var redirectResult = result.Should().BeOfType<RedirectToActionResult>();
+
+            redirectResult.Subject.ActionName.Should().Be("Detail");
+        }
+
+        [Test]
+        public void Redirect_To_Detail_When_PlaceHold_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            var result = controller.PlaceHold(24, 1);
+            var redirectResult = result.Should().BeOfType<RedirectToActionResult>();
+
+            redirectResult.Subject.ActionName.Should().Be("Detail");
+        }
+
+
+        [Test]
+        public void Call_CheckoutItem_In_Service_When_PlaceCheckout_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var sut= new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            sut.PlaceCheckout(24, 1);
+
+            mockCheckoutService.Verify(s => s.CheckoutItem(24, 1), Times.Once());
+        }
+
+        [Test]
+        public void Call_PlaceHold_In_Service_When_PlaceHold_Called()
+        {
+            var mockLibraryAssetService = new Mock<ILibraryAssetService>();
+            var mockCheckoutService = new Mock<ICheckoutService>();
+            mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            var sut= new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
+
+            sut.PlaceHold(24, 1);
+
+            mockCheckoutService.Verify(s => s.PlaceHold(24, 1), Times.Once());
         }
 
         private static IEnumerable<LibraryAsset> GetAllAssets()
@@ -268,11 +376,6 @@ namespace Library.Tests.Controllers
                     Name = "Checked In",
                     Id = 1,
                 },
-                Location = new LibraryBranch()
-                {
-                    Id = -99,
-                    Name = "Hawkins"
-                }
             };
         }
     }
