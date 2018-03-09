@@ -62,7 +62,7 @@ namespace Library.Web.Controllers
                 Status = asset.Status.Name,
                 ImageUrl = asset.ImageUrl,
                 AuthorOrDirector = _assetsService.GetAuthorOrDirector(id),
-                CurrentLocation = _assetsService.GetCurrentLocation(id).Name,
+                CurrentLocation = _assetsService.GetCurrentLocation(id)?.Name,
                 Dewey = _assetsService.GetDeweyIndex(id),
                 CheckoutHistory = _checkoutsService.GetCheckoutHistory(id),
                 CurrentAssociatedLibraryCard = _assetsService.GetLibraryCardByAssetId(id),
@@ -73,11 +73,6 @@ namespace Library.Web.Controllers
             };
 
             return View(model);
-        }
-
-        public IActionResult Edit()
-        {
-            return View();
         }
 
         public IActionResult Checkout(int id)
