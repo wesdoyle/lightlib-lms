@@ -53,6 +53,14 @@ namespace Library.Tests.Controllers
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
+            mockCheckoutService.Setup(r => r.GetCurrentHoldPlaced(24)).Returns("foo");
+            mockCheckoutService.Setup(r => r.GetCurrentHoldPatron(24)).Returns("bar");
+
+            mockCheckoutService.Setup(r => r.GetCheckoutHistory(24)).Returns(new List<CheckoutHistory>()
+            {
+                new CheckoutHistory()
+            });
+
             mockLibraryAssetService.Setup(r => r.GetType(24)).Returns("Book");
             mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
             {
@@ -76,7 +84,6 @@ namespace Library.Tests.Controllers
 
             var viewResult = result.Should().BeOfType<ViewResult>();
             var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<AssetDetailModel>();
-
             viewModel.Subject.Title.Should().Be("Orlando");
         }
 
@@ -86,27 +93,10 @@ namespace Library.Tests.Controllers
             var mockLibraryAssetService = new Mock<ILibraryAssetService>();
             var mockCheckoutService = new Mock<ICheckoutService>();
             mockLibraryAssetService.Setup(r => r.Get(24)).Returns(GetAsset());
-            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
-            {
-                Name = "Hawkins Library"
-            });
-            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
-            {
-                Name = "Hawkins Library"
-            });
-            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
-            {
-                Name = "Hawkins Library"
-            });
-            mockLibraryAssetService.Setup(r => r.GetCurrentLocation(24)).Returns(new LibraryBranch
-            {
-                Name = "Hawkins Library"
-            });
             var controller = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
             var result = controller.Detail(24);
 
             var viewResult = result.Should().BeOfType<ViewResult>();
-
             viewResult.Subject.Model.Should().BeOfType<AssetDetailModel>();
         }
 
@@ -208,8 +198,8 @@ namespace Library.Tests.Controllers
             var sut = new CatalogController(mockLibraryAssetService.Object, mockCheckoutService.Object);
 
             var result = sut.MarkFound(24);
-            var redirectResult = result.Should().BeOfType<RedirectToActionResult>();
 
+            var redirectResult = result.Should().BeOfType<RedirectToActionResult>();
             redirectResult.Subject.ActionName.Should().Be("Detail");
         }
 
@@ -345,6 +335,9 @@ namespace Library.Tests.Controllers
                 {
                     Title = "Orlando",
                     Author = "Virginia Woolf",
+                    Year = 1928,
+                    Cost = 23.0M,
+                    ImageUrl = "foo",
                     Status = new Status()
                     {
                         Name = "Checked In",
