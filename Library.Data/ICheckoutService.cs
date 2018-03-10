@@ -14,7 +14,6 @@ namespace Library.Data
         void CheckInItem(int id);
         Checkout GetLatestCheckout(int id);
         int GetNumberOfCopies(int id);
-        int GetAvailableCopies(int id);
         bool IsCheckedOut(int id);
 
         string GetCurrentHoldPatron(int id);

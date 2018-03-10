@@ -204,17 +204,6 @@ namespace Library.Service
                 .FirstOrDefault();
         }
 
-        public int GetAvailableCopies(int id)
-        {
-            var numberOfCopies = GetNumberOfCopies(id);
-
-            var numberCheckedOut = _context.Checkouts
-                .Count(a => a.LibraryAsset.Id == id
-                            && a.LibraryAsset.Status.Name == "Checked Out");
-
-            return numberOfCopies - numberCheckedOut;
-        }
-
         public int GetNumberOfCopies(int id)
         {
             return _context.LibraryAssets

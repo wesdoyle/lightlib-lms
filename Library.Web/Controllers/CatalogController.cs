@@ -28,7 +28,7 @@ namespace Library.Web.Controllers
                     ImageUrl = a.ImageUrl,
                     AuthorOrDirector = _assetsService.GetAuthorOrDirector(a.Id),
                     Dewey = _assetsService.GetDeweyIndex(a.Id),
-                    CopiesAvailable = _checkoutsService.GetAvailableCopies(a.Id),
+                    CopiesAvailable = _checkoutsService.GetNumberOfCopies(a.Id), // Remove
                     Title = _assetsService.GetTitle(a.Id),
                     Type = _assetsService.GetType(a.Id),
                     NumberOfCopies = _checkoutsService.GetNumberOfCopies(a.Id)
