@@ -180,9 +180,10 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var service = new CheckoutService(context);
-                service.MarkLost(-516);
+                service.MarkFound(-516);
+                
                 var book = context.LibraryAssets.Find(-516);
-                book.Status.Name.Should().Be("Lost");
+                book.Status.Name.Should().Be("Available");
             }
         }
 
