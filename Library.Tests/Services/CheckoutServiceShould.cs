@@ -18,7 +18,7 @@ namespace Library.Tests.Services
         public void Add_New_Checkout()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase(databaseName: "Add_writes_to_database")
+                .UseInMemoryDatabase("Add_writes_to_database")
                 .Options;
 
             using (var context = new LibraryDbContext(options))
@@ -96,7 +96,7 @@ namespace Library.Tests.Services
         public void Add_Checkout_To_Database()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase(databaseName: "Adds_checkout_to_database")
+                .UseInMemoryDatabase("Adds_checkout_to_database")
                 .Options;
 
             using (var context = new LibraryDbContext(options))
@@ -117,7 +117,7 @@ namespace Library.Tests.Services
         public void Mark_Item_Lost()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase(databaseName: "Marks_item_lost")
+                .UseInMemoryDatabase("Marks_item_lost")
                 .Options;
 
             using (var context = new LibraryDbContext(options))
@@ -153,7 +153,7 @@ namespace Library.Tests.Services
         public void Mark_Item_Found()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase(databaseName: "Marks_item_found")
+                .UseInMemoryDatabase("Marks_item_found")
                 .Options;
 
             using (var context = new LibraryDbContext(options))
@@ -191,7 +191,7 @@ namespace Library.Tests.Services
         public void Place_Hold()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase(databaseName: "Places_hold")
+                .UseInMemoryDatabase("Places_hold")
                 .Options;
 
             using (var context = new LibraryDbContext(options))
@@ -233,14 +233,143 @@ namespace Library.Tests.Services
         [Test]
         public void Check_In_Item()
         {
-            
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Checks_In_Item")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                context.LibraryAssets.Add(new Book
+                {
+                    Id = -516,
+                    Status = new Status
+                    {
+                        Id = 2,
+                        Name = "Checked Out"
+                    }
+                });
+
+                context.Statuses.Add(new Status
+                {
+                    Id = 1,
+                    Name = "On Hold"
+                });
+
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var service = new CheckoutService(context);
+                service.PlaceHold(-516, 1);
+                
+                var book = context.LibraryAssets.Find(-516);
+                book.Status.Name.Should().Be("On Hold");
+            }
         }
 
         [Test]
-        public void Get_Checkout_History() { }
+        public void Get_Checkout_History()
+        {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Gets_checkout_history")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var book = new Book
+                {
+                    Id = 14,
+                    Title = "Man and His Symbols"
+                };
+
+                context.SaveChanges();
+                
+                var checkoutHistories = new List<CheckoutHistory>
+                {
+                    new CheckoutHistory
+                    {
+                        Id = 1,
+                        LibraryCard = new LibraryCard
+                        {
+                            Id = 64
+                        },
+                        LibraryAsset = book
+                    },
+                    new CheckoutHistory
+                    {
+                        Id = 2,
+                        LibraryCard = new LibraryCard
+                        {
+                            Id = 182 
+                        },
+                        LibraryAsset =  book
+                    }
+                };
+                
+                context.CheckoutHistories.AddRange(checkoutHistories);
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var sut = new CheckoutService(context);
+                var result = sut.GetCheckoutHistory(14);
+                result.Count().Should().Be(2);
+            }
+       }
 
         [Test]
-        public void Get_Latest_Checkout() { }
+        public void Get_Latest_Checkout()
+        {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Gets_latest_checkout")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var book = new Book
+                {
+                    Id = 222,
+                    Title = "Fact, Fiction, and Forecast"
+                };
+
+                context.SaveChanges();
+                
+                var checkoutHistories = new List<CheckoutHistory>
+                {
+                    new CheckoutHistory
+                    {
+                        Id = 1,
+                        LibraryCard = new LibraryCard
+                        {
+                            Id = 64
+                        },
+                        LibraryAsset = book
+                    },
+                    new CheckoutHistory
+                    {
+                        Id = 2,
+                        LibraryCard = new LibraryCard
+                        {
+                            Id = 182 
+                        },
+                        LibraryAsset =  book
+                    }
+                };
+                
+                context.CheckoutHistories.AddRange(checkoutHistories);
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var sut = new CheckoutService(context);
+                var result = sut.GetCheckoutHistory(14);
+                result.Count().Should().Be(2);
+            }
+            
+        }
 
         [Test]
         public void Get_Available_Copies() { }
