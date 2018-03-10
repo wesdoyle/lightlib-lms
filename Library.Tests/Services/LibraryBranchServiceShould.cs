@@ -31,20 +31,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_LibraryBranch_By_Id()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Name = "Clover",
-                    Id = 1234
-                },
-
-                new LibraryBranch
-                {
-                    Name = "Downtown",
-                    Id = -6
-                }
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
             mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.Provider).Returns(branches.Provider);
@@ -58,26 +45,13 @@ namespace Library.Tests.Services
             var sut = new LibraryBranchService(mockCtx.Object);
             var branch = sut.Get(-6);
 
-            branch.Name.Should().Be("Downtown");
+            branch.Name.Should().Be("Hawkins");
         }
 
         [Test]
         public void Get_All_LibraryBranches()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Name = "A",
-                    Id = 332 
-                },
-
-                new LibraryBranch
-                {
-                    Name = "Q",
-                    Id = -600
-                }
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
             mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.Provider).Returns(branches.Provider);
@@ -93,37 +67,14 @@ namespace Library.Tests.Services
 
             queryResult.Should().AllBeOfType(typeof(LibraryBranch));
             queryResult.Should().HaveCount(2);
-            queryResult.Should().Contain(a => a.Name == "A");
-            queryResult.Should().Contain(a => a.Name == "Q");
+            queryResult.Should().Contain(a => a.Name == "Hawkins");
+            queryResult.Should().Contain(a => a.Name == "Downtown");
         }
 
         [Test]
         public void Get_Branch_Asset_Count()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Id = -86,
-                    LibraryAssets = new List<LibraryAsset>
-                    {
-                        new Book
-                        {
-                            Id = 11
-                        },
-
-                        new Video
-                        {
-                            Id = 234
-                        },
-
-                        new Book
-                        {
-                            Id = 145
-                        }
-                    }
-                },
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
 
@@ -136,37 +87,14 @@ namespace Library.Tests.Services
             mockCtx.Setup(c => c.LibraryBranches).Returns(mockSet.Object);
 
             var sut = new LibraryBranchService(mockCtx.Object);
-            var queryResult = sut.GetAssetCount(branches.First().Id);
-            queryResult.Should().Be(3);
+            var queryResult = sut.GetAssetCount(1);
+            queryResult.Should().Be(2);
         }
 
         [Test]
         public void Get_Branch_Assets()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Id = -86,
-                    LibraryAssets = new List<LibraryAsset>
-                    {
-                        new Book
-                        {
-                            Id = 11
-                        },
-
-                        new Video
-                        {
-                            Id = 234
-                        },
-
-                        new Book
-                        {
-                            Id = -145
-                        }
-                    }
-                },
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
 
@@ -179,41 +107,15 @@ namespace Library.Tests.Services
             mockCtx.Setup(c => c.LibraryBranches).Returns(mockSet.Object);
 
             var sut = new LibraryBranchService(mockCtx.Object);
-            var queryResult = sut.GetAssets(branches.First().Id).ToList();
-            queryResult.Count.Should().Be(3);
-            queryResult.Should().Contain(q => q.Id == -145);
+            var queryResult = sut.GetAssets(1).ToList();
+            queryResult.Count.Should().Be(2);
+            queryResult.Should().Contain(asset => asset.Id == 1);
         }
 
         [Test]
         public void Get_Branch_Assets_Value()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Id = -86,
-                    LibraryAssets = new List<LibraryAsset>
-                    {
-                        new Book
-                        {
-                            Id = 11,
-                            Cost = 12.50M
-                        },
-
-                        new Video
-                        {
-                            Id = 234,
-                            Cost = 100M
-                        },
-
-                        new Book
-                        {
-                            Id = -145,
-                            Cost = 10M
-                        }
-                    }
-                },
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
 
@@ -226,34 +128,14 @@ namespace Library.Tests.Services
             mockCtx.Setup(c => c.LibraryBranches).Returns(mockSet.Object);
 
             var sut = new LibraryBranchService(mockCtx.Object);
-            var queryResult = sut.GetAssetsValue(branches.First().Id);
-            queryResult.Should().Be(122.50M);
+            var queryResult = sut.GetAssetsValue(1);
+            queryResult.Should().Be(2.50M);
         }
 
         [Test]
         public void Get_Patron_Count()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Id = 1,
-                    Patrons = new List<Patron>
-                    {
-                        new Patron 
-                        {
-                            Id = 11,
-                            FirstName = "Jin"
-                        },
-
-                        new Patron
-                        {
-                            Id = 234,
-                            FirstName = "Helen" 
-                        }
-                    }
-                },
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
 
@@ -271,29 +153,15 @@ namespace Library.Tests.Services
         }
 
         [Test]
+        public void Get_Branch_Hours()
+        {
+
+        }
+
+        [Test]
         public void Get_Patrons_Associated_With_Branch()
         {
-            var branches = new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Id = 1,
-                    Patrons = new List<Patron>
-                    {
-                        new Patron 
-                        {
-                            Id = 11,
-                            FirstName = "Jin"
-                        },
-
-                        new Patron
-                        {
-                            Id = 234,
-                            FirstName = "Helen" 
-                        }
-                    }
-                },
-            }.AsQueryable();
+            var branches = GetBranches().AsQueryable();
 
             var mockSet = new Mock<DbSet<LibraryBranch>>();
 
@@ -310,6 +178,67 @@ namespace Library.Tests.Services
             queryResult.Count.Should().Be(2);
             queryResult.Should().Contain(c => c.FirstName == "Helen");
             queryResult.Should().Contain(c => c.FirstName == "Jin");
+        }
+
+        private static IEnumerable<LibraryBranch> GetBranches()
+        {
+            return new List<LibraryBranch>
+            {
+                new LibraryBranch
+                {
+                    Id = -6,
+                    Name = "Hawkins",
+                    Patrons = new List<Patron>
+                    {
+                        new Patron
+                        {
+                            Id = 11,
+                            FirstName = "Jin"
+                        },
+
+                        new Patron
+                        {
+                            Id = 234,
+                            FirstName = "Helen"
+                        }
+                    }
+                },
+
+                new LibraryBranch
+                {
+                    Id = 1,
+                    Name = "Downtown",
+                    Patrons = new List<Patron>
+                    {
+                        new Patron
+                        {
+                            Id = 19,
+                            FirstName = "Sam"
+                        },
+
+                        new Patron
+                        {
+                            Id = 28,
+                            FirstName = "Mark"
+                        }
+                    },
+                    LibraryAssets = new List<LibraryAsset>
+                    {
+                        new Book()
+                        {
+                            Id = 1,
+                            Title = "CTCI",
+                            Cost = 1.25M
+                        },
+                        new Video()
+                        {
+                            Id = 23,
+                            Title = "Stranger Things",
+                            Cost = 1.25M
+                        }
+                    }
+                }
+            };
         }
     }
 }
