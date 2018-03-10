@@ -13,3 +13,4 @@ Library.Tests/obj/
 .coveralls.*
 appveyor.yml
 coverage/
+.idea*

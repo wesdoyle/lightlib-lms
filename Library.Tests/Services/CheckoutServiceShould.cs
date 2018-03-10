@@ -125,7 +125,7 @@ namespace Library.Tests.Services
                 context.LibraryAssets.Add(new Book
                 {
                     Id = -516,
-                    Status = new Status()
+                    Status = new Status
                     {
                         Name = "Available"
                     }
@@ -161,7 +161,7 @@ namespace Library.Tests.Services
                 context.LibraryAssets.Add(new Book
                 {
                     Id = -516,
-                    Status = new Status()
+                    Status = new Status
                     {
                         Id = 2,
                         Name = "Lost"
@@ -188,10 +188,53 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Place_Hold() { }
+        public void Place_Hold()
+        {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase(databaseName: "Places_hold")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                context.LibraryAssets.Add(new Book
+                {
+                    Id = -516,
+                    Status = new Status
+                    {
+                        Id = 2,
+                        Name = "Available"
+                    }
+                });
+
+                context.LibraryCards.Add(new LibraryCard
+                {
+                    Id = 1
+                });
+
+                context.Statuses.Add(new Status
+                {
+                    Id = 1,
+                    Name = "On Hold"
+                });
+
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var service = new CheckoutService(context);
+                service.PlaceHold(-516, 1);
+                
+                var book = context.LibraryAssets.Find(-516);
+                book.Status.Name.Should().Be("On Hold");
+            }
+        }
 
         [Test]
-        public void Check_In_Item() { }
+        public void Check_In_Item()
+        {
+            
+        }
 
         [Test]
         public void Get_Checkout_History() { }
@@ -230,7 +273,7 @@ namespace Library.Tests.Services
                 Id = 304,
                 Since = new DateTime(2018, 03, 09),
                 Until = new DateTime(2018, 04, 12),
-                LibraryCard = new LibraryCard()
+                LibraryCard = new LibraryCard
                 {
                     Id = -1,
                     Created = new DateTime(2008, 01, 21)
@@ -240,14 +283,14 @@ namespace Library.Tests.Services
 
         private static IEnumerable<Checkout> GetCheckouts()
         {
-            return new List<Checkout>()
+            return new List<Checkout>
             {
                 new Checkout
                 {
                     Id = 1234,
                     Since = new DateTime(2018, 03, 09),
                     Until = new DateTime(2018, 04, 12),
-                    LibraryCard = new LibraryCard()
+                    LibraryCard = new LibraryCard
                     {
                         Id = -1,
                         Created = new DateTime(2008, 01, 21),
@@ -259,7 +302,7 @@ namespace Library.Tests.Services
                     Id = 999,
                     Since = new DateTime(2018, 03, 09),
                     Until = new DateTime(2018, 04, 12),
-                    LibraryCard = new LibraryCard()
+                    LibraryCard = new LibraryCard
                     {
                         Id = -14,
                         Created = new DateTime(2008, 01, 21),
@@ -271,7 +314,7 @@ namespace Library.Tests.Services
                     Id = 416,
                     Since = new DateTime(2017, 03, 09),
                     Until = new DateTime(2017, 05, 24),
-                    LibraryCard = new LibraryCard()
+                    LibraryCard = new LibraryCard
                     {
                         Id = 824,
                         Created = new DateTime(1994, 05, 16),
