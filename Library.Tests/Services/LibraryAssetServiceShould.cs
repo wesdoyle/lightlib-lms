@@ -43,6 +43,17 @@ namespace Library.Tests.Services
             };
         }
 
+        private Mock<DbSet<LibraryAsset>> BuildMock()
+        {
+            var assets = GetAssets().AsQueryable();
+            var mockSet = new Mock<DbSet<LibraryAsset>>();
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(assets.Provider);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(assets.Expression);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(assets.ElementType);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(assets.GetEnumerator());
+            return mockSet;
+        }
+
         [Test]
         public void Add_New_Asset()
         {
@@ -66,14 +77,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_All_Assets()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
-
+            var mockSet = BuildMock();
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
 
@@ -88,13 +92,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Asset_By_Id()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -114,13 +112,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Asset_Title()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -133,13 +125,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Asset_Type_Given_Book()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -152,13 +138,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Asset_Type_Given_Video()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -171,13 +151,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Author_Given_Book()
         {
-            var books = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(books.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(books.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(books.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(books.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -190,13 +164,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Current_Location()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -207,15 +175,9 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Get_Dewey_Index()
+        public void Get_Dewey_Index_For_Book()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
@@ -226,16 +188,20 @@ namespace Library.Tests.Services
         }
 
         [Test]
+        public void Get_Dewey_Index_NA_For_Video()
+        {
+            var mockSet = BuildMock();
+            var mockCtx = new Mock<LibraryDbContext>();
+            mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
+            var sut = new LibraryAssetService(mockCtx.Object);
+            var queryResult = sut.GetDeweyIndex(234);
+            queryResult.Should().Be("N/A");
+        }
+
+        [Test]
         public void Get_Director_Given_Video()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
-
+            var mockSet = BuildMock();
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
 
@@ -247,14 +213,7 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Isbn_For_Book()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
-
+            var mockSet = BuildMock();
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
 
@@ -302,13 +261,7 @@ namespace Library.Tests.Services
         [Test]
         public void Return_NA_ISBN_For_NonBook_Asset()
         {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+            var mockSet = BuildMock();
 
             var mockCtx = new Mock<LibraryDbContext>();
             mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);

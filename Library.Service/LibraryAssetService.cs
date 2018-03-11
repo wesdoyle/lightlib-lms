@@ -73,8 +73,6 @@ namespace Library.Service
                     .Select(v => v.Id).Contains(id));
         }
 
-        // cannot access discriminator value directly without
-        // building a raw sql query as far as I'm aware
         public string GetTitle(int id)
         {
             return _context.LibraryAssets.First(a => a.Id == id).Title;
@@ -82,14 +80,10 @@ namespace Library.Service
 
         public string GetType(int id)
         {
-            // you should be aware that the discriminator column is used internally 
-            // by Code First and you cannnot read/write its values from an inheritance 
-            // mapping standpoint.
-
-            var books = _context.LibraryAssets
-                .OfType<Book>().Where(a => a.Id == id);
-
-            return books.Any() ? "Book" : "Video";
+            // Hack
+            var book = _context.LibraryAssets
+                .OfType<Book>().SingleOrDefault(a => a.Id == id);
+            return book != null ? "Book" : "Video";
         }
 
         private string GetAuthor(int id)
