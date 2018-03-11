@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Library.Data;
@@ -375,6 +376,36 @@ namespace Library.Tests.Services
         [Test]
         public void Get_CurrentHoldPlaced()
         {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Gets_current_hold_placed")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var hold = new Hold
+                {
+                    Id = 191,
+                    LibraryCard = new LibraryCard {Id = 16},
+                    LibraryAsset = new Book
+                    {
+                        Id = 123,
+                        Title = "My Antonia"
+                    },
+                    HoldPlaced = new DateTime(2000, 05, 11)
+                };
+
+                context.Holds.Add(hold);
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var sut = new CheckoutService(context);
+                var result = sut.GetCurrentHoldPlaced(191);
+
+                var expected = new DateTime(2000, 05, 11).ToString(CultureInfo.InvariantCulture);
+                result.Should().Be(expected);
+            }
         }
 
         [Test]
