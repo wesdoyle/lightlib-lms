@@ -66,10 +66,9 @@ namespace Library.Tests.Services
             var queryResult = sut.GetAll().ToList();
 
             queryResult.Should().AllBeOfType(typeof(LibraryCard));
-            queryResult.Should().HaveCount(3);
+            queryResult.Should().HaveCount(2);
             queryResult.Should().Contain(a => a.Id == 1);
             queryResult.Should().Contain(a => a.Id == 2);
-            queryResult.Should().Contain(a => a.Id == 3);
         }
 
         [Test]
@@ -80,9 +79,9 @@ namespace Library.Tests.Services
             mockCtx.Setup(c => c.LibraryCards).Returns(mockSet.Object);
 
             var sut = new LibraryCardService(mockCtx.Object);
-            var queryResult = sut.Get(3);
+            var queryResult = sut.Get(2);
 
-            queryResult.Should().BeEquivalentTo(new LibraryCard {Id = 3});
+            queryResult.Should().BeEquivalentTo(new LibraryCard {Id = 2});
         }
     }
 }
