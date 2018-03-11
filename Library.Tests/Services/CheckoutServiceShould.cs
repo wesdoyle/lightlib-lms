@@ -130,6 +130,62 @@ namespace Library.Tests.Services
         }
 
         [Test]
+        public void CheckIn_Checks_Out_To_Earliest_Hold()
+        {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Checks_out_to_earliest_hold")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var book = new Book
+                {
+                    Id = 155,
+                    Status = new Status { Name = "Checked Out" }
+                };
+
+                var checkout = new Checkout
+                {
+                    Id = 2309,
+                    LibraryAsset = book,
+                    LibraryCard = new LibraryCard { Id = 5 }
+                };
+
+                context.Checkouts.Add(checkout);
+                
+                var libraryCard = new LibraryCard { Id = 682  };
+
+                var earliestHold = new Hold
+                {
+                    Id = 221,
+                    LibraryCard = libraryCard,
+                    LibraryAsset = book,
+                    HoldPlaced = new DateTime(1954, 12, 30)
+                };
+
+                var latestHold = new Hold
+                {
+                    Id = 1423,
+                    LibraryCard = new LibraryCard { Id = 12 },
+                    LibraryAsset = book,
+                    HoldPlaced = new DateTime(2018, 2, 14)
+                };
+
+                context.Holds.Add(latestHold);
+                context.Holds.Add(earliestHold);
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var service = new CheckoutService(context);
+                service.CheckInItem(155);
+                context.LibraryAssets.Find(155).Status.Name.Should().Be("Checked Out");
+                context.LibraryCards.Find(682).Checkouts.Should().Contain(v => v.LibraryAsset.Id == 155);
+            }
+        }
+
+        [Test]
         public void Checks_Out_Item()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
@@ -654,6 +710,48 @@ namespace Library.Tests.Services
         }
 
         [Test]
+        public void Update_History_When_Checked_In()
+        {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Updates_history_when_checked_in")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                context.CheckoutHistories.Add(new CheckoutHistory
+                {
+                    Id = 2209,
+                    LibraryAsset = new Video
+                    {
+                        Id = 10,
+                        Status = new Status
+                        {
+                            Id = 12,
+                            Name = "Checked Out"
+                        }
+                    },
+                    LibraryCard = new LibraryCard
+                    {
+                        Id = 42898
+                    },
+                    CheckedIn = null,
+                    CheckedOut = DateTime.Now
+                });
+
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var service = new CheckoutService(context);
+                service.CheckInItem(10);
+
+                var history = context.CheckoutHistories.Find(2209);
+                history.CheckedIn.Should().NotBeNull();
+            }
+        }
+
+        [Test]
         public void Update_History_When_Marked_Found()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
@@ -684,51 +782,9 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var service = new CheckoutService(context);
-                service.MarkFound(16);
+                service.CheckInItem(16);
 
                 var history = context.CheckoutHistories.Find(31);
-                history.CheckedIn.Should().NotBeNull();
-            }
-        }
-        
-        [Test]
-        public void Update_History_When_Checked_In()
-        {
-            var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase("Updates_history_when_checked_in")
-                .Options;
-
-            using (var context = new LibraryDbContext(options))
-            {
-                context.CheckoutHistories.Add(new CheckoutHistory
-                {
-                    Id = 2209,
-                    LibraryAsset = new Video 
-                    {
-                        Id = 10,
-                        Status = new Status
-                        {
-                            Id = 12,
-                            Name = "Checked Out"
-                        }
-                    },
-                    LibraryCard = new LibraryCard
-                    {
-                        Id = 42898
-                    },
-                    CheckedIn = null,
-                    CheckedOut = DateTime.Now
-                });
-
-                context.SaveChanges();
-            }
-
-            using (var context = new LibraryDbContext(options))
-            {
-                var service = new CheckoutService(context);
-                service.CheckInItem(10);
-
-                var history = context.CheckoutHistories.Find(2209);
                 history.CheckedIn.Should().NotBeNull();
             }
         }
