@@ -249,7 +249,7 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Get_Checkout()
+        public void Get_Checkout_By_Id()
         {
             var cos = GetCheckouts().AsQueryable();
 

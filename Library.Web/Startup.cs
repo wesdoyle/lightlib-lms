@@ -26,7 +26,7 @@ namespace Library.Web
             services.AddScoped<ILibraryBranchService, LibraryBranchService>();
             services.AddScoped<IPatronService, PatronService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
-            services.AddScoped<ILibraryAssetService, LibraryAssetServiceService>();
+            services.AddScoped<ILibraryAssetService, LibraryAssetService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<IStatusService, StatusServiceService>();

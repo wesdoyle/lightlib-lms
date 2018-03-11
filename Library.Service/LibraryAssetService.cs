@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Service
 {
-    public class LibraryAssetServiceService : ILibraryAssetService
+    public class LibraryAssetService : ILibraryAssetService
     {
         private readonly LibraryDbContext _context;
 
-        public LibraryAssetServiceService(LibraryDbContext context)
+        public LibraryAssetService(LibraryDbContext context)
         {
             _context = context;
         }
@@ -42,9 +42,8 @@ namespace Library.Service
                 .OfType<Book>().Any(a => a.Id == id);
 
             return isBook
-                ? _context.Books.FirstOrDefault(a => a.Id == id)?.Author
-                : _context.Videos.FirstOrDefault(a => a.Id == id)?.Director
-                  ?? "Unknown";
+                ? GetAuthor(id)
+                : GetDirector(id);
         }
 
         public LibraryBranch GetCurrentLocation(int id)
@@ -66,12 +65,10 @@ namespace Library.Service
 
         public string GetIsbn(int id)
         {
-            if (_context.Books.Any(a => a.Id == id))
-                return _context.Books
-                    .FirstOrDefault(a => a.Id == id)
-                    ?.ISBN;
+            if (GetType(id) != "Book") return "N/A";
+            var book = (Book) Get(id);
+            return book.ISBN;
 
-            return "";
         }
 
         public LibraryCard GetLibraryCardByAssetId(int id)
@@ -96,13 +93,24 @@ namespace Library.Service
             // you should be aware that the discriminator column is used internally 
             // by Code First and you cannnot read/write its values from an inheritance 
             // mapping standpoint.
-
             // Hack, not scalable - there is a better way.
 
             var books = _context.LibraryAssets
                 .OfType<Book>().Where(a => a.Id == id);
 
             return books.Any() ? "Book" : "Video";
+        }
+
+        private string GetAuthor(int id)
+        {
+            var book = (Book) Get(id);
+            return book.Author;
+        }
+
+        private string GetDirector(int id)
+        {
+            var video = (Video) Get(id);
+            return video.Director;
         }
     }
 }
