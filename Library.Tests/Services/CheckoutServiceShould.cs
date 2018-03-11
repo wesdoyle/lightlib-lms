@@ -136,6 +136,11 @@ namespace Library.Tests.Services
 
             using (var context = new LibraryDbContext(options))
             {
+                context.Statuses.Add(new Status
+                {
+                    Name = "Available"
+                });
+
                 context.LibraryAssets.Add(new Book
                 {
                     Id = -516,
@@ -146,22 +151,15 @@ namespace Library.Tests.Services
                     }
                 });
 
-                context.Statuses.Add(new Status
-                {
-                    Id = 1,
-                    Name = "On Hold"
-                });
-
                 context.SaveChanges();
             }
 
             using (var context = new LibraryDbContext(options))
             {
                 var service = new CheckoutService(context);
-                service.PlaceHold(-516, 1);
-
+                service.CheckInItem(-516);
                 var book = context.LibraryAssets.Find(-516);
-                book.Status.Name.Should().Be("On Hold");
+                book.Status.Name.Should().Be("Available");
             }
         }
 
@@ -289,7 +287,7 @@ namespace Library.Tests.Services
                 context.Books.Add(book);
                 context.LibraryCards.Add(card);
                 context.SaveChanges();
-                
+
                 var patron = new Patron
                 {
                     Id = 118,
@@ -297,14 +295,14 @@ namespace Library.Tests.Services
                     FirstName = "Frodo",
                     LastName = "Baggins"
                 };
-                
+
                 var hold = new Hold
                 {
                     Id = 41,
                     LibraryAsset = book,
                     LibraryCard = card
                 };
-                
+
                 context.Patrons.Add(patron);
                 context.Holds.Add(hold);
                 context.SaveChanges();
@@ -322,7 +320,7 @@ namespace Library.Tests.Services
         public void Get_Current_Holds()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase("Gets_checked_out_item")
+                .UseInMemoryDatabase("Gets_current_holds")
                 .Options;
 
             using (var context = new LibraryDbContext(options))
@@ -342,20 +340,20 @@ namespace Library.Tests.Services
                 context.Books.Add(book);
                 context.LibraryCards.Add(card);
                 context.SaveChanges();
-                
+
                 var patron = new Patron
                 {
                     Id = 118,
                     LibraryCard = card
                 };
-                
+
                 var hold = new Hold
                 {
                     Id = 41,
                     LibraryAsset = book,
                     LibraryCard = card
                 };
-                
+
                 context.Patrons.Add(patron);
                 context.Holds.Add(hold);
                 context.SaveChanges();
@@ -390,7 +388,7 @@ namespace Library.Tests.Services
             {
                 var book = new Book
                 {
-                    Id = 2319,
+                    Id = 322,
                     Title = "Ulysses",
                     NumberOfCopies = 99
                 };
@@ -410,62 +408,8 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var sut = new CheckoutService(context);
-                var result = sut.IsCheckedOut(2319);
+                var result = sut.IsCheckedOut(322);
                 result.Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void Get_Latest_Checkout()
-        {
-            var options = new DbContextOptionsBuilder<LibraryDbContext>()
-                .UseInMemoryDatabase("Gets_latest_checkout")
-                .Options;
-
-            using (var context = new LibraryDbContext(options))
-            {
-                var book = new Book
-                {
-                    Id = 222,
-                    Title = "Fact, Fiction, and Forecast"
-                };
-
-                context.Books.Add(book);
-                context.SaveChanges();
-
-                var checkouts = new List<Checkout>
-                {
-                    new Checkout
-                    {
-                        Id = 1,
-                        Since = new DateTime(2018, 12, 23),
-                        LibraryCard = new LibraryCard
-                        {
-                            Id = 64
-                        },
-                        LibraryAsset = book
-                    },
-                    new Checkout
-                    {
-                        Id = 2,
-                        Since = new DateTime(2014, 12, 1),
-                        LibraryCard = new LibraryCard
-                        {
-                            Id = 182
-                        },
-                        LibraryAsset = book
-                    }
-                };
-
-                context.Checkouts.AddRange(checkouts);
-                context.SaveChanges();
-            }
-
-            using (var context = new LibraryDbContext(options))
-            {
-                var sut = new CheckoutService(context);
-                var result = sut.GetLatestCheckout(14);
-                result.LibraryCard.Id.Should().Be(64);
             }
         }
 
@@ -492,8 +436,8 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var sut = new CheckoutService(context);
-                var result = sut.GetLatestCheckout(14);
-                result.LibraryCard.Id.Should().Be(64);
+                var result = sut.GetNumberOfCopies(2319);
+                result.Should().Be(99);
             }
         }
 
@@ -549,13 +493,14 @@ namespace Library.Tests.Services
                     Id = -516,
                     Status = new Status
                     {
+                        Id = -123,
                         Name = "Available"
                     }
                 });
 
                 context.Statuses.Add(new Status
                 {
-                    Id = 2,
+                    Id = -117,
                     Name = "Lost"
                 });
                 context.SaveChanges();

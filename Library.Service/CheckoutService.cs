@@ -196,6 +196,7 @@ namespace Library.Service
                 .Where(a => a.LibraryAsset.Id == id);
         }
 
+        // Remove useless method and replace with finding latest CheckoutHistory if needed 
         public Checkout GetLatestCheckout(int id)
         {
             return _context.Checkouts
