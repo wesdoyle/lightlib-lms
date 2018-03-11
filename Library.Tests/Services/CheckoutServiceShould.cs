@@ -782,7 +782,7 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var service = new CheckoutService(context);
-                service.CheckInItem(16);
+                service.MarkFound(16);
 
                 var history = context.CheckoutHistories.Find(31);
                 history.CheckedIn.Should().NotBeNull();
