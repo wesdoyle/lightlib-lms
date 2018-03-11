@@ -13,6 +13,67 @@ namespace Library.Tests.Services
     [TestFixture]
     public class LibrarybrancheserviceShould
     {
+        private static IEnumerable<LibraryBranch> GetBranches()
+        {
+            return new List<LibraryBranch>
+            {
+                new LibraryBranch
+                {
+                    Id = -6,
+                    Name = "Hawkins",
+                    Patrons = new List<Patron>
+                    {
+                        new Patron
+                        {
+                            Id = 11,
+                            FirstName = "Jin"
+                        },
+
+                        new Patron
+                        {
+                            Id = 234,
+                            FirstName = "Helen"
+                        }
+                    }
+                },
+
+                new LibraryBranch
+                {
+                    Id = 1,
+                    Name = "Downtown",
+                    Patrons = new List<Patron>
+                    {
+                        new Patron
+                        {
+                            Id = 19,
+                            FirstName = "Sam"
+                        },
+
+                        new Patron
+                        {
+                            Id = 28,
+                            FirstName = "Mark"
+                        }
+                    },
+                    LibraryAssets = new List<LibraryAsset>
+                    {
+                        new Book
+                        {
+                            Id = 1,
+                            Title = "CTCI",
+                            Cost = 1.25M
+                        },
+                        new Video
+                        {
+                            Id = 23,
+                            Title = "Stranger Things",
+                            Cost = 1.25M
+                        }
+                    }
+                }
+            };
+        }
+
         [Test]
         public void Add_New_LibraryBranch_To_Context()
         {
@@ -26,26 +87,6 @@ namespace Library.Tests.Services
 
             mockCtx.Verify(s => s.Add(It.IsAny<LibraryBranch>()), Times.Once());
             mockCtx.Verify(c => c.SaveChanges(), Times.Once());
-        }
-
-        [Test]
-        public void Get_LibraryBranch_By_Id()
-        {
-            var branches = GetBranches().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryBranch>>();
-            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.Provider).Returns(branches.Provider);
-            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.Expression).Returns(branches.Expression);
-            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.ElementType).Returns(branches.ElementType);
-            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.GetEnumerator()).Returns(branches.GetEnumerator);
-
-            var mockCtx = new Mock<LibraryDbContext>();
-            mockCtx.Setup(c => c.LibraryBranches).Returns(mockSet.Object);
-
-            var sut = new LibraryBranchService(mockCtx.Object);
-            var branch = sut.Get(-6);
-
-            branch.Name.Should().Be("Hawkins");
         }
 
         [Test]
@@ -133,6 +174,31 @@ namespace Library.Tests.Services
         }
 
         [Test]
+        public void Get_Branch_Hours()
+        {
+        }
+
+        [Test]
+        public void Get_LibraryBranch_By_Id()
+        {
+            var branches = GetBranches().AsQueryable();
+
+            var mockSet = new Mock<DbSet<LibraryBranch>>();
+            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.Provider).Returns(branches.Provider);
+            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.Expression).Returns(branches.Expression);
+            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.ElementType).Returns(branches.ElementType);
+            mockSet.As<IQueryable<LibraryBranch>>().Setup(b => b.GetEnumerator()).Returns(branches.GetEnumerator);
+
+            var mockCtx = new Mock<LibraryDbContext>();
+            mockCtx.Setup(c => c.LibraryBranches).Returns(mockSet.Object);
+
+            var sut = new LibraryBranchService(mockCtx.Object);
+            var branch = sut.Get(-6);
+
+            branch.Name.Should().Be("Hawkins");
+        }
+
+        [Test]
         public void Get_Patron_Count()
         {
             var branches = GetBranches().AsQueryable();
@@ -150,12 +216,6 @@ namespace Library.Tests.Services
             var sut = new LibraryBranchService(mockCtx.Object);
             var queryResult = sut.GetPatronCount(branches.First().Id);
             queryResult.Should().Be(2);
-        }
-
-        [Test]
-        public void Get_Branch_Hours()
-        {
-
         }
 
         [Test]
@@ -178,67 +238,6 @@ namespace Library.Tests.Services
             queryResult.Count.Should().Be(2);
             queryResult.Should().Contain(c => c.FirstName == "Helen");
             queryResult.Should().Contain(c => c.FirstName == "Jin");
-        }
-
-        private static IEnumerable<LibraryBranch> GetBranches()
-        {
-            return new List<LibraryBranch>
-            {
-                new LibraryBranch
-                {
-                    Id = -6,
-                    Name = "Hawkins",
-                    Patrons = new List<Patron>
-                    {
-                        new Patron
-                        {
-                            Id = 11,
-                            FirstName = "Jin"
-                        },
-
-                        new Patron
-                        {
-                            Id = 234,
-                            FirstName = "Helen"
-                        }
-                    }
-                },
-
-                new LibraryBranch
-                {
-                    Id = 1,
-                    Name = "Downtown",
-                    Patrons = new List<Patron>
-                    {
-                        new Patron
-                        {
-                            Id = 19,
-                            FirstName = "Sam"
-                        },
-
-                        new Patron
-                        {
-                            Id = 28,
-                            FirstName = "Mark"
-                        }
-                    },
-                    LibraryAssets = new List<LibraryAsset>
-                    {
-                        new Book()
-                        {
-                            Id = 1,
-                            Title = "CTCI",
-                            Cost = 1.25M
-                        },
-                        new Video()
-                        {
-                            Id = 23,
-                            Title = "Stranger Things",
-                            Cost = 1.25M
-                        }
-                    }
-                }
-            };
         }
     }
 }
