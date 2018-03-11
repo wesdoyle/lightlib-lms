@@ -29,7 +29,7 @@ namespace Library.Web
             services.AddScoped<ILibraryAssetService, LibraryAssetService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IVideoService, VideoService>();
-            services.AddScoped<IStatusService, StatusServiceService>();
+            services.AddScoped<IStatusService, StatusService>();
 
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));

@@ -5,11 +5,11 @@ using Library.Data.Models;
 
 namespace Library.Service
 {
-    public class StatusServiceService : IStatusService
+    public class StatusService : IStatusService
     {
         private readonly LibraryDbContext _context;
 
-        public StatusServiceService(LibraryDbContext context)
+        public StatusService(LibraryDbContext context)
         {
             _context = context;
         }
