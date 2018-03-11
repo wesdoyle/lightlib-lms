@@ -10,7 +10,7 @@ namespace Library.Web.Models.Catalog
         public string AuthorOrDirector { get; set; }
         public string Type { get; set; }
         public int Year { get; set; }
-        public string ISBN { get; set; }
+        public string Isbn { get; set; }
         public string Dewey { get; set; }
         public string Status { get; set; }
         public decimal Cost { get; set; }

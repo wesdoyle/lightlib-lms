@@ -66,7 +66,7 @@ namespace Library.Web.Controllers
                 Dewey = _assetsService.GetDeweyIndex(id),
                 CheckoutHistory = _checkoutsService.GetCheckoutHistory(id),
                 CurrentAssociatedLibraryCard = _assetsService.GetLibraryCardByAssetId(id),
-                ISBN = _assetsService.GetIsbn(id),
+                Isbn = _assetsService.GetIsbn(id),
                 LatestCheckout = _checkoutsService.GetLatestCheckout(id),
                 CurrentHolds = currentHolds,
                 PatronName = _checkoutsService.GetCurrentPatron(id)
