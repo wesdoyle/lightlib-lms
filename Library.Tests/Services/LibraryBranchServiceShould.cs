@@ -131,7 +131,7 @@ namespace Library.Tests.Services
             var queryResult = sut.GetAssetCount(1);
             queryResult.Should().Be(2);
         }
-
+        
         [Test]
         public void Get_Branch_Assets()
         {

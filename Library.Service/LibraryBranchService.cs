@@ -36,13 +36,13 @@ namespace Library.Service
 
         public int GetAssetCount(int branchId)
         {
-            return Get(branchId)?.LibraryAssets?.Count() ?? 0;
+            return Get(branchId).LibraryAssets.Count();
         }
 
         public IEnumerable<LibraryAsset> GetAssets(int branchId)
         {
             return _context.LibraryBranches.Include(a => a.LibraryAssets)
-                .FirstOrDefault(b => b.Id == branchId)?.LibraryAssets;
+                .First(b => b.Id == branchId).LibraryAssets;
         }
 
         public decimal GetAssetsValue(int branchId)
