@@ -61,20 +61,6 @@ namespace Library.Tests.Controllers
         }
 
         [Test]
-        public void Return_Default_Message_For_Patrons_With_No_Name()
-        {
-            var mockPatronService= new Mock<IPatronService>();
-            mockPatronService.Setup(r => r.Get(1)).Returns(GetNamelessPatron());
-            var controller = new PatronController(mockPatronService.Object);
-
-            var result = controller.Detail(1);
-
-            var viewResult = result.Should().BeOfType<ViewResult>();
-            var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<PatronDetailModel>();
-            viewModel.Subject.LastName.Should().Be("No Last Name Provided");
-        }
-
-        [Test]
         public void Return_PatronDetailModel()
         {
             var mockPatronService = new Mock<IPatronService>();
@@ -85,6 +71,24 @@ namespace Library.Tests.Controllers
 
             var viewResult = result.Should().BeOfType<ViewResult>();
             viewResult.Subject.Model.Should().BeOfType<PatronDetailModel>();
+        }
+        
+        [Test]
+        public void Return_Default_Values_For_Missing_Patron_Details()
+        {
+            var mockPatronService = new Mock<IPatronService>();
+            mockPatronService.Setup(r => r.Get(411)).Returns(GetNoInfoPatron());
+            var controller = new PatronController(mockPatronService.Object);
+
+            var result = controller.Detail(411);
+
+            var viewResult = result.Should().BeOfType<ViewResult>();
+            var viewModel = viewResult.Subject.ViewData.Model.Should().BeAssignableTo<PatronDetailModel>();
+            viewModel.Subject.FirstName.Should().Be("No First Name Provided");
+            viewModel.Subject.LastName.Should().Be("No Last Name Provided");
+            viewModel.Subject.Address.Should().Be("No Address Provided");
+            viewModel.Subject.HomeLibrary.Should().Be("No Home Library");
+            viewModel.Subject.Telephone.Should().Be("No Telephone Number Provided");
         }
 
         private static IEnumerable<Patron> GetAllPatrons()
@@ -129,6 +133,11 @@ namespace Library.Tests.Controllers
                     Name = "Hawkins",
                 }
             };
+        }
+        
+        private static Patron GetNoInfoPatron()
+        {
+            return new Patron();
         }
 
         private static Patron GetNamelessPatron()

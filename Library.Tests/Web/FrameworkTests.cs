@@ -19,12 +19,12 @@ namespace Library.Tests.Web
             _client = server.CreateClient();
         }
 
-        [Test]
-        public async Task Default_Web_Request_Should_Return_OK()
-        {
-            // var response = await _client.GetAsync("/");
-            // var responseString = await response.Content.ReadAsStringAsync();
-            // response.EnsureSuccessStatusCode();
-        }
+        // Test]
+        // ublic async Task Default_Web_Request_Should_Return_OK()
+        // 
+        //    // var response = await _client.GetAsync("/");
+        //    // var responseString = await response.Content.ReadAsStringAsync();
+        //    // response.EnsureSuccessStatusCode();
+        // }
     }
 }
