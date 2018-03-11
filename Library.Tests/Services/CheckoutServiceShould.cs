@@ -7,6 +7,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using Moq;
 using NUnit.Framework;
 
@@ -15,21 +16,6 @@ namespace Library.Tests.Services
     [TestFixture]
     public class CheckoutServiceShould
     {
-        private static Checkout GetCheckout()
-        {
-            return new Checkout
-            {
-                Id = 304,
-                Since = new DateTime(2018, 03, 09),
-                Until = new DateTime(2018, 04, 12),
-                LibraryCard = new LibraryCard
-                {
-                    Id = -1,
-                    Created = new DateTime(2008, 01, 21)
-                }
-            };
-        }
-
         private static IEnumerable<Checkout> GetCheckouts()
         {
             return new List<Checkout>
@@ -74,7 +60,7 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Add_Checkout_To_Database()
+        public void Gets_Checkout()
         {
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
                 .UseInMemoryDatabase("Adds_checkout_to_database")
@@ -104,11 +90,12 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var service = new CheckoutService(context);
+                
                 service.Add(new Checkout
                 {
                     Id = -247
                 });
-                Assert.AreEqual(1, context.Checkouts.Count());
+                
                 Assert.AreEqual(-247, context.Checkouts.Single().Id);
             }
         }
@@ -161,6 +148,47 @@ namespace Library.Tests.Services
                 service.CheckInItem(-516);
                 var book = context.LibraryAssets.Find(-516);
                 book.Status.Name.Should().Be("Available");
+            }
+        }
+
+        [Test]
+        public void Checks_Out_Item()
+        {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Checks_Out_Item")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                context.Statuses.Add(new Status
+                {
+                    Name = "Checked Out"
+                });
+                
+                context.LibraryCards.Add(new LibraryCard()
+                {
+                    Id = 990 
+                });
+
+                context.LibraryAssets.Add(new Book
+                {
+                    Id = -2126,
+                    Status = new Status
+                    {
+                        Id = 2,
+                        Name = "Available"
+                    }
+                });
+
+                context.SaveChanges();
+            }
+            
+            using (var context = new LibraryDbContext(options))
+            {
+                var service = new CheckoutService(context);
+                service.CheckoutItem(-2126, 990);
+                var book = context.LibraryAssets.Find(-2126);
+                book.Status.Name.Should().Be("Checked Out");
             }
         }
 
@@ -371,6 +399,48 @@ namespace Library.Tests.Services
         [Test]
         public void Get_Current_Patron()
         {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Gets_current_patron")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var card = new LibraryCard
+                {
+                    Id = 3233
+                };
+                
+                var patron = new Patron
+                {
+                    FirstName = "Kevin",
+                    LastName = "Shields",
+                    LibraryCard = card
+                };
+                
+                context.Patrons.Add(patron);
+                
+                var checkout = new Checkout 
+                {
+                    Id = 1999,
+                    LibraryAsset = new Video
+                    {
+                        Id = 9,
+                        Title = "Stranger Things 2"
+                    },
+                    
+                    LibraryCard = card
+                };
+
+                context.Checkouts.Add(checkout);
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var sut = new CheckoutService(context);
+                var result = sut.GetCurrentPatron(9);
+                result.Should().Be("Kevin Shields");
+            }
         }
 
         [Test]
