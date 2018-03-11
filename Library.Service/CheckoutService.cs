@@ -39,9 +39,9 @@ namespace Library.Service
 
             var item = _context.LibraryAssets
                 .Include(a => a.Status)
-                .FirstOrDefault(a => a.Id == id);
+                .First(a => a.Id == id);
 
-            _context.Update(item ?? throw new InvalidOperationException());
+            _context.Update(item);
 
             item.Status = _context.Statuses
                 .FirstOrDefault(a => a.Name == "Checked Out");
@@ -76,9 +76,9 @@ namespace Library.Service
         public void MarkLost(int id)
         {
             var item = _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == id);
+                .First(a => a.Id == id);
 
-            _context.Update(item ?? throw new InvalidOperationException());
+            _context.Update(item);
 
             item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Lost");
 
@@ -88,9 +88,9 @@ namespace Library.Service
         public void MarkFound(int id)
         {
             var item = _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == id);
+                .First(a => a.Id == id);
 
-            _context.Update(item ?? throw new InvalidOperationException());
+            _context.Update(item);
             item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
             var now = DateTime.Now;
 
@@ -119,12 +119,12 @@ namespace Library.Service
 
             var asset = _context.LibraryAssets
                 .Include(a => a.Status)
-                .FirstOrDefault(a => a.Id == assetId);
+                .First(a => a.Id == assetId);
 
             var card = _context.LibraryCards
-                .FirstOrDefault(a => a.Id == libraryCardId);
+                .First(a => a.Id == libraryCardId);
 
-            _context.Update(asset ?? throw new InvalidOperationException());
+            _context.Update(asset);
 
             if (asset.Status.Name == "Available")
                 asset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "On Hold");
@@ -145,9 +145,9 @@ namespace Library.Service
             var now = DateTime.Now;
 
             var item = _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == id);
+                .First(a => a.Id == id);
 
-            _context.Update(item ?? throw new InvalidOperationException());
+            _context.Update(item);
 
             // remove any existing checkouts on the item
             var checkout = _context.Checkouts
