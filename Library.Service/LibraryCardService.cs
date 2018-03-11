@@ -5,11 +5,11 @@ using Library.Data.Models;
 
 namespace Library.Service
 {
-    public class LibraryCardServiceService : ILibraryCardService
+    public class LibraryCardService : ILibraryCardService
     {
         private readonly LibraryDbContext _context;
 
-        public LibraryCardServiceService(LibraryDbContext context)
+        public LibraryCardService(LibraryDbContext context)
         {
             _context = context;
         }
@@ -25,7 +25,7 @@ namespace Library.Service
             return _context.LibraryCards.FirstOrDefault(p => p.Id == cardId);
         }
 
-        IEnumerable<LibraryCard> ILibraryCardService.GetAll()
+        public IEnumerable<LibraryCard> GetAll()
         {
             return _context.LibraryCards;
         }

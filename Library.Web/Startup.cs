@@ -22,7 +22,7 @@ namespace Library.Web
         {
             services.AddMvc();
             services.AddSingleton(Configuration);
-            services.AddScoped<ILibraryCardService, LibraryCardServiceService>();
+            services.AddScoped<ILibraryCardService, LibraryCardService>();
             services.AddScoped<ILibraryBranchService, LibraryBranchService>();
             services.AddScoped<IPatronService, PatronService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
