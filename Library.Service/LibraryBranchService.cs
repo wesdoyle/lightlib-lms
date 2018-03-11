@@ -63,12 +63,12 @@ namespace Library.Service
 
         public int GetPatronCount(int branchId)
         {
-            return Get(branchId)?.Patrons?.Count() ?? 0;
+            return Get(branchId).Patrons.Count();
         }
 
         public IEnumerable<Patron> GetPatrons(int branchId)
         {
-            return _context.LibraryBranches.Include(a => a.Patrons).FirstOrDefault(b => b.Id == branchId)?.Patrons;
+            return _context.LibraryBranches.Include(a => a.Patrons).First(b => b.Id == branchId).Patrons;
         }
 
         //TODO: Implement 

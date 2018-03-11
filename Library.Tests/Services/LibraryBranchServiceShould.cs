@@ -131,7 +131,7 @@ namespace Library.Tests.Services
             var queryResult = sut.GetAssetCount(1);
             queryResult.Should().Be(2);
         }
-        
+
         [Test]
         public void Get_Branch_Assets()
         {
@@ -183,26 +183,26 @@ namespace Library.Tests.Services
             using (var context = new LibraryDbContext(options))
             {
                 var branch = new LibraryBranch {Id = -190};
-                
-                var hours = new List<BranchHours>()
+
+                var hours = new List<BranchHours>
                 {
                     new BranchHours
                     {
-                        Branch = branch, 
+                        Branch = branch,
                         DayOfWeek = 1,
                         OpenTime = 13,
                         CloseTime = 15
                     },
-                    
+
                     new BranchHours
                     {
-                        Branch = branch, 
+                        Branch = branch,
                         DayOfWeek = 2,
                         OpenTime = 4,
-                        CloseTime = 24 
+                        CloseTime = 24
                     }
                 };
-                
+
                 context.BranchHours.AddRange(hours);
                 context.SaveChanges();
             }
@@ -216,7 +216,7 @@ namespace Library.Tests.Services
                     "Monday 13:00 to 15:00",
                     "Tuesday 04:00 to 00:00"
                 };
-                
+
                 result.Should().BeEquivalentTo(expected);
             }
         }

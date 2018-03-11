@@ -141,19 +141,19 @@ namespace Library.Tests.Services
                 var book = new Book
                 {
                     Id = 155,
-                    Status = new Status { Name = "Checked Out" }
+                    Status = new Status {Name = "Checked Out"}
                 };
 
                 var checkout = new Checkout
                 {
                     Id = 2309,
                     LibraryAsset = book,
-                    LibraryCard = new LibraryCard { Id = 5 }
+                    LibraryCard = new LibraryCard {Id = 5}
                 };
 
                 context.Checkouts.Add(checkout);
-                
-                var libraryCard = new LibraryCard { Id = 682  };
+
+                var libraryCard = new LibraryCard {Id = 682};
 
                 var earliestHold = new Hold
                 {
@@ -166,7 +166,7 @@ namespace Library.Tests.Services
                 var latestHold = new Hold
                 {
                     Id = 1423,
-                    LibraryCard = new LibraryCard { Id = 12 },
+                    LibraryCard = new LibraryCard {Id = 12},
                     LibraryAsset = book,
                     HoldPlaced = new DateTime(2018, 2, 14)
                 };
