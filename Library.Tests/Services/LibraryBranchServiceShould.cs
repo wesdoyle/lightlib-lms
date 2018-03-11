@@ -174,8 +174,51 @@ namespace Library.Tests.Services
         }
 
         [Test]
-        public void Get_Branch_Hours()
+        public void Get_Humanized_Branch_Hours()
         {
+            var options = new DbContextOptionsBuilder<LibraryDbContext>()
+                .UseInMemoryDatabase("Gets_branch_hours")
+                .Options;
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var branch = new LibraryBranch {Id = -190};
+                
+                var hours = new List<BranchHours>()
+                {
+                    new BranchHours
+                    {
+                        Branch = branch, 
+                        DayOfWeek = 1,
+                        OpenTime = 13,
+                        CloseTime = 15
+                    },
+                    
+                    new BranchHours
+                    {
+                        Branch = branch, 
+                        DayOfWeek = 2,
+                        OpenTime = 4,
+                        CloseTime = 24 
+                    }
+                };
+                
+                context.BranchHours.AddRange(hours);
+                context.SaveChanges();
+            }
+
+            using (var context = new LibraryDbContext(options))
+            {
+                var sut = new LibraryBranchService(context);
+                var result = sut.GetBranchHours(-190);
+                var expected = new List<string>
+                {
+                    "Monday 13:00 to 15:00",
+                    "Tuesday 04:00 to 00:00"
+                };
+                
+                result.Should().BeEquivalentTo(expected);
+            }
         }
 
         [Test]
