@@ -48,19 +48,14 @@ namespace Library.Service
 
         public LibraryBranch GetCurrentLocation(int id)
         {
-            return _context.LibraryAssets
-                .FirstOrDefault(a => a.Id == id)
-                ?.Location;
+            return _context.LibraryAssets.First(a => a.Id == id).Location;
         }
 
         public string GetDeweyIndex(int id)
         {
-            if (_context.Books.Any(a => a.Id == id))
-                return _context.Books
-                    .FirstOrDefault(a => a.Id == id)
-                    ?.DeweyIndex;
-
-            return "";
+            if (GetType(id) != "Book") return "N/A";
+            var book = (Book) Get(id);
+            return book.DeweyIndex;
         }
 
         public string GetIsbn(int id)
@@ -68,7 +63,6 @@ namespace Library.Service
             if (GetType(id) != "Book") return "N/A";
             var book = (Book) Get(id);
             return book.ISBN;
-
         }
 
         public LibraryCard GetLibraryCardByAssetId(int id)
@@ -80,12 +74,10 @@ namespace Library.Service
         }
 
         // cannot access discriminator value directly without
-        // building a raw sql query as far as I'm aware,
-        // so we should either change mapping strategy, or 
-        // perhaps we don't need to implement inheritance
+        // building a raw sql query as far as I'm aware
         public string GetTitle(int id)
         {
-            return _context.LibraryAssets.FirstOrDefault(a => a.Id == id)?.Title;
+            return _context.LibraryAssets.First(a => a.Id == id).Title;
         }
 
         public string GetType(int id)
@@ -93,7 +85,6 @@ namespace Library.Service
             // you should be aware that the discriminator column is used internally 
             // by Code First and you cannnot read/write its values from an inheritance 
             // mapping standpoint.
-            // Hack, not scalable - there is a better way.
 
             var books = _context.LibraryAssets
                 .OfType<Book>().Where(a => a.Id == id);

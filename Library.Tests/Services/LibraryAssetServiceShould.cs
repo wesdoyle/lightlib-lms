@@ -22,7 +22,8 @@ namespace Library.Tests.Services
                 {
                     Id = 1223,
                     Title = "Infinite Jest",
-                    Author = "DFW"
+                    Author = "DFW",
+                    DeweyIndex = "WAL111"
                 },
 
                 new Book
@@ -206,6 +207,25 @@ namespace Library.Tests.Services
         }
 
         [Test]
+        public void Get_Dewey_Index()
+        {
+            var cos = GetAssets().AsQueryable();
+
+            var mockSet = new Mock<DbSet<LibraryAsset>>();
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+
+            var mockCtx = new Mock<LibraryDbContext>();
+            mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
+
+            var sut = new LibraryAssetService(mockCtx.Object);
+            var queryResult = sut.GetDeweyIndex(1223);
+            queryResult.Should().Be("WAL111");
+        }
+
+        [Test]
         public void Get_Director_Given_Video()
         {
             var cos = GetAssets().AsQueryable();
@@ -224,24 +244,6 @@ namespace Library.Tests.Services
             queryResult.Should().Be("WB");
         }
 
-        [Test]
-        public void Return_NA_ISBN_For_NonBook_Asset()
-        {
-            var cos = GetAssets().AsQueryable();
-
-            var mockSet = new Mock<DbSet<LibraryAsset>>();
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
-            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
-
-            var mockCtx = new Mock<LibraryDbContext>();
-            mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
-
-            var sut = new LibraryAssetService(mockCtx.Object);
-            var queryResult = sut.GetIsbn(234);
-            queryResult.Should().Be("N/A");
-        }
         [Test]
         public void Get_Isbn_For_Book()
         {
@@ -272,7 +274,9 @@ namespace Library.Tests.Services
             {
                 var card = new LibraryCard
                 {
-                    Id = 16, Created = new DateTime(1999, 1, 1), Fees = 0M
+                    Id = 16,
+                    Created = new DateTime(1999, 1, 1),
+                    Fees = 0M
                 };
 
                 var checkout = new Checkout
@@ -290,8 +294,28 @@ namespace Library.Tests.Services
             {
                 var sut = new LibraryAssetService(context);
                 var result = sut.GetLibraryCardByAssetId(300);
-                result.Should().BeEquivalentTo(new LibraryCard {Id = 16, Created = new DateTime(1999, 1, 1), Fees = 0M});
+                result.Should()
+                    .BeEquivalentTo(new LibraryCard {Id = 16, Created = new DateTime(1999, 1, 1), Fees = 0M});
             }
+        }
+
+        [Test]
+        public void Return_NA_ISBN_For_NonBook_Asset()
+        {
+            var cos = GetAssets().AsQueryable();
+
+            var mockSet = new Mock<DbSet<LibraryAsset>>();
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Provider).Returns(cos.Provider);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.Expression).Returns(cos.Expression);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.ElementType).Returns(cos.ElementType);
+            mockSet.As<IQueryable<LibraryAsset>>().Setup(b => b.GetEnumerator()).Returns(cos.GetEnumerator());
+
+            var mockCtx = new Mock<LibraryDbContext>();
+            mockCtx.Setup(c => c.LibraryAssets).Returns(mockSet.Object);
+
+            var sut = new LibraryAssetService(mockCtx.Object);
+            var queryResult = sut.GetIsbn(234);
+            queryResult.Should().Be("N/A");
         }
     }
 }
