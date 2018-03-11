@@ -90,7 +90,7 @@ namespace Library.Tests.Services
             var sut = new StatusService(mockCtx.Object);
             var queryResult = sut.Get(3);
 
-            queryResult.Should().BeEquivalentTo(new Status() {Id = 3, Name = "Lost"});
+            queryResult.Should().BeEquivalentTo(new Status {Id = 3, Name = "Lost"});
         }
     }
 }
