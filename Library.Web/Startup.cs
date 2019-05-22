@@ -2,6 +2,8 @@
 using Library.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +22,15 @@ namespace Library.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+	        services.Configure<CookiePolicyOptions>(opts =>
+	        {
+				// Determines whether user consent for non-essential cookies is needed for a given request
+				opts.CheckConsentNeeded = context => true;
+				opts.MinimumSameSitePolicy = SameSiteMode.None;
+	        });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddSingleton(Configuration);
             services.AddScoped<ILibraryCardService, LibraryCardService>();
             services.AddScoped<ILibraryBranchService, LibraryBranchService>();
@@ -43,14 +53,16 @@ namespace Library.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+				// Where is UseHttps();
             }
 
             app.UseStaticFiles();
+            app.UseCookiePolicy();
+            // Where is UseHttpsRedirection();
 
             app.UseMvc(routes =>
             {
