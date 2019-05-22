@@ -7,4 +7,4 @@ install:
 
 script:
 - dotnet build
-- dotnet test Library.Tests\Library.Tests.csproj
+# - dotnet test Library.Tests\Library.Tests.csproj
