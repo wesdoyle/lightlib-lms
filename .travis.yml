@@ -1,6 +1,8 @@
 language: csharp
 mono: none
+dist: xenial
 dotnet: 2.2
+sudo: required
 
 install:
 - dotnet restore
