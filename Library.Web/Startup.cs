@@ -29,7 +29,7 @@ namespace Library.Web
 				opts.MinimumSameSitePolicy = SameSiteMode.None;
 	        });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton(Configuration);
             services.AddScoped<ILibraryCardService, LibraryCardService>();
@@ -45,11 +45,8 @@ namespace Library.Web
                 options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
