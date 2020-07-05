@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Library.Data.Models;
 
-namespace Library.Data
-{
-    public interface IBookService
-    {
+namespace Library.Service.Interfaces {
+    public interface IBookService {
         IEnumerable<Book> GetAll();
         IEnumerable<Book> GetByAuthor(string author);
         IEnumerable<Book> GetByIsbn(string isbn);
