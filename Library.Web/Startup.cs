@@ -1,35 +1,22 @@
-﻿using Library.Data;
-using Library.Service;
-using Library.Service.Interfaces;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Library.Service.Interfaces;
+using Library.Service;
+using Library.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace Library.Web
-{
-    public class Startup
-    {
-        public Startup(IConfiguration config)
-        {
+namespace Library.Web {
+    public class Startup {
+        public Startup(IConfiguration config) {
             Configuration = config;
         }
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-	        services.Configure<CookiePolicyOptions>(opts =>
-	        {
-				// Determines whether user consent for non-essential cookies is needed for a given request
-				opts.CheckConsentNeeded = context => true;
-				opts.MinimumSameSitePolicy = SameSiteMode.None;
-	        });
-
+        public void ConfigureServices(IServiceCollection services) {
             services.AddMvc();
 
             services.AddSingleton(Configuration);
@@ -43,35 +30,21 @@ namespace Library.Web
             services.AddScoped<IStatusService, StatusService>();
 
             services.AddDbContext<LibraryDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("LibraryConnection")));
         }
 
-        public void Configure(
-            IApplicationBuilder app, 
-            IHostingEnvironment env, 
-            ILoggerFactory loggerFactory) {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if (env.IsDevelopment())
-            {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
+            } else {
                 app.UseExceptionHandler("/Home/Error");
-				// Where is UseHttps();
             }
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            // Where is UseHttpsRedirection();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    "default",
-                    "{controller=Home}/{action=Index}/{id?}");
+            app.UseEndpoints(routes => {
+                routes.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
