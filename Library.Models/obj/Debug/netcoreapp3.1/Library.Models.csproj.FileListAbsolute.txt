@@ -1,0 +1,9 @@
+/Users/wes/projects/library-management-system/Library.Models/bin/Debug/netcoreapp3.1/Library.Models.deps.json
+/Users/wes/projects/library-management-system/Library.Models/bin/Debug/netcoreapp3.1/Library.Models.dll
+/Users/wes/projects/library-management-system/Library.Models/bin/Debug/netcoreapp3.1/Library.Models.pdb
+/Users/wes/projects/library-management-system/Library.Models/obj/Debug/netcoreapp3.1/Library.Models.csprojAssemblyReference.cache
+/Users/wes/projects/library-management-system/Library.Models/obj/Debug/netcoreapp3.1/Library.Models.AssemblyInfoInputs.cache
+/Users/wes/projects/library-management-system/Library.Models/obj/Debug/netcoreapp3.1/Library.Models.AssemblyInfo.cs
+/Users/wes/projects/library-management-system/Library.Models/obj/Debug/netcoreapp3.1/Library.Models.csproj.CoreCompileInputs.cache
+/Users/wes/projects/library-management-system/Library.Models/obj/Debug/netcoreapp3.1/Library.Models.dll
+/Users/wes/projects/library-management-system/Library.Models/obj/Debug/netcoreapp3.1/Library.Models.pdb
