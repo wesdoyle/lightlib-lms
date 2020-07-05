@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Library.Data.Models;
+﻿using System.Threading.Tasks;
+using Library.Models;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface IBookService {
-        IEnumerable<Book> GetAll();
-        IEnumerable<Book> GetByAuthor(string author);
-        IEnumerable<Book> GetByIsbn(string isbn);
-        Book Get(int id);
-        void Add(Book newBook);
+        Task<PagedServiceResult<BookDto>> GetAll();
+        Task<PagedServiceResult<BookDto>> GetByAuthor(string author);
+        Task<PagedServiceResult<BookDto>> GetByIsbn(string isbn);
+        Task<ServiceResult<BookDto>> Get(int id);
+        Task<ServiceResult<int>> Add(BookDto newBook);
     }
 }

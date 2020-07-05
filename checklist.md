@@ -1,7 +1,6 @@
 # Library Mgmt System Update Checklist
 
-- Add service result
-- Add pagination
-- Check up on tests
-- Add docker-compose file for running psql
+- Implement use of service result
 - Make service layer, web async
+- Add pagination
+- Write new tests
