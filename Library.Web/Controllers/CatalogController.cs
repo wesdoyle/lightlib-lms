@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Library.Data;
+using Library.Service.Interfaces;
 using Library.Web.Models.Catalog;
 using Library.Web.Models.CheckoutModels;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,14 @@ namespace Library.Web.Controllers
         private readonly ILibraryAssetService _assetsService;
         private readonly ICheckoutService _checkoutsService;
 
-        public CatalogController(ILibraryAssetService assetsService, ICheckoutService checkoutsService)
-        {
+        public CatalogController(
+            ILibraryAssetService assetsService, 
+            ICheckoutService checkoutsService) {
             _assetsService = assetsService;
             _checkoutsService = checkoutsService;
         }
 
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             var assetModels = _assetsService.GetAll();
 
             var listingResult = assetModels

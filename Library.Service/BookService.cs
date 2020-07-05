@@ -2,6 +2,7 @@
 using System.Linq;
 using Library.Data;
 using Library.Data.Models;
+using Library.Service.Interfaces;
 
 namespace Library.Service
 {
@@ -9,8 +10,7 @@ namespace Library.Service
     {
         private readonly LibraryDbContext _context;
 
-        public BookService(LibraryDbContext context)
-        {
+        public BookService(LibraryDbContext context) {
             _context = context;
         }
 

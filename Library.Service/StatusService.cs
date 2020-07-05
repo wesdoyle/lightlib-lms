@@ -2,6 +2,7 @@
 using System.Linq;
 using Library.Data;
 using Library.Data.Models;
+using Library.Service.Interfaces;
 
 namespace Library.Service
 {

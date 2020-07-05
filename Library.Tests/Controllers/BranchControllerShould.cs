@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Library.Data;
 using Library.Data.Models;
+using Library.Service.Interfaces;
 using Library.Web.Controllers;
 using Library.Web.Models.Branch;
 using Microsoft.AspNetCore.Mvc;

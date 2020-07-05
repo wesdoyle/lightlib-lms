@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Library.Data.Models;
 
-namespace Library.Data
+namespace Library.Service.Interfaces
 {
     public interface ILibraryBranchService
     {
