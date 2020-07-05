@@ -9,33 +9,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Service
 {
-    public class CheckoutService : ICheckoutService
-    {
+    public class CheckoutService : ICheckoutService {
         private readonly LibraryDbContext _context;
 
-        public CheckoutService(LibraryDbContext context)
-        {
+        public CheckoutService(LibraryDbContext context) {
             _context = context;
         }
 
-        public void Add(Checkout newCheckout)
-        {
+        public void Add(Checkout newCheckout) {
             _context.Add(newCheckout);
             _context.SaveChanges();
         }
 
-        public Checkout Get(int id)
-        {
+        public Checkout Get(int id) {
             return _context.Checkouts.FirstOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<Checkout> GetAll()
-        {
+        public IEnumerable<Checkout> GetAll() {
             return _context.Checkouts;
         }
 
-        public void CheckoutItem(int id, int libraryCardId)
-        {
+        public void CheckoutItem(int id, int libraryCardId) {
             if (IsCheckedOut(id)) return;
 
             var item = _context.LibraryAssets
@@ -74,8 +68,7 @@ namespace Library.Service
             _context.SaveChanges();
         }
 
-        public void MarkLost(int id)
-        {
+        public void MarkLost(int id) {
             var item = _context.LibraryAssets
                 .First(a => a.Id == id);
 
@@ -86,8 +79,7 @@ namespace Library.Service
             _context.SaveChanges();
         }
 
-        public void MarkFound(int id)
-        {
+        public void MarkFound(int id) {
             var item = _context.LibraryAssets
                 .First(a => a.Id == id);
 
@@ -114,8 +106,7 @@ namespace Library.Service
             _context.SaveChanges();
         }
 
-        public void PlaceHold(int assetId, int libraryCardId)
-        {
+        public void PlaceHold(int assetId, int libraryCardId) {
             var now = DateTime.Now;
 
             var asset = _context.LibraryAssets
@@ -130,8 +121,7 @@ namespace Library.Service
             if (asset.Status.Name == "Available")
                 asset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "On Hold");
 
-            var hold = new Hold
-            {
+            var hold = new Hold {
                 HoldPlaced = now,
                 LibraryAsset = asset,
                 LibraryCard = card
@@ -141,8 +131,7 @@ namespace Library.Service
             _context.SaveChanges();
         }
 
-        public void CheckInItem(int id)
-        {
+        public void CheckInItem(int id) {
             var now = DateTime.Now;
 
             var item = _context.LibraryAssets
