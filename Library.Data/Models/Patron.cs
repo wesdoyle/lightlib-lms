@@ -17,9 +17,11 @@ namespace Library.Data.Models
         [StringLength(30, ErrorMessage = "Limit last name to 30 characters.")]
         public string LastName { get; set; }
 
-        [Required] public string Address { get; set; }
+        [Required] 
+        public string Address { get; set; }
 
-        [Required] public DateTime DateOfBirth { get; set; }
+        [Required] 
+        public DateTime DateOfBirth { get; set; }
 
         public string Telephone { get; set; }
         public string Gender { get; set; }
