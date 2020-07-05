@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  stacked-postgres:
+    image: postgres:11.3-alpine
+    container_name: stacked-postgres
+    environment:
+      - POSTGRES_DATABASE=library_dev
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - 5432:5432
+    volumes:
+      # persist data
+      - postgres-data:/var/lib/postgres/data
+    restart: on-failure
+
+volumes:
+  postgres-data:
