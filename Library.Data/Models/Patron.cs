@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Library.Data.Models
-{
-    public class Patron
-    {
+namespace Library.Data.Models {
+    public class Patron {
         public int Id { get; set; }
 
         [Required]

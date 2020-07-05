@@ -14,8 +14,7 @@ namespace Library.Service
             _context = context;
         }
 
-        public void Add(Book newBook)
-        {
+        public void Add(Book newBook) {
             _context.Add(newBook);
             _context.SaveChanges();
         }

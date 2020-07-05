@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Library.Data.Models
 {
-    public class LibraryBranch
-    {
+    public class LibraryBranch {
         public int Id { get; set; }
 
         [Required]

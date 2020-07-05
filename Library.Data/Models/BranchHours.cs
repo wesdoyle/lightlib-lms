@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Library.Data.Models
-{
-    public class BranchHours
-    {
+namespace Library.Data.Models {
+    public class BranchHours {
         public int Id { get; set; }
         public LibraryBranch Branch { get; set; }
 

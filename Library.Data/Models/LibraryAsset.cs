@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Library.Data.Models
-{
-    public abstract class LibraryAsset
-    {
+namespace Library.Data.Models {
+    
+    public abstract class LibraryAsset {
         public int Id { get; set; }
 
         [Required] 

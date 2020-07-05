@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Library.Data.Models
-{
-    public class LibraryCard
-    {
+namespace Library.Data.Models {
+    public class LibraryCard {
         public int Id { get; set; }
 
         [Display(Name = "Overdue Fees")] 
