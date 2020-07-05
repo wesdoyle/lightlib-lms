@@ -42,6 +42,8 @@ namespace Library.Web {
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
+            app.UseAuthentication();
 
             app.UseEndpoints(routes => {
                 routes.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
