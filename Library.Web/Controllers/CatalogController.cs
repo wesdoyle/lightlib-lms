@@ -27,10 +27,10 @@ namespace Library.Web.Controllers
                     ImageUrl = a.ImageUrl,
                     AuthorOrDirector = _assetsService.GetAuthorOrDirector(a.Id),
                     Dewey = _assetsService.GetDeweyIndex(a.Id),
-                    CopiesAvailable = _checkoutsService.GetNumberOfCopies(a.Id), // Remove
+                    // CopiesAvailable = _checkoutsService.GetNumberOfCopies(a.Id), // Remove
                     Title = _assetsService.GetTitle(a.Id),
                     Type = _assetsService.GetType(a.Id),
-                    NumberOfCopies = _checkoutsService.GetNumberOfCopies(a.Id)
+                    // NumberOfCopies = _checkoutsService.GetNumberOfCopies(a.Id)
                 }).ToList();
 
             var model = new AssetIndexModel {
@@ -44,11 +44,11 @@ namespace Library.Web.Controllers
         {
             var asset = _assetsService.Get(id);
 
-            var currentHolds = _checkoutsService.GetCurrentHolds(id).Select(a => new AssetHoldModel
-            {
-                HoldPlaced = _checkoutsService.GetCurrentHoldPlaced(a.Id),
-                PatronName = _checkoutsService.GetCurrentHoldPatron(a.Id)
-            });
+            // var currentHolds = _checkoutsService.GetCurrentHolds(id).Select(a => new AssetHoldModel
+            // {
+            //     // HoldPlaced = _checkoutsService.GetCurrentHoldPlaced(a.Id),
+            //     // PatronName = _checkoutsService.GetCurrentHoldPatron(a.Id)
+            // });
 
             var model = new AssetDetailModel
             {
@@ -62,12 +62,12 @@ namespace Library.Web.Controllers
                 AuthorOrDirector = _assetsService.GetAuthorOrDirector(id),
                 CurrentLocation = _assetsService.GetCurrentLocation(id)?.Name,
                 Dewey = _assetsService.GetDeweyIndex(id),
-                CheckoutHistory = _checkoutsService.GetCheckoutHistory(id),
+                // CheckoutHistory = _checkoutsService.GetCheckoutHistory(id),
                 CurrentAssociatedLibraryCard = _assetsService.GetLibraryCardByAssetId(id),
                 Isbn = _assetsService.GetIsbn(id),
-                LatestCheckout = _checkoutsService.GetLatestCheckout(id),
-                CurrentHolds = currentHolds,
-                PatronName = _checkoutsService.GetCurrentPatron(id)
+                // LatestCheckout = _checkoutsService.GetLatestCheckout(id),
+                // CurrentHolds = currentHolds,
+                // PatronName = _checkoutsService.GetCurrentPatron(id)
             };
 
             return View(model);
@@ -83,7 +83,7 @@ namespace Library.Web.Controllers
                 ImageUrl = asset.ImageUrl,
                 Title = asset.Title,
                 LibraryCardId = "",
-                IsCheckedOut = _checkoutsService.IsCheckedOut(id)
+                // IsCheckedOut = _checkoutsService.IsCheckedOut(id)
             };
             return View(model);
         }
@@ -98,7 +98,7 @@ namespace Library.Web.Controllers
                 ImageUrl = asset.ImageUrl,
                 Title = asset.Title,
                 LibraryCardId = "",
-                HoldCount = _checkoutsService.GetCurrentHolds(id).Count()
+                // HoldCount = _checkoutsService.GetCurrentHolds(id).Count()
             };
             return View(model);
         }

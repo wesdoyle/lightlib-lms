@@ -1,32 +1,147 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Library.Data;
 using Library.Data.Models;
+using Library.Models;
+using Library.Models.DTOs;
 using Library.Service.Interfaces;
+using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Service
 {
     public class CheckoutService : ICheckoutService {
         private readonly LibraryDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IPaginator<Hold> _holdsPaginator;
+        private readonly IPaginator<Checkout> _checkoutPaginator;
 
-        public CheckoutService(LibraryDbContext context) {
+        public CheckoutService(
+            LibraryDbContext context, 
+            IMapper mapper, 
+            IPaginator<Hold> hp, 
+            IPaginator<Checkout> cp) {
             _context = context;
+            _mapper = mapper;
+            _holdsPaginator = hp;
+            _checkoutPaginator = cp;
         }
 
-        public void Add(Checkout newCheckout) {
-            _context.Add(newCheckout);
-            _context.SaveChanges();
+        public async Task<PagedServiceResult<CheckoutDto>> GetAll(int page, int perPage) {
+            var checkouts = _context.Checkouts;
+
+            var pageOfCheckouts = await _checkoutPaginator 
+                .BuildPageResult(checkouts, page, perPage, b => b.Since)
+                .ToListAsync();
+            
+            var paginatedCheckouts = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts);
+            
+            var paginationResult = new PaginationResult<CheckoutDto> {
+                Results = paginatedCheckouts,
+                PerPage = perPage,
+                PageNumber = page
+            };
+            
+            return new PagedServiceResult<CheckoutDto> {
+                Data = paginationResult,
+                Error = null
+            };
+        }
+        
+        public IEnumerable<CheckoutHistory> GetCheckoutHistory(int id)
+        {
+            return _context.CheckoutHistories
+                .Include(a => a.LibraryAsset)
+                .Include(a => a.LibraryCard)
+                .Where(a => a.LibraryAsset.Id == id);
+        }
+
+        public Task<PagedServiceResult<CheckoutDto>> GetCheckoutHistory(int id, int page, int perPage) {
+            throw new NotImplementedException();
+        }
+
+        public Task<PagedServiceResult<HoldDto>> GetCurrentHolds(int id, int page, int perPage) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<CheckoutDto>> ICheckoutService.Get(int id) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<CheckoutDto>> ICheckoutService.GetLatestCheckout(int id) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<int>> ICheckoutService.GetNumberOfCopies(int id) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<bool>> ICheckoutService.IsCheckedOut(int id) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<string>> ICheckoutService.GetCurrentHoldPatron(int id) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<string>> ICheckoutService.GetCurrentHoldPlaced(int id) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<string>> ICheckoutService.GetCurrentPatron(int id) {
+            throw new NotImplementedException();
+        }
+        
+        public async Task<ServiceResult<int>> Add(CheckoutDto newCheckoutDto) {
+            var checkoutEntity = _mapper.Map<Checkout>(newCheckoutDto);
+            try {
+                await _context.AddAsync(checkoutEntity);
+                await _context.SaveChangesAsync();
+                return new ServiceResult<int> {
+                    Data = checkoutEntity.Id,
+                    Error = null
+                };
+            } catch (Exception ex) when (
+                ex is DbUpdateException 
+                || ex is DBConcurrencyException) {
+                
+                return new ServiceResult<int> {
+                    Data = 0,
+                    Error = new ServiceError {
+                        Message = ex.Message,
+                        Stacktrace = ex.StackTrace
+                    }
+                };
+            }
+        }
+
+        Task<ServiceResult<bool>> ICheckoutService.PlaceHold(int assetId, int libraryCardId) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<bool>> ICheckoutService.CheckoutItem(int assetId, int libraryCardId) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<bool>> ICheckoutService.CheckInItem(int assetId) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<bool>> ICheckoutService.MarkLost(int assetId) {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult<bool>> ICheckoutService.MarkFound(int assetId) {
+            throw new NotImplementedException();
         }
 
         public Checkout Get(int id) {
             return _context.Checkouts.FirstOrDefault(p => p.Id == id);
-        }
-
-        public IEnumerable<Checkout> GetAll() {
-            return _context.Checkouts;
         }
 
         public void CheckoutItem(int id, int libraryCardId) {
@@ -176,14 +291,6 @@ namespace Library.Service
             item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
 
             _context.SaveChanges();
-        }
-
-        public IEnumerable<CheckoutHistory> GetCheckoutHistory(int id)
-        {
-            return _context.CheckoutHistories
-                .Include(a => a.LibraryAsset)
-                .Include(a => a.LibraryCard)
-                .Where(a => a.LibraryAsset.Id == id);
         }
 
         // Remove useless method and replace with finding latest CheckoutHistory if needed 

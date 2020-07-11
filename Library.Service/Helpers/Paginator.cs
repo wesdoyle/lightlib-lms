@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Library.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,14 +16,13 @@ namespace Library.Service.Helpers {
         /// <param name="orderByExp">Order By lambda</param>
         /// <typeparam name="TOrder">Entity Property to order by</typeparam>
         /// <returns></returns>
-        public async Task<List<T>> BuildPageResult<TOrder>(
+        public IQueryable<T> BuildPageResult<TOrder>(
             DbSet<T> dbSet, int page, int perPage, Expression<Func<T, TOrder>> orderByExp) {
             var entsToSkip = (page - 1) * perPage;
-            return await dbSet 
+            return dbSet
                 .OrderBy(orderByExp)
                 .Skip(entsToSkip)
-                .Take(perPage)
-                .ToListAsync();
+                .Take(perPage);
         }
 
         /// <summary>
@@ -39,17 +36,17 @@ namespace Library.Service.Helpers {
         /// <param name="orderExp">a LINQ OrderBy expression</param>
         /// <typeparam name="TOrder">Entity Property to order by</typeparam>
         /// <returns></returns>
-        public async Task<List<T>> BuildPageResult<TOrder>(
+        public IQueryable<T> BuildPageResult<TOrder>(
             DbSet<T> dbSet, int page, int perPage, 
             Expression<Func<T, bool>> whereExp, 
             Expression<Func<T, TOrder>> orderExp) {
             var entsToSkip = (page - 1) * perPage;
-            return await dbSet 
+
+            return dbSet
                 .OrderBy(orderExp)
                 .Where(whereExp)
                 .Skip(entsToSkip)
-                .Take(perPage)
-                .ToListAsync();
+                .Take(perPage);
         }
     }
 }

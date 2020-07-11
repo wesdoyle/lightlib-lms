@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Library.Data.Models;
 
-namespace Library.Service.Interfaces
-{
-    public interface ILibraryBranchService
-    {
+namespace Library.Service.Interfaces {
+    public interface ILibraryBranchService {
         IEnumerable<LibraryBranch> GetAll();
         IEnumerable<Patron> GetPatrons(int branchId);
         IEnumerable<LibraryAsset> GetAssets(int branchId);

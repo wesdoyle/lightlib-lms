@@ -66,7 +66,8 @@ namespace Library.Service {
             var books = _context.Books;
 
             var pageOfBooks = await _paginator
-                .BuildPageResult(books, page, perPage, b => b.Author);
+                .BuildPageResult(books, page, perPage, b => b.Author)
+                .ToListAsync();
             
             var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
             
@@ -82,11 +83,12 @@ namespace Library.Service {
             };
         }
 
-        public async Task<PagedServiceResult<BookDto>> GetByAuthor(string author, int page, int perPage) {
+        public async Task<PagedServiceResult<BookDto>> GetByAuthor(
+            string author, int page, int perPage) {
             var books = _context.Books;
 
             try {
-                var pageOfBooks = await _paginator
+                var pageOfBooks = _paginator
                     .BuildPageResult(
                         books,
                         page,
@@ -94,7 +96,8 @@ namespace Library.Service {
                         b => b.Author.Contains(author),
                         b => b.Author);
 
-                var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
+                var paginatedBooks = _mapper
+                    .Map<List<BookDto>>(await pageOfBooks.ToListAsync());
 
                 var paginationResult = new PaginationResult<BookDto> {
                     Results = paginatedBooks,

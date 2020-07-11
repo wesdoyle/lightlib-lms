@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Library.Data.Models;
 
-namespace Library.Service.Interfaces
-{
-    public interface IVideoService
-    {
+namespace Library.Service.Interfaces {
+    public interface IVideoService {
         IEnumerable<Video> GetAll();
         IEnumerable<Video> GetByDirector(string author);
         Video Get(int id);

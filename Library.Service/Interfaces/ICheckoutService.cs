@@ -1,27 +1,30 @@
-﻿using System.Collections.Generic;
-using Library.Data.Models;
+﻿using System.Threading.Tasks;
+using Library.Models.DTOs;
+using Library.Service.Models;
 
-namespace Library.Service.Interfaces
-{
-    public interface ICheckoutService
-    {
-        IEnumerable<Checkout> GetAll();
-        Checkout Get(int id);
-        void Add(Checkout newCheckout);
-        IEnumerable<CheckoutHistory> GetCheckoutHistory(int id);
-        void PlaceHold(int assetId, int libraryCardId);
-        void CheckoutItem(int id, int libraryCardId);
-        void CheckInItem(int id);
-        Checkout GetLatestCheckout(int id);
-        int GetNumberOfCopies(int id);
-        bool IsCheckedOut(int id);
+namespace Library.Service.Interfaces {
+    public interface ICheckoutService {
+        Task<PagedServiceResult<CheckoutDto>> GetAll(int page, int perPage);
+        Task<PagedServiceResult<CheckoutDto>> GetCheckoutHistory(int id, int page, int perPage);
+        Task<PagedServiceResult<HoldDto>> GetCurrentHolds(int id, int page, int perPage);
 
-        string GetCurrentHoldPatron(int id);
-        string GetCurrentHoldPlaced(int id);
-        string GetCurrentPatron(int id);
-        IEnumerable<Hold> GetCurrentHolds(int id);
-
-        void MarkLost(int id);
-        void MarkFound(int id);
+        Task<ServiceResult<CheckoutDto>> Get(int id);
+        Task<ServiceResult<CheckoutDto>> GetLatestCheckout(int id);
+        
+        Task<ServiceResult<int>> GetNumberOfCopies(int id);
+        Task<ServiceResult<bool>> IsCheckedOut(int id);
+        
+        Task<ServiceResult<string>> GetCurrentHoldPatron(int id);
+        Task<ServiceResult<string>> GetCurrentHoldPlaced(int id);
+        Task<ServiceResult<string>> GetCurrentPatron(int id);
+        
+        Task<ServiceResult<int>> Add(CheckoutDto newCheckout);
+        
+        Task<ServiceResult<bool>> PlaceHold(int assetId, int libraryCardId);
+        Task<ServiceResult<bool>> CheckoutItem(int assetId, int libraryCardId);
+        Task<ServiceResult<bool>> CheckInItem(int assetId);
+        
+        Task<ServiceResult<bool>> MarkLost(int assetId);
+        Task<ServiceResult<bool>> MarkFound(int assetId);
     }
 }
