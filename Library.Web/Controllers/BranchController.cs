@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Library.Data;
 using Library.Service.Interfaces;
 using Library.Web.Models.Branch;
 using Microsoft.AspNetCore.Mvc;

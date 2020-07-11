@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Library.Data.Models;
 
-namespace Library.Service.Interfaces
-{
-    public interface ILibraryAssetService
-    {
+namespace Library.Service.Interfaces {
+    public interface ILibraryAssetService {
         IEnumerable<LibraryAsset> GetAll();
         LibraryAsset Get(int id);
         void Add(LibraryAsset newAsset);

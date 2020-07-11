@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Library.Data;
 using Library.Service.Interfaces;
 using Library.Web.Models.Catalog;
 using Library.Web.Models.CheckoutModels;
@@ -23,8 +22,7 @@ namespace Library.Web.Controllers
             var assetModels = _assetsService.GetAll();
 
             var listingResult = assetModels
-                .Select(a => new AssetIndexListingModel
-                {
+                .Select(a => new AssetIndexListingModel {
                     Id = a.Id,
                     ImageUrl = a.ImageUrl,
                     AuthorOrDirector = _assetsService.GetAuthorOrDirector(a.Id),
@@ -35,8 +33,7 @@ namespace Library.Web.Controllers
                     NumberOfCopies = _checkoutsService.GetNumberOfCopies(a.Id)
                 }).ToList();
 
-            var model = new AssetIndexModel
-            {
+            var model = new AssetIndexModel {
                 Assets = listingResult
             };
 

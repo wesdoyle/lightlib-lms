@@ -8,6 +8,7 @@ using Library.Service.Interfaces;
 using Library.Service;
 using Library.Data;
 using Library.Models.Mapping;
+using Library.Service.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Web {
@@ -30,6 +31,8 @@ namespace Library.Web {
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<IStatusService, StatusService>();
+
+            services.AddScoped(typeof(IPaginator<>), typeof(Paginator<>));
 
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("LibraryConnection")));

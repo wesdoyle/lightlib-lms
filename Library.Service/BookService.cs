@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Library.Data;
+using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
 using Library.Service.Interfaces;
@@ -17,10 +20,16 @@ namespace Library.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IPaginator<Book> _paginator;
 
-        public BookService(LibraryDbContext context, IMapper mapper) {
+        public BookService(
+        LibraryDbContext context, 
+        IMapper mapper,
+        IPaginator<Book> bookPaginator
+        ) {
             _context = context;
             _mapper = mapper;
+            _paginator = bookPaginator;
         }
 
         public async Task<ServiceResult<int>> Add(BookDto newBook) {
@@ -34,43 +43,87 @@ namespace Library.Service {
         public async Task<ServiceResult<BookDto>> Get(int id) {
             var book =  await _context
                 .Books.FirstOrDefaultAsync(b => b.Id == id);
-            
-            return new ServiceResult<BookDto> {
-                Data = new BookDto {
-                    Id = book.Id,
-                    Title = book.Title,
-                    Author = book.Author,
-                    ImageUrl = book.ImageUrl
-                }
-            };
+
+            try {
+                var bookDto = _mapper.Map<BookDto>(book);
+
+                return new ServiceResult<BookDto> {
+                    Data = bookDto,
+                    Error = null
+                };
+            } catch (Exception e) {
+                return new ServiceResult<BookDto> {
+                    Data = null,
+                    Error = new ServiceError {
+                        Message = e.Message,
+                        Stacktrace = e.StackTrace
+                    }
+                };
+            }
         }
 
-        public async Task<PagedServiceResult<BookDto>> GetAll() {
+        public async Task<PagedServiceResult<BookDto>> GetAll(int page, int perPage) {
             var books = _context.Books;
-            // implement pagination
-            var pagedBooks = new PaginationResult<BookDto>();
+
+            var pageOfBooks = await _paginator
+                .BuildPageResult(books, page, perPage, b => b.Author);
+            
+            var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
+            
+            var paginationResult = new PaginationResult<BookDto> {
+                Results = paginatedBooks,
+                PerPage = perPage,
+                PageNumber = page
+            };
+            
             return new PagedServiceResult<BookDto> {
-                Data = pagedBooks
+                Data = paginationResult,
+                Error = null
             };
         }
 
-        public async Task<PagedServiceResult<BookDto>> GetByAuthor(string author) {
-            var books = await _context.Books
-                .Where(a => a.Author.Contains(author))
-                .ToListAsync();
-            var pagedBooks = new PaginationResult<BookDto>();
-            return new PagedServiceResult<BookDto> {
-                Data = pagedBooks
-            };
+        public async Task<PagedServiceResult<BookDto>> GetByAuthor(string author, int page, int perPage) {
+            var books = _context.Books;
+
+            try {
+                var pageOfBooks = await _paginator
+                    .BuildPageResult(
+                        books,
+                        page,
+                        perPage,
+                        b => b.Author.Contains(author),
+                        b => b.Author);
+
+                var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
+
+                var paginationResult = new PaginationResult<BookDto> {
+                    Results = paginatedBooks,
+                    PerPage = perPage,
+                    PageNumber = page
+                };
+
+                return new PagedServiceResult<BookDto> {
+                    Data = paginationResult,
+                    Error = null
+                };
+            }
+            catch (Exception e) {
+                return new PagedServiceResult<BookDto> {
+                    Data = null,
+                    Error = new ServiceError {
+                        Message = e.Message,
+                        Stacktrace = e.StackTrace
+                    }
+                };
+            }
         }
 
-        public async Task<PagedServiceResult<BookDto>> GetByIsbn(string isbn) {
-            var books = await _context.Books
-                .Where(a => a.ISBN == isbn)
-                .ToListAsync();
-            var pagedBooks = new PaginationResult<BookDto>();
-            return new PagedServiceResult<BookDto> {
-                Data = pagedBooks
+        public async Task<ServiceResult<BookDto>> GetByIsbn(string isbn) {
+            var book = await _context.Books.FirstOrDefaultAsync(a => a.ISBN == isbn);
+            var bookDto = _mapper.Map<BookDto>(book);
+            return new ServiceResult<BookDto> {
+                Data = bookDto,
+                Error = null
             };
         }
     }
