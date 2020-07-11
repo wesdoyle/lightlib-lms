@@ -1,4 +1,4 @@
-namespace Library.Models {
+namespace Library.Models.DTOs {
     public class BookDto {
         public int Id { get; set; }
         public string ISBN { get; set; }

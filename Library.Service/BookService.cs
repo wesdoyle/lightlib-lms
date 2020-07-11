@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Library.Data;
 using Library.Models;
+using Library.Models.DTOs;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +16,11 @@ namespace Library.Service {
     public class BookService : IBookService { 
         
         private readonly LibraryDbContext _context;
+        private readonly IMapper _mapper;
 
-        public BookService(LibraryDbContext context) {
+        public BookService(LibraryDbContext context, IMapper mapper) {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResult<int>> Add(BookDto newBook) {
@@ -31,9 +35,13 @@ namespace Library.Service {
             var book =  await _context
                 .Books.FirstOrDefaultAsync(b => b.Id == id);
             
-            // TODO Serialize to BookDto
             return new ServiceResult<BookDto> {
-                // Data = book
+                Data = new BookDto {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Author = book.Author,
+                    ImageUrl = book.ImageUrl
+                }
             };
         }
 

@@ -6,20 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Web.Controllers
 {
-    public class BranchController : Controller
-    {
+    public class BranchController : Controller {
         private readonly ILibraryBranchService _branchService;
 
-        public BranchController(ILibraryBranchService branchService)
-        {
+        public BranchController(ILibraryBranchService branchService) {
             _branchService = branchService;
         }
 
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             var branchModels = _branchService.GetAll()
-                .Select(br => new BranchDetailModel
-                {
+                .Select(br => new BranchDetailModel {
                     Id = br.Id,
                     BranchName = br.Name,
                     NumberOfAssets = _branchService.GetAssetCount(br.Id),

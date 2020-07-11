@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Library.Models;
+using Library.Models.DTOs;
 using Library.Service.Models;
 
 namespace Library.Service.Interfaces {

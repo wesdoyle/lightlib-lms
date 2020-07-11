@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Library.Service.Interfaces;
 using Library.Service;
 using Library.Data;
+using Library.Models.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Web {
@@ -31,6 +33,9 @@ namespace Library.Web {
 
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("LibraryConnection")));
+
+            services.AddAutoMapper(
+                c => c.AddProfile<EntityMappingProfile>(), typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
