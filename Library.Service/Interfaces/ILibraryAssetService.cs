@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using Library.Data.Models;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface ILibraryAssetService {
-        IEnumerable<LibraryAsset> GetAll();
-        LibraryAsset Get(int id);
-        void Add(LibraryAsset newAsset);
-        string GetAuthorOrDirector(int id);
-        string GetDeweyIndex(int id);
-        string GetType(int id);
-        string GetTitle(int id);
-        string GetIsbn(int id);
-        LibraryBranch GetCurrentLocation(int id);
-        LibraryCard GetLibraryCardByAssetId(int id);
+        Task<PagedServiceResult<LibraryAsset>> GetAll(int page, int perPage);
+        Task<ServiceResult<LibraryAsset>> Get(int id);
+        Task<ServiceResult<int>> Add(AssetType newType);
+        
+        Task<ServiceResult<string>> GetAuthorOrDirector(int id);
+        Task<ServiceResult<string>> GetDeweyIndex(int id);
+        Task<ServiceResult<string>> GetType(int id);
+        Task<ServiceResult<string>> GetTitle(int id);
+        Task<ServiceResult<string>> GetIsbn(int id);
+        
+        Task<ServiceResult<LibraryBranch>> GetCurrentLocation(int id);
+        Task<ServiceResult<LibraryCard>> GetLibraryCardByAssetId(int id);
     }
 }

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using Library.Data.Models;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface IHoldService {
-        IEnumerable<AssetType> GetAll();
-        AssetType Get(int id);
-        void Add(AssetType newType);
+        Task<PagedServiceResult<AssetType>> GetAll(int page, int perPage);
+        Task<ServiceResult<AssetType>> Get(int id);
+        Task<ServiceResult<int>> Add(AssetType newType);
     }
 }

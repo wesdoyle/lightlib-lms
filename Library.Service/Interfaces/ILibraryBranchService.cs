@@ -1,17 +1,22 @@
 ﻿using System.Collections.Generic;
-using Library.Data.Models;
+using System.Threading.Tasks;
+using Library.Models.DTOs;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface ILibraryBranchService {
-        IEnumerable<LibraryBranch> GetAll();
-        IEnumerable<Patron> GetPatrons(int branchId);
-        IEnumerable<LibraryAsset> GetAssets(int branchId);
-        LibraryBranch Get(int branchId);
-        void Add(LibraryBranch newBranch);
-        IEnumerable<string> GetBranchHours(int branchId);
-        bool IsBranchOpen(int branchId);
-        int GetAssetCount(int branchId);
-        int GetPatronCount(int branchId);
-        decimal GetAssetsValue(int id);
+        Task<PagedServiceResult<LibraryBranchDto>> GetAll(int page, int perPage);
+        Task<PagedServiceResult<PatronDto>> GetPatrons(int page, int perPage);
+        Task<PagedServiceResult<LibraryAssetDto>> GetAssets(int page, int perPage);
+
+        Task<ServiceResult<List<string>>> GetBranchHours(int branchId);
+        Task<ServiceResult<LibraryBranchDto>> Get(int branchId);
+        
+        Task<ServiceResult<int>> Add(LibraryBranchDto newBranch);
+        
+        Task<ServiceResult<bool>> IsBranchOpen(int branchId);
+        Task<ServiceResult<int>> GetAssetCount(int branchId);
+        Task<ServiceResult<int>> GetPatronCount(int branchId);
+        Task<ServiceResult<decimal>> GetAssetsValue(int id);
     }
 }

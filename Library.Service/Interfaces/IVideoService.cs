@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using Library.Data.Models;
+﻿
+using System.Threading.Tasks;
+using Library.Models.DTOs;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface IVideoService {
-        IEnumerable<Video> GetAll();
-        IEnumerable<Video> GetByDirector(string author);
-        Video Get(int id);
-        void Add(Video newVideo);
+        Task<PagedServiceResult<VideoDto>> GetAll(int page, int perPage);
+        Task<PagedServiceResult<VideoDto>> GetByDirector(string author, int page, int perPage);
+        Task<ServiceResult<VideoDto>> Get(int videoId);
+        Task<ServiceResult<int>> Add(VideoDto video);
     }
 }

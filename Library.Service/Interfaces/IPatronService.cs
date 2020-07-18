@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Library.Data.Models;
+using Library.Models.DTOs;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface IPatronService {
-        IEnumerable<Patron> GetAll();
-        Patron Get(int id);
-        void Add(Patron newBook);
-        IEnumerable<CheckoutHistory> GetCheckoutHistory(int patronId);
-        IEnumerable<Hold> GetHolds(int patronId);
-        IEnumerable<Checkout> GetCheckouts(int id);
+        Task<PagedServiceResult<PatronDto>> GetAll(int page, int perPage);
+        Task<PagedServiceResult<CheckoutHistoryDto>> GetCheckoutHistory(
+            int patronId, int page, int perPage);
+        Task<PagedServiceResult<HoldDto>> GetHolds(
+            int patronId, int page, int perPage);
+        Task<PagedServiceResult<CheckoutDto>> GetCheckouts(
+            int patronId, int page, int perPage);
+        
+        Task<ServiceResult<PatronDto>> Get(int patronId);
+        Task<ServiceResult<int>> Add(Patron newPatron);
     }
 }

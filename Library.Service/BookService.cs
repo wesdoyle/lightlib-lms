@@ -121,6 +121,11 @@ namespace Library.Service {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="isbn"></param>
+        /// <returns></returns>
         public async Task<ServiceResult<BookDto>> GetByIsbn(string isbn) {
             var book = await _context.Books.FirstOrDefaultAsync(a => a.ISBN == isbn);
             var bookDto = _mapper.Map<BookDto>(book);

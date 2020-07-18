@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using Library.Data.Models;
+﻿using System.Threading.Tasks;
+using Library.Models.DTOs;
+using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface IStatusService {
-        IEnumerable<Status> GetAll();
-        Status Get(int id);
-        void Add(Status newStatus);
+        Task<PagedServiceResult<StatusDto>> GetAll(int page, int perPage);
+        Task<ServiceResult<StatusDto>> Get(int statusId);
+        Task<ServiceResult<int>> Add(StatusDto status);
     }
 }
