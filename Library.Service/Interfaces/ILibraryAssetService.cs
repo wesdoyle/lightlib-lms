@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Library.Data.Models;
+using Library.Models.DTOs;
 using Library.Service.Models;
 
 namespace Library.Service.Interfaces {
     public interface ILibraryAssetService {
-        Task<PagedServiceResult<LibraryAsset>> GetAll(int page, int perPage);
-        Task<ServiceResult<LibraryAsset>> Get(int id);
-        Task<ServiceResult<int>> Add(AssetType newType);
+        Task<PagedServiceResult<LibraryAssetDto>> GetAll(int page, int perPage);
+        Task<ServiceResult<LibraryAssetDto>> Get(int id);
+        Task<ServiceResult<int>> Add(AssetTypeDto newType);
         
         Task<ServiceResult<string>> GetAuthorOrDirector(int id);
         Task<ServiceResult<string>> GetDeweyIndex(int id);
@@ -14,7 +14,7 @@ namespace Library.Service.Interfaces {
         Task<ServiceResult<string>> GetTitle(int id);
         Task<ServiceResult<string>> GetIsbn(int id);
         
-        Task<ServiceResult<LibraryBranch>> GetCurrentLocation(int id);
-        Task<ServiceResult<LibraryCard>> GetLibraryCardByAssetId(int id);
+        Task<ServiceResult<LibraryBranchDto>> GetCurrentLocation(int id);
+        Task<ServiceResult<LibraryCardDto>> GetLibraryCardByAssetId(int id);
     }
 }
