@@ -1,102 +1,120 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Library.Data;
 using Library.Data.Models;
+using Library.Models;
+using Library.Models.DTOs;
 using Library.Service.Interfaces;
+using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.Service
-{
-    public class LibraryAssetService : ILibraryAssetService
-    {
+namespace Library.Service {
+    public class LibraryAssetService : ILibraryAssetService {
         private readonly LibraryDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IPaginator<LibraryAsset> _paginator;
 
-        public LibraryAssetService(LibraryDbContext context)
-        {
+        public LibraryAssetService(
+            LibraryDbContext context, 
+            IMapper mapper, 
+            IPaginator<LibraryAsset> paginator) {
             _context = context;
+            _mapper = mapper;
+            _paginator = paginator;
         }
 
-        public void Add(LibraryAsset newAsset)
-        {
-            _context.Add(newAsset);
-            _context.SaveChanges();
+        public async Task<ServiceResult<int>> Add(LibraryAssetDto assetDto) {
+            var newAsset = _mapper.Map<LibraryAsset>(assetDto);
+            await _context.AddAsync(newAsset);
+            await _context.SaveChangesAsync();
+            return new ServiceResult<int> {
+                Data = newAsset.Id,
+                Error = null
+            };
         }
 
-        public LibraryAsset Get(int id)
-        {
-            return _context.LibraryAssets
+        public async Task<ServiceResult<LibraryAssetDto>> Get(int id) {
+            var asset = await _context.LibraryAssets
                 .Include(a => a.Status)
                 .Include(a => a.Location)
-                .FirstOrDefault(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id);
+            var assetDto = _mapper.Map<LibraryAssetDto>(asset);
+            return new ServiceResult<LibraryAssetDto> {
+                Data = assetDto,
+                Error = null
+            };
         }
 
-        public IEnumerable<LibraryAsset> GetAll()
-        {
-            return _context.LibraryAssets
+        public Task<ServiceResult<int>> Add(AssetTypeDto newType) {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PagedServiceResult<LibraryAssetDto>> GetAll(int page, int perPage) {
+            var assets = _context.LibraryAssets
                 .Include(a => a.Status)
                 .Include(a => a.Location);
+
+            var pageOfAssets = await _paginator
+                .BuildPageResult(assets, page, perPage, a => a.Title)
+                .ToListAsync();
+
+            var pageOfAssetDtos = _mapper
+                .Map<List<LibraryAssetDto>>(pageOfAssets);
+            
+            return new PagedServiceResult<LibraryAssetDto> {
+                Data = new PaginationResult<LibraryAssetDto> {
+                    PageNumber = page,
+                    PerPage = perPage,
+                    Results = pageOfAssetDtos 
+                }
+            };
         }
 
-        public string GetAuthorOrDirector(int id)
-        {
-            var isBook = _context.LibraryAssets
-                .OfType<Book>().Any(a => a.Id == id);
+        public async Task<ServiceResult<string>> GetAuthorOrDirector(int id) {
+            var isBook = await _context.LibraryAssets
+                .OfType<Book>()
+                .AnyAsync(a => a.Id == id);
 
             return isBook
                 ? GetAuthor(id)
                 : GetDirector(id);
         }
 
-        public LibraryBranch GetCurrentLocation(int id)
-        {
-            return _context.LibraryAssets.First(a => a.Id == id).Location;
+        public async Task<ServiceResult<LibraryBranchDto>> GetCurrentLocation(int assetId) {
+            var asset = await _context
+                .LibraryAssets
+                .FirstOrDefaultAsync(a => a.Id == assetId);
+            
+            var location = asset.Location;
+            var locationDto = _mapper.Map<LibraryBranchDto>(location);
+            
+            return new ServiceResult<LibraryBranchDto> {
+                Data = locationDto,
+                Error = null
+            };
         }
 
-        public string GetDeweyIndex(int id)
-        {
-            if (GetType(id) != "Book") return "N/A";
-            var book = (Book) Get(id);
-            return book.DeweyIndex;
+        public async Task<ServiceResult<string>> GetDeweyIndex(int id) {
+            throw new NotImplementedException();
         }
 
-        public string GetIsbn(int id)
-        {
-            if (GetType(id) != "Book") return "N/A";
-            var book = (Book) Get(id);
-            return book.ISBN;
+        public Task<ServiceResult<string>> GetType(int id) {
+            throw new NotImplementedException();
         }
 
-        public LibraryCard GetLibraryCardByAssetId(int id)
-        {
-            return _context.LibraryCards
-                .FirstOrDefault(c => c.Checkouts
-                    .Select(a => a.LibraryAsset)
-                    .Select(v => v.Id).Contains(id));
+        public Task<ServiceResult<string>> GetTitle(int id) {
+            throw new NotImplementedException();
         }
 
-        public string GetTitle(int id)
-        {
-            return _context.LibraryAssets.First(a => a.Id == id).Title;
+        public async Task<ServiceResult<string>> GetIsbn(int id) {
+            throw new NotImplementedException();
         }
 
-        public string GetType(int id)
-        {
-            // Hack
-            var book = _context.LibraryAssets
-                .OfType<Book>().SingleOrDefault(a => a.Id == id);
-            return book != null ? "Book" : "Video";
-        }
-
-        private string GetAuthor(int id)
-        {
-            var book = (Book) Get(id);
-            return book.Author;
-        }
-
-        private string GetDirector(int id)
-        {
-            var video = (Video) Get(id);
-            return video.Director;
+        public async Task<ServiceResult<LibraryCardDto>> GetLibraryCardByAssetId(int id) {
+            throw new NotImplementedException();
         }
     }
 }

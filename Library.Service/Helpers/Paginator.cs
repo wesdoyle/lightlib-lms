@@ -3,7 +3,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Library.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Library.Service.Helpers {
     public class Paginator<T> : IPaginator<T> where T: DbSet<T> {
@@ -18,7 +17,7 @@ namespace Library.Service.Helpers {
         /// <typeparam name="TOrder">Entity Property to order by</typeparam>
         /// <returns></returns>
         public IQueryable<T> BuildPageResult<TOrder>(
-            DbSet<T> dbSet, 
+            IQueryable<T> dbSet, 
             int page, 
             int perPage, 
             Expression<Func<T, TOrder>> orderByExp) {
@@ -41,7 +40,7 @@ namespace Library.Service.Helpers {
         /// <typeparam name="TOrder">Entity Property to order by</typeparam>
         /// <returns></returns>
         public IQueryable<T> BuildPageResult<TOrder>(
-            DbSet<T> dbSet, int page, int perPage, 
+            IQueryable<T> dbSet, int page, int perPage, 
             Expression<Func<T, bool>> whereExp, 
             Expression<Func<T, TOrder>> orderExp) {
             var entsToSkip = (page - 1) * perPage;
@@ -50,21 +49,6 @@ namespace Library.Service.Helpers {
                 .OrderBy(orderExp)
                 .Where(whereExp)
                 .Skip(entsToSkip)
-                .Take(perPage);
-        }
-
-        public IIncludableQueryable<T, T1> BuildPageResult<TOrder, T1>(
-            DbSet<T> data, int page, int perPage, 
-            Expression<Func<T, bool>> whereExp,
-            Expression<Func<T, TOrder>> orderByExp, 
-            Expression<Func<T, T1>> includeExp) {
-            var entsToSkip = (page - 1) * perPage;
-
-            return data
-                .OrderBy(orderByExp)
-                .Where(whereExp)
-                .Skip(entsToSkip)
-                .Include(includeExp)
                 .Take(perPage);
         }
     }
