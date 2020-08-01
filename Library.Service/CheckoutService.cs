@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,24 +12,32 @@ using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.Service
-{
+namespace Library.Service {
+    /// <summary>
+    /// Handles Library Asset Checkout / Checkin / Lost / Found business logic
+    /// </summary>
     public class CheckoutService : ICheckoutService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
         private readonly IPaginator<Hold> _holdsPaginator;
         private readonly IPaginator<Checkout> _checkoutPaginator;
         private readonly IPaginator<CheckoutHistory> _checkoutHistoryPaginator;
+        private readonly IHoldService _holdService;
 
         public CheckoutService(
-            LibraryDbContext context, 
+            LibraryDbContext context,
+            IHoldService holdService,
             IMapper mapper, 
             IPaginator<Hold> hp, 
-            IPaginator<Checkout> cp) {
+            IPaginator<Checkout> cp,
+            IPaginator<CheckoutHistory> chp
+            ) {
             _context = context;
+            _holdService = holdService;
             _mapper = mapper;
             _holdsPaginator = hp;
             _checkoutPaginator = cp;
+            _checkoutHistoryPaginator = chp;
         }
 
         /// <summary>
@@ -94,38 +101,113 @@ namespace Library.Service
             };
         }
 
-        public Task<PagedServiceResult<HoldDto>> GetCurrentHolds(int id, int page, int perPage) {
-            throw new NotImplementedException();
+
+        /// <summary>
+        /// Get the Checkout corresponding to the given ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<CheckoutDto>> Get(int id) {
+            var checkout = await _context.Checkouts
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            var checkoutDto = _mapper.Map<CheckoutDto>(checkout);
+            
+            return new ServiceResult<CheckoutDto> {
+                Data = checkoutDto,
+                Error = null
+            };
         }
 
-        Task<ServiceResult<CheckoutDto>> ICheckoutService.Get(int id) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Gets the latest Checkout for a given Library Asset ID
+        /// </summary>
+        /// <param name="libraryAssetId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<CheckoutDto>> GetLatestCheckout(int libraryAssetId) {
+            var latest = await _context.Checkouts
+                .Where(c => c.LibraryAsset.Id == libraryAssetId)
+                .OrderByDescending(c => c.Since)
+                .FirstOrDefaultAsync();
+            
+            var checkoutDto = _mapper.Map<CheckoutDto>(latest);
+            
+            return new ServiceResult<CheckoutDto> {
+                Data = checkoutDto,
+                Error = null
+            };
         }
 
-        Task<ServiceResult<CheckoutDto>> ICheckoutService.GetLatestCheckout(int id) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Gets the number of copies for a given Library Asset ID
+        /// </summary>
+        /// <param name="libraryAssetId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<int>> GetNumberOfCopies(int libraryAssetId) {
+            var libraryAsset = await _context.LibraryAssets
+                .FirstAsync(a => a.Id == libraryAssetId);
+
+            var numberOfCopies = libraryAsset.NumberOfCopies;
+            
+            return new ServiceResult<int> {
+                Data = numberOfCopies,
+                Error = null
+            };
         }
 
-        Task<ServiceResult<int>> ICheckoutService.GetNumberOfCopies(int id) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Returns true if a given Library Asset ID is checked out
+        /// </summary>
+        /// <param name="libraryAssetId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<bool>> IsCheckedOut(int libraryAssetId) {
+            var isCheckedOut = await _context.Checkouts
+                .AnyAsync(a => a.LibraryAsset.Id == libraryAssetId);
+            
+            return new ServiceResult<bool> {
+                Data = isCheckedOut,
+                Error = null
+            };
         }
 
-        Task<ServiceResult<bool>> ICheckoutService.IsCheckedOut(int id) {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Get the patron who has the given Library Asset ID checked out
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<string>> GetCurrentPatron(int id) {
+            var checkout = await _context.Checkouts
+                .Include(a => a.LibraryAsset)
+                .Include(a => a.LibraryCard)
+                .FirstAsync(a => a.LibraryAsset.Id == id);
 
-        Task<ServiceResult<string>> ICheckoutService.GetCurrentHoldPatron(int id) {
-            throw new NotImplementedException();
-        }
+            if (checkout == null) {
+                return new ServiceResult<string> {
+                    // TODO
+                    Error = null,
+                    Data = "Not checked out"
+                };
+            }
 
-        Task<ServiceResult<string>> ICheckoutService.GetCurrentHoldPlaced(int id) {
-            throw new NotImplementedException();
-        }
+            var cardId = checkout.LibraryCard.Id;
 
-        Task<ServiceResult<string>> ICheckoutService.GetCurrentPatron(int id) {
-            throw new NotImplementedException();
+            var patron = await _context.Patrons
+                .Include(p => p.LibraryCard)
+                .FirstAsync(c => c.LibraryCard.Id == cardId);
+
+            var patronFullName = patron.FirstName + " " + patron.LastName;
+            
+            return new ServiceResult<string> {
+                Data = patronFullName,
+                Error = null
+            };
         }
         
+        /// <summary>
+        /// Add a checkout given a Checkout DTO representing a new instance
+        /// </summary>
+        /// <param name="newCheckoutDto"></param>
+        /// <returns></returns>
         public async Task<ServiceResult<int>> Add(CheckoutDto newCheckoutDto) {
             var checkoutEntity = _mapper.Map<Checkout>(newCheckoutDto);
             try {
@@ -149,292 +231,214 @@ namespace Library.Service
             }
         }
 
-        Task<ServiceResult<bool>> ICheckoutService.PlaceHold(int assetId, int libraryCardId) {
+        /// <summary>
+        /// Checks the provided Library Asset out to the provided Library Card
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <param name="libraryCardId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<bool>> CheckOutItem(int assetId, int libraryCardId) {
+
             var now = DateTime.UtcNow;
 
-            var asset = _context.LibraryAssets
+            var isAlreadyCheckedOut = await IsCheckedOut(assetId);
+                
+            if (isAlreadyCheckedOut.Data) {
+                return new ServiceResult<bool> {
+                    Data = false,
+                    // TODO
+                    Error = null
+                };
+            }
+
+            var libraryAsset = await _context.LibraryAssets
                 .Include(a => a.Status)
-                .First(a => a.Id == assetId);
+                .FirstAsync(a => a.Id == assetId);
 
-            var card = _context.LibraryCards
-                .First(a => a.Id == libraryCardId);
+            _context.Update(libraryAsset);
 
-            _context.Update(asset);
+            // TODO
+            libraryAsset.Status = await _context.Statuses
+                .FirstAsync(a => a.Name == "Checked Out");
 
-            if (asset.Status.Name == "Available")
-                asset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "On Hold");
-
-            var hold = new Hold {
-                HoldPlaced = now,
-                LibraryAsset = asset,
-                LibraryCard = card
-            };
-
-            _context.Add(hold);
-            _context.SaveChanges();
-        }
-
-        Task<ServiceResult<bool>> ICheckoutService.CheckoutItem(int assetId, int libraryCardId) {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResult<bool>> ICheckoutService.CheckInItem(int assetId) {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResult<bool>> ICheckoutService.MarkLost(int assetId) {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResult<bool>> ICheckoutService.MarkFound(int assetId) {
-            throw new NotImplementedException();
-        }
-
-        public Checkout Get(int id) {
-            return _context.Checkouts.FirstOrDefault(p => p.Id == id);
-        }
-
-        public void CheckoutItem(int id, int libraryCardId) {
-            if (IsCheckedOut(id)) return;
-
-            var item = _context.LibraryAssets
-                .Include(a => a.Status)
-                .First(a => a.Id == id);
-
-            _context.Update(item);
-
-            item.Status = _context.Statuses
-                .FirstOrDefault(a => a.Name == "Checked Out");
-
-            var now = DateTime.Now;
-
-            var libraryCard = _context.LibraryCards
+            var libraryCard = await _context.LibraryCards
                 .Include(c => c.Checkouts)
-                .FirstOrDefault(a => a.Id == libraryCardId);
+                .FirstAsync(a => a.Id == libraryCardId);
 
-            var checkout = new Checkout
-            {
-                LibraryAsset = item,
+            var checkout = new Checkout {
+                LibraryAsset = libraryAsset,
                 LibraryCard = libraryCard,
                 Since = now,
-                Until = GetDefaultCheckoutTime(now)
+                Until = GetDefaultDateDue(now)
             };
 
-            _context.Add(checkout);
+            await _context.AddAsync(checkout);
 
-            var checkoutHistory = new CheckoutHistory
-            {
+            var checkoutHistory = new CheckoutHistory {
                 CheckedOut = now,
-                LibraryAsset = item,
+                LibraryAsset = libraryAsset,
                 LibraryCard = libraryCard
             };
 
-            _context.Add(checkoutHistory);
-            _context.SaveChanges();
-        }
-
-        public void MarkLost(int id) {
-            var item = _context.LibraryAssets
-                .First(a => a.Id == id);
-
-            _context.Update(item);
-
-            item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Lost");
-
-            _context.SaveChanges();
-        }
-
-        public void MarkFound(int id) {
-            var item = _context.LibraryAssets
-                .First(a => a.Id == id);
-
-            _context.Update(item);
-            item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
-            var now = DateTime.Now;
-
-            // remove any existing checkouts on the item
-            var checkout = _context.Checkouts
-                .FirstOrDefault(a => a.LibraryAsset.Id == id);
-            if (checkout != null) _context.Remove(checkout);
-
-            // close any existing checkout history
-            var history = _context.CheckoutHistories
-                .FirstOrDefault(h =>
-                    h.LibraryAsset.Id == id
-                    && h.CheckedIn == null);
-            if (history != null)
-            {
-                _context.Update(history);
-                history.CheckedIn = now;
-            }
-
-            _context.SaveChanges();
-        }
-
-        public void PlaceHold(int assetId, int libraryCardId) {
-            var now = DateTime.Now;
-
-            var asset = _context.LibraryAssets
-                .Include(a => a.Status)
-                .First(a => a.Id == assetId);
-
-            var card = _context.LibraryCards
-                .First(a => a.Id == libraryCardId);
-
-            _context.Update(asset);
-
-            if (asset.Status.Name == "Available")
-                asset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "On Hold");
-
-            var hold = new Hold {
-                HoldPlaced = now,
-                LibraryAsset = asset,
-                LibraryCard = card
+            await _context.AddAsync(checkoutHistory);
+            await _context.SaveChangesAsync();
+            
+            return new ServiceResult<bool> {
+                Data = true,
+                Error = null
             };
-
-            _context.Add(hold);
-            _context.SaveChanges();
         }
 
-        public void CheckInItem(int id) {
-            var now = DateTime.Now;
+        /// <summary>
+        /// Checks in the given Library Asset ID
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<bool>> CheckInItem(int assetId) {
+            
+            var now = DateTime.UtcNow;
 
-            var item = _context.LibraryAssets
-                .First(a => a.Id == id);
+            var libraryAsset = await _context.LibraryAssets
+                .FirstAsync(a => a.Id == assetId);
 
-            _context.Update(item);
+            _context.Update(libraryAsset);
 
             // remove any existing checkouts on the item
-            var checkout = _context.Checkouts
+            var checkout = await _context.Checkouts
                 .Include(c => c.LibraryAsset)
                 .Include(c => c.LibraryCard)
-                .FirstOrDefault(a => a.LibraryAsset.Id == id);
-            if (checkout != null) _context.Remove(checkout);
+                .FirstAsync(a => a.LibraryAsset.Id == assetId);
+            
+            if (checkout != null) {
+                _context.Remove(checkout);
+            }
 
             // close any existing checkout history
-            var history = _context.CheckoutHistories
+            var history = await _context.CheckoutHistories
                 .Include(h => h.LibraryAsset)
                 .Include(h => h.LibraryCard)
-                .FirstOrDefault(h =>
-                    h.LibraryAsset.Id == id
+                .FirstAsync(h =>
+                    h.LibraryAsset.Id == assetId 
                     && h.CheckedIn == null);
-            if (history != null)
-            {
+            
+            if (history != null) {
                 _context.Update(history);
                 history.CheckedIn = now;
             }
 
-            // look for current holds
-            var currentHolds = _context.Holds
-                .Include(a => a.LibraryAsset)
-                .Include(a => a.LibraryCard)
-                .Where(a => a.LibraryAsset.Id == id);
-
             // if there are current holds, check out the item to the earliest
-            if (currentHolds.Any())
-            {
-                CheckoutToEarliestHold(id, currentHolds);
-                return;
+            // TODO
+            var wasCheckedOutToNewHold = await CheckoutToEarliestHold(assetId);
+
+            if (wasCheckedOutToNewHold) {
+                return new ServiceResult<bool> {
+                    Data = true,
+                    Error = null
+                };
             }
 
             // otherwise, set item status to available
-            item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
+            // TODO magic string
+            libraryAsset.Status = await _context.Statuses
+                .FirstAsync(a => a.Name == "Available");
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
+            return new ServiceResult<bool> {
+                Data = true,
+                Error = null
+            };
         }
 
-        // Remove useless method and replace with finding latest CheckoutHistory if needed 
-        public Checkout GetLatestCheckout(int id)
-        {
-            return _context.Checkouts
-                .Where(c => c.LibraryAsset.Id == id)
-                .OrderByDescending(c => c.Since)
-                .FirstOrDefault();
+        /// <summary>
+        /// Marks the given Library Asset ID as Lost
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<bool>> MarkLost(int assetId) {
+            var item = await _context.LibraryAssets
+                .FirstAsync(a => a.Id == assetId);
+
+            _context.Update(item);
+
+            // TODO
+            item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Lost");
+
+            await _context.SaveChangesAsync();
+
+            return new ServiceResult<bool> {
+                Data = true,
+                Error = null
+            };
         }
 
-        public int GetNumberOfCopies(int id)
-        {
-            return _context.LibraryAssets
-                .First(a => a.Id == id)
-                .NumberOfCopies;
-        }
+        /// <summary>
+        /// Marks the given Library Asset ID as Found
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<bool>> MarkFound(int assetId) {
+            var libraryAsset = await _context.LibraryAssets
+                .FirstAsync(a => a.Id == assetId);
 
-        public bool IsCheckedOut(int id)
-        {
-            var isCheckedOut = _context.Checkouts.Any(a => a.LibraryAsset.Id == id);
+            _context.Update(libraryAsset);
+            libraryAsset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
+            var now = DateTime.UtcNow;
 
-            return isCheckedOut;
-        }
-
-        public string GetCurrentHoldPatron(int id)
-        {
-            var hold = _context.Holds
-                .Include(a => a.LibraryAsset)
-                .Include(a => a.LibraryCard)
-                .Where(v => v.Id == id);
-
-            var cardId = hold
-                .Include(a => a.LibraryCard)
-                .Select(a => a.LibraryCard.Id)
-                .FirstOrDefault();
-
-            var patron = _context.Patrons
-                .Include(p => p.LibraryCard)
-                .First(p => p.LibraryCard.Id == cardId);
-
-            return patron.FirstName + " " + patron.LastName;
-        }
-
-        public string GetCurrentHoldPlaced(int id)
-        {
-            var hold = _context.Holds
-                .Include(a => a.LibraryAsset)
-                .Include(a => a.LibraryCard)
-                .Where(v => v.Id == id);
-
-            return hold.Select(a => a.HoldPlaced)
-                .FirstOrDefault().ToString(CultureInfo.InvariantCulture);
-        }
-
-        public IEnumerable<Hold> GetCurrentHolds(int id)
-        {
-            return _context.Holds
-                .Include(h => h.LibraryAsset)
-                .Where(a => a.LibraryAsset.Id == id);
-        }
-
-        public string GetCurrentPatron(int id)
-        {
+            // remove any existing checkouts on the item
             var checkout = _context.Checkouts
-                .Include(a => a.LibraryAsset)
-                .Include(a => a.LibraryCard)
-                .FirstOrDefault(a => a.LibraryAsset.Id == id);
+                .FirstOrDefault(a => a.LibraryAsset.Id == assetId);
+            if (checkout != null) _context.Remove(checkout);
 
-            if (checkout == null) return "Not checked out.";
+            // close any existing checkout history
+            var history = _context.CheckoutHistories
+                .FirstOrDefault(h =>
+                    h.LibraryAsset.Id == assetId 
+                    && h.CheckedIn == null);
+            
+            if (history != null) {
+                _context.Update(history);
+                history.CheckedIn = now;
+            }
 
-            var cardId = checkout.LibraryCard.Id;
-
-            var patron = _context.Patrons
-                .Include(p => p.LibraryCard)
-                .First(c => c.LibraryCard.Id == cardId);
-
-            return patron.FirstName + " " + patron.LastName;
+            await _context.SaveChangesAsync();
+            
+            return new ServiceResult<bool> {
+                Data = true,
+                Error = null
+            };
         }
 
-        private void CheckoutToEarliestHold(int assetId, IEnumerable<Hold> currentHolds)
-        {
-            var earliestHold = currentHolds.OrderBy(a => a.HoldPlaced).FirstOrDefault();
-            if (earliestHold == null) return;
-            var card = earliestHold.LibraryCard;
+        /// <summary>
+        /// Checks the given Library Asset ID out to the next Hold
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        private async Task<bool> CheckoutToEarliestHold(int assetId) {
+
+            var earliestHold = await _holdService.GetEarliestHold(assetId);
+            
+            if (earliestHold?.Data == null) {
+                return false;
+            }
+
+            var card = earliestHold.Data.LibraryCard;
+            
             _context.Remove(earliestHold);
-            _context.SaveChanges();
-
-            CheckoutItem(assetId, card.Id);
+            await _context.SaveChangesAsync();
+            
+            // TODO
+            var checkOutResult = await CheckOutItem(assetId, card.Id);
+            
+            return checkOutResult.Data;
         }
 
-        private DateTime GetDefaultCheckoutTime(DateTime now)
-        {
-            return now.AddDays(30);
-        }
+        /// <summary>
+        /// Gets default date an asset is due
+        /// </summary>
+        /// <param name="now"></param>
+        /// <returns></returns>
+        /// TODO Magic Number
+        private static DateTime GetDefaultDateDue(DateTime now) => now.AddDays(30);
     }
 }
