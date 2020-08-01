@@ -5,7 +5,7 @@ using Library.Service.Models;
 namespace Library.Service.Interfaces {
     public interface ICheckoutService {
         Task<PagedServiceResult<CheckoutDto>> GetAll(int page, int perPage);
-        Task<PagedServiceResult<CheckoutDto>> GetCheckoutHistory(int id, int page, int perPage);
+        Task<PagedServiceResult<CheckoutHistoryDto>> GetCheckoutHistory(int id, int page, int perPage);
         Task<PagedServiceResult<HoldDto>> GetCurrentHolds(int id, int page, int perPage);
 
         Task<ServiceResult<CheckoutDto>> Get(int id);

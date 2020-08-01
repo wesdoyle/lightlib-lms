@@ -9,7 +9,9 @@ namespace Library.Service.Interfaces {
             IQueryable<T> data, 
             int page, 
             int perPage, 
-            Expression<Func<T, TOrder>> orderByExp);
+            Expression<Func<T, TOrder>> orderByExp, 
+            bool isDescending = true
+            );
         
         public IQueryable<T> BuildPageResult<TOrder>(
             IQueryable<T> data, 

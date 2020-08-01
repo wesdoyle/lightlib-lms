@@ -20,6 +20,7 @@ namespace Library.Service
         private readonly IMapper _mapper;
         private readonly IPaginator<Hold> _holdsPaginator;
         private readonly IPaginator<Checkout> _checkoutPaginator;
+        private readonly IPaginator<CheckoutHistory> _checkoutHistoryPaginator;
 
         public CheckoutService(
             LibraryDbContext context, 
@@ -32,6 +33,12 @@ namespace Library.Service
             _checkoutPaginator = cp;
         }
 
+        /// <summary>
+        /// Returns a paginated result of Checkouts
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
         public async Task<PagedServiceResult<CheckoutDto>> GetAll(int page, int perPage) {
             var checkouts = _context.Checkouts;
 
@@ -53,16 +60,38 @@ namespace Library.Service
             };
         }
         
-        public IEnumerable<CheckoutHistory> GetCheckoutHistory(int id)
-        {
-            return _context.CheckoutHistories
+        /// <summary>
+        /// Returns an paginated Checkout History ordered by latest checked-out date
+        /// </summary>
+        /// <param name="libraryAssetId"></param>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public async Task<PagedServiceResult<CheckoutHistoryDto>> GetCheckoutHistory(
+            int libraryAssetId, 
+            int page, 
+            int perPage) {
+            var checkoutHistories = _context.CheckoutHistories
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
-                .Where(a => a.LibraryAsset.Id == id);
-        }
+                .Where(a => a.LibraryAsset.Id == libraryAssetId);
 
-        public Task<PagedServiceResult<CheckoutDto>> GetCheckoutHistory(int id, int page, int perPage) {
-            throw new NotImplementedException();
+            var pageOfHistory = await _checkoutHistoryPaginator
+                .BuildPageResult(checkoutHistories, page, perPage, ch => ch.CheckedOut)
+                .ToListAsync();
+
+            var paginatedHistories = _mapper.Map<List<CheckoutHistoryDto>>(pageOfHistory);
+            
+            var paginationResult = new PaginationResult<CheckoutHistoryDto> {
+                Results = paginatedHistories,
+                PerPage = perPage,
+                PageNumber = page
+            };
+            
+            return new PagedServiceResult<CheckoutHistoryDto> {
+                Data = paginationResult,
+                Error = null
+            };
         }
 
         public Task<PagedServiceResult<HoldDto>> GetCurrentHolds(int id, int page, int perPage) {
@@ -121,7 +150,28 @@ namespace Library.Service
         }
 
         Task<ServiceResult<bool>> ICheckoutService.PlaceHold(int assetId, int libraryCardId) {
-            throw new NotImplementedException();
+            var now = DateTime.UtcNow;
+
+            var asset = _context.LibraryAssets
+                .Include(a => a.Status)
+                .First(a => a.Id == assetId);
+
+            var card = _context.LibraryCards
+                .First(a => a.Id == libraryCardId);
+
+            _context.Update(asset);
+
+            if (asset.Status.Name == "Available")
+                asset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "On Hold");
+
+            var hold = new Hold {
+                HoldPlaced = now,
+                LibraryAsset = asset,
+                LibraryCard = card
+            };
+
+            _context.Add(hold);
+            _context.SaveChanges();
         }
 
         Task<ServiceResult<bool>> ICheckoutService.CheckoutItem(int assetId, int libraryCardId) {
