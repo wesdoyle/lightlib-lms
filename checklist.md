@@ -1,8 +1,11 @@
 # Library Mgmt System Update Checklist
 
 - Make service layer, web async
+- Caching
+
 - Generic Repository
 - Write new tests
+
 - ERROR HANDLING
   - First() etc. everywhere
   - Handle the unhappy paths
@@ -12,10 +15,7 @@
 - More expressive return types from CheckoutService on success
   - Replace all ServiceResult<bool> type ServiceResults with add+ info
 
-- Decompose the CheckoutService into the following:
-  - HoldsService
-  - CheckoutCollectionService (PaginationResult)
-
 - Logging (NLog)
 - Monitoring (Prometheus + Grafana)
+
 

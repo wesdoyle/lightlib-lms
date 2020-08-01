@@ -8,5 +8,8 @@ namespace Library.Models.DTOs {
         public string ImageUrl { get; set; }
         public int NumberOfCopies { get; set; }
         public virtual LibraryBranchDto Location { get; set; }
+
+        public static explicit operator VideoDto(LibraryAssetDto libraryAsset) => new VideoDto();
+        public static explicit operator BookDto(LibraryAssetDto libraryAsset) => new BookDto();
     }
 }

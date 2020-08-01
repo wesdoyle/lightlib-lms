@@ -139,23 +139,6 @@ namespace Library.Service {
         }
 
         /// <summary>
-        /// Gets the number of copies for a given Library Asset ID
-        /// </summary>
-        /// <param name="libraryAssetId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResult<int>> GetNumberOfCopies(int libraryAssetId) {
-            var libraryAsset = await _context.LibraryAssets
-                .FirstAsync(a => a.Id == libraryAssetId);
-
-            var numberOfCopies = libraryAsset.NumberOfCopies;
-            
-            return new ServiceResult<int> {
-                Data = numberOfCopies,
-                Error = null
-            };
-        }
-
-        /// <summary>
         /// Returns true if a given Library Asset ID is checked out
         /// </summary>
         /// <param name="libraryAssetId"></param>
@@ -344,65 +327,6 @@ namespace Library.Service {
 
             await _context.SaveChangesAsync();
 
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
-        }
-
-        /// <summary>
-        /// Marks the given Library Asset ID as Lost
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResult<bool>> MarkLost(int assetId) {
-            var item = await _context.LibraryAssets
-                .FirstAsync(a => a.Id == assetId);
-
-            _context.Update(item);
-
-            // TODO
-            item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Lost");
-
-            await _context.SaveChangesAsync();
-
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
-        }
-
-        /// <summary>
-        /// Marks the given Library Asset ID as Found
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResult<bool>> MarkFound(int assetId) {
-            var libraryAsset = await _context.LibraryAssets
-                .FirstAsync(a => a.Id == assetId);
-
-            _context.Update(libraryAsset);
-            libraryAsset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
-            var now = DateTime.UtcNow;
-
-            // remove any existing checkouts on the item
-            var checkout = _context.Checkouts
-                .FirstOrDefault(a => a.LibraryAsset.Id == assetId);
-            if (checkout != null) _context.Remove(checkout);
-
-            // close any existing checkout history
-            var history = _context.CheckoutHistories
-                .FirstOrDefault(h =>
-                    h.LibraryAsset.Id == assetId 
-                    && h.CheckedIn == null);
-            
-            if (history != null) {
-                _context.Update(history);
-                history.CheckedIn = now;
-            }
-
-            await _context.SaveChangesAsync();
-            
             return new ServiceResult<bool> {
                 Data = true,
                 Error = null

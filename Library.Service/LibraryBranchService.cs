@@ -1,65 +1,119 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Library.Data;
 using Library.Data.Models;
 using Library.Models.DTOs;
-using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
+using static Library.Service.Helpers.DataHelpers;
 
-namespace Library.Service
-{
-    public class LibraryBranchService : ILibraryBranchService
-    {
+namespace Library.Service {
+    /// <summary>
+    /// Handles business logic related to Library Branches 
+    /// </summary>
+    public class LibraryBranchService : ILibraryBranchService {
         private readonly LibraryDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IPaginator<LibraryBranch> _paginator;
 
-        public LibraryBranchService(LibraryDbContext context)
-        {
+        public LibraryBranchService(
+            LibraryDbContext context, 
+            IMapper mapper, 
+            IPaginator<LibraryBranch> paginator) {
             _context = context;
+            _mapper = mapper;
+            _paginator = paginator;
         }
 
-        public void Add(LibraryBranch newBranch)
-        {
-            _context.Add(newBranch);
-            _context.SaveChanges();
+        /// <summary>
+        /// Creates a new Library Branch
+        /// </summary>
+        /// <param name="newBranch"></param>
+        public async Task<ServiceResult<int>> Add(LibraryBranchDto newBranch) {
+            await _context.AddAsync(newBranch);
+            var newBranchId = await _context.SaveChangesAsync();
+            return new ServiceResult<int> {
+                Data = newBranchId,
+                Error = null
+            };
         }
 
-        Task<ServiceResult<List<string>>> ILibraryBranchService.GetBranchHours(int branchId) {
-            throw new System.NotImplementedException();
+        /// <summary>
+        /// Get the business hours for the given Branch ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<List<string>>> GetBranchHours(int branchId) {
+            var hours = await _context
+                .BranchHours
+                .Where(a => a.Branch.Id == branchId)
+                .ToListAsync();
+
+            var displayHours = HumanizeBusinessHours(hours).ToList();
+
+            return new ServiceResult<List<string>> {
+                Data = displayHours,
+                Error = null
+            };
         }
 
-        Task<ServiceResult<LibraryBranchDto>> ILibraryBranchService.Get(int branchId) {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<ServiceResult<int>> Add(LibraryBranchDto newBranch) {
-            throw new System.NotImplementedException();
-        }
-
-        Task<ServiceResult<bool>> ILibraryBranchService.IsBranchOpen(int branchId) {
-            throw new System.NotImplementedException();
-        }
-
-        Task<ServiceResult<int>> ILibraryBranchService.GetAssetCount(int branchId) {
-            throw new System.NotImplementedException();
-        }
-
-        Task<ServiceResult<int>> ILibraryBranchService.GetPatronCount(int branchId) {
-            throw new System.NotImplementedException();
-        }
-
-        Task<ServiceResult<decimal>> ILibraryBranchService.GetAssetsValue(int id) {
-            throw new System.NotImplementedException();
-        }
-
-        public LibraryBranch Get(int branchId)
-        {
-            return _context.LibraryBranches
+        /// <summary>
+        /// Gets a Library Branch by ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<LibraryBranchDto>> Get(int branchId) {
+            var branches = await _context.LibraryBranches
                 .Include(b => b.Patrons)
                 .Include(b => b.LibraryAssets)
-                .FirstOrDefault(p => p.Id == branchId);
+                .FirstAsync(p => p.Id == branchId);
+
+            // TODO Check if AM needs List<T>
+            var branchDtos = _mapper.Map<LibraryBranchDto>(branches);
+                             
+            return new ServiceResult<LibraryBranchDto> {
+                Data = branchDtos,
+                Error = null
+            };
+        }
+
+        public struct BranchHoursOpenRangeForDay {
+            public int Start_SecondsSinceWeekStart { get; set; }
+            public int End_SecondsSinceWeekStart { get; set; }
+        }
+
+        /// <summary>
+        /// Returns true if a Library Branch is currently open.
+        /// Otherwise, returns false
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<ServiceResult<bool>> IsBranchOpen(int branchId) {
+            var now = DateTime.UtcNow;
+            
+            // Get the currentSeconds since start of current week 
+            // Get the branchHours
+            // Create BranchHoursOpenRangeForDay for today
+            // Return true if currentSeconds falls in the range the struct 
+            throw new NotImplementedException();
+        }
+
+        public async Task<ServiceResult<int>> GetAssetCount(int branchId) {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<ServiceResult<int>> GetPatronCount(int branchId) {
+            var branch = await Get(branchId);
+            var patronCount = branch.Data.Patrons.Count();
+        }
+
+        public async Task<ServiceResult<decimal>> GetAssetsValue(int id) {
+            throw new System.NotImplementedException();
         }
 
         public IEnumerable<LibraryBranch> GetAll()
@@ -96,30 +150,13 @@ namespace Library.Service
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<string> GetBranchHours(int branchId)
-        {
-            var hours = _context.BranchHours.Where(a => a.Branch.Id == branchId);
-
-            var displayHours =
-                DataHelpers.HumanizeBusinessHours(hours);
-
-            return displayHours;
-        }
-
         public int GetPatronCount(int branchId)
         {
-            return Get(branchId).Patrons.Count();
         }
 
         public IEnumerable<Patron> GetPatrons(int branchId)
         {
             return _context.LibraryBranches.Include(a => a.Patrons).First(b => b.Id == branchId).Patrons;
-        }
-
-        //TODO: Implement 
-        public bool IsBranchOpen(int branchId)
-        {
-            return true;
         }
     }
 }

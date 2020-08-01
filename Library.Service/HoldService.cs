@@ -13,21 +13,28 @@ using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Service {
+    /// <summary>
+    /// Handles business logic for Holds
+    /// </summary>
     public class HoldService : IHoldService {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
         private readonly IPaginator<Hold> _holdsPaginator;
-        private readonly IPaginator<Checkout> _checkoutPaginator;
-        private readonly IPaginator<CheckoutHistory> _checkoutHistoryPaginator;
-        
-        public HoldService() {
+
+        public HoldService(
+            LibraryDbContext context,
+            IMapper mapper,
+            IPaginator<Hold> hp) {
+            _context = context;
+            _mapper = mapper;
+            _holdsPaginator = hp;
         }
         
         /// <summary>
         /// Gets a paginated list of current Holds for a given Library Asset ID
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="libraryAssetId"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
@@ -133,6 +140,7 @@ namespace Library.Service {
 
             await _context.AddAsync(hold);
             
+            // TODO: expressive SL return types
             var result = await _context.SaveChangesAsync();
             
             //TODO: Error types
