@@ -9,6 +9,10 @@
 
 - Establish types for magic strings (enums)
 
+- Create AutoMapper mappings
+
+- Run the latest migrations
+
 - More expressive return types from service layer on success / error
   - Replace all ServiceResult<bool> type ServiceResults with add+ info
 
