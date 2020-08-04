@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Library.Data.Models;
 
 namespace Library.Models.DTOs {
     public class LibraryBranchDto {
@@ -12,8 +11,8 @@ namespace Library.Models.DTOs {
         public string Description { get; set; }
         public DateTime OpenDate { get; set; }
         public string ImageUrl { get; set; }
-        public List<Patron> Patrons { get; set; }
-        public List<LibraryAsset> LibraryAssets { get; set; }
+        public List<PatronDto> Patrons { get; set; }
+        public List<LibraryAssetDto> LibraryAssets { get; set; }
         
         public bool IsOpen { get; set; }
         public List<string> HoursOpen { get; set; }

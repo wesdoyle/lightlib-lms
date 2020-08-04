@@ -17,11 +17,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "projectReferences": {
-          "/Users/wes/projects/personal/library-management-system/Library.Data/Library.Data.csproj": {
-            "projectPath": "/Users/wes/projects/personal/library-management-system/Library.Data/Library.Data.csproj"
-          }
-        }
+        "projectReferences": {}
       }
     },
     "warningProperties": {

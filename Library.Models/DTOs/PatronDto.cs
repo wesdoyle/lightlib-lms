@@ -1,5 +1,4 @@
 using System;
-using Library.Data.Models;
 
 namespace Library.Models.DTOs {
     public class PatronDto {
@@ -10,7 +9,7 @@ namespace Library.Models.DTOs {
         public DateTime DateOfBirth { get; set; }
         public string Telephone { get; set; }
         public string Gender { get; set; }
-        public LibraryCard LibraryCard { get; set; }
-        public LibraryBranch HomeLibraryBranch { get; set; }
+        public LibraryCardDto LibraryCard { get; set; }
+        public LibraryBranchDto HomeLibraryBranch { get; set; }
     }
 }

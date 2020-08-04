@@ -1,35 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "vctJa1rSQuDXWGMyYIFHM6ni6MbpBgz066DgCUVwHgsOTA4RGcwKpt9+AtQuTinENSKhFaIJicHaf69ZW0tdxA==",
+  "dgSpecHash": "HS8TaTPdIqSEFDwNPHLe9jW7zw0T+XlnIU8LDssYeKxINxqWwBWCZDx2DNpFPCsMeIiThLsKBUYYm7RXhgfhcw==",
   "success": true,
   "projectFilePath": "/Users/wes/projects/personal/library-management-system/Library.Models/Library.Models.csproj",
   "expectedPackageFiles": [
     "/Users/wes/.nuget/packages/automapper/10.0.0/automapper.10.0.0.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.bcl.hashcode/1.1.0/microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "/Users/wes/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.entityframeworkcore/3.1.4/microsoft.entityframeworkcore.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.entityframeworkcore.abstractions/3.1.4/microsoft.entityframeworkcore.abstractions.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.entityframeworkcore.analyzers/3.1.4/microsoft.entityframeworkcore.analyzers.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.entityframeworkcore.relational/3.1.4/microsoft.entityframeworkcore.relational.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.caching.abstractions/3.1.4/microsoft.extensions.caching.abstractions.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.caching.memory/3.1.4/microsoft.extensions.caching.memory.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.configuration/3.1.4/microsoft.extensions.configuration.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.configuration.abstractions/3.1.4/microsoft.extensions.configuration.abstractions.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.configuration.binder/3.1.4/microsoft.extensions.configuration.binder.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.dependencyinjection/3.1.4/microsoft.extensions.dependencyinjection.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/3.1.4/microsoft.extensions.dependencyinjection.abstractions.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.logging/3.1.4/microsoft.extensions.logging.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.logging.abstractions/3.1.4/microsoft.extensions.logging.abstractions.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.options/3.1.4/microsoft.extensions.options.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/microsoft.extensions.primitives/3.1.4/microsoft.extensions.primitives.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/npgsql/4.1.3.1/npgsql.4.1.3.1.nupkg.sha512",
-    "/Users/wes/.nuget/packages/npgsql.entityframeworkcore.postgresql/3.1.4/npgsql.entityframeworkcore.postgresql.3.1.4.nupkg.sha512",
-    "/Users/wes/.nuget/packages/system.collections.immutable/1.7.1/system.collections.immutable.1.7.1.nupkg.sha512",
-    "/Users/wes/.nuget/packages/system.componentmodel.annotations/4.7.0/system.componentmodel.annotations.4.7.0.nupkg.sha512",
-    "/Users/wes/.nuget/packages/system.diagnostics.diagnosticsource/4.7.1/system.diagnostics.diagnosticsource.4.7.1.nupkg.sha512",
-    "/Users/wes/.nuget/packages/system.reflection.emit/4.7.0/system.reflection.emit.4.7.0.nupkg.sha512",
-    "/Users/wes/.nuget/packages/system.runtime.compilerservices.unsafe/4.6.0/system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512"
+    "/Users/wes/.nuget/packages/system.reflection.emit/4.7.0/system.reflection.emit.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }

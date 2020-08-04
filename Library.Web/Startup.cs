@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Library.Service.Interfaces;
 using Library.Service;
 using Library.Data;
-using Library.Models.Mapping;
+using Library.Data.Mapping;
 using Library.Service.Helpers;
 using Microsoft.EntityFrameworkCore;
 

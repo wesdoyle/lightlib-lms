@@ -1,5 +1,6 @@
 ﻿using Library.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Library.Models;
 
 namespace Library.Data
 {
@@ -28,8 +29,8 @@ namespace Library.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<LibraryAsset>()
                 .HasDiscriminator<string>("AssetType")
-                .HasValue<Book>("Book")
-                .HasValue<Video>("Video");
+                .HasValue<AssetType>(AssetType.Book)
+                .HasValue<AssetType>("Video");
         }
     }
 }

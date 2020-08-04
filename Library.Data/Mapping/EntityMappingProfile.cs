@@ -2,7 +2,7 @@ using AutoMapper;
 using Library.Data.Models;
 using Library.Models.DTOs;
 
-namespace Library.Models.Mapping {
+namespace Library.Data.Mapping {
     /// <summary>
     /// AutoMapper Mapping Profile for de/serializing entity models to DTOs
     /// </summary>

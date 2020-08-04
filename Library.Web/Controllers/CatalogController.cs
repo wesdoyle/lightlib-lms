@@ -41,8 +41,11 @@ namespace Library.Web.Controllers
                 foreach (var asset in paginationServiceResult.Data.Results) {
                     var assetId = asset.Id;
                     var authorOrDirector = await _assetsService.GetAuthorOrDirector(assetId);
-                    var deweyIndex = await _assetsService.GetDeweyIndex(assetId);
-                    var 
+
+
+                    if (asset.AssetType == "Book") {
+                        var deweyIndex = await _assetsService.GetDeweyIndex(assetId);
+                    }
                 }
                 
                 var listingResult = assetModels
@@ -50,9 +53,6 @@ namespace Library.Web.Controllers
                         Id = a.Id,
                         ImageUrl = a.ImageUrl,
                         AuthorOrDirector = authorOrDirector,
-                        Dewey = _assetsService.GetDeweyIndex(a.Id),
-                        Title = _assetsService.GetTitle(a.Id),
-                        Type = _assetsService.GetType(a.Id),
                     }).ToList();
 
                 var model = new AssetIndexModel {

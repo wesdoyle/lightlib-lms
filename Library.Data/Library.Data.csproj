@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Library.Models\Library.Models.csproj" />
+  </ItemGroup>
 </Project>
