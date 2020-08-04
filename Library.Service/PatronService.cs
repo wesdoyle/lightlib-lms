@@ -62,9 +62,10 @@ namespace Library.Service {
         /// <summary>
         /// Creates a new Patron
         /// </summary>
-        /// <param name="newPatron"></param>
+        /// <param name="newPatronDto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<int>> Add(Patron newPatron) {
+        public async Task<ServiceResult<int>> Add(PatronDto newPatronDto) {
+            var newPatron = _mapper.Map<Patron>(newPatronDto);
             await _context.AddAsync(newPatron);
             var patronId = await _context.SaveChangesAsync();
             return new ServiceResult<int> {

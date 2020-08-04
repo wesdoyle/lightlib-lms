@@ -40,8 +40,9 @@ namespace Library.Service {
         /// <summary>
         /// Creates a new Library Branch
         /// </summary>
-        /// <param name="newBranch"></param>
-        public async Task<ServiceResult<int>> Add(LibraryBranchDto newBranch) {
+        /// <param name="newBranchDto"></param>
+        public async Task<ServiceResult<int>> Add(LibraryBranchDto newBranchDto) {
+            var newBranch = _mapper.Map<LibraryBranch>(newBranchDto);
             await _context.AddAsync(newBranch);
             var newBranchId = await _context.SaveChangesAsync();
             return new ServiceResult<int> {
@@ -89,6 +90,7 @@ namespace Library.Service {
             };
         }
 
+        // TODO
         private struct BranchHoursOpenRangeForDay {
             public int Start_SecondsSinceWeekStart { get; set; }
             public int End_SecondsSinceWeekStart { get; set; }

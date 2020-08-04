@@ -12,7 +12,7 @@ namespace Library.Service.Interfaces {
         Task<ServiceResult<List<string>>> GetBranchHours(int branchId);
         Task<ServiceResult<LibraryBranchDto>> Get(int branchId);
         
-        Task<ServiceResult<int>> Add(LibraryBranchDto newBranch);
+        Task<ServiceResult<int>> Add(LibraryBranchDto newBranchDto);
         
         Task<ServiceResult<bool>> IsBranchOpen(int branchId);
         Task<ServiceResult<int>> GetAssetCount(int branchId);

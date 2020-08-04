@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Library.Data.Models;
 using Library.Models.DTOs;
 using Library.Service.Models;
 
@@ -12,8 +11,7 @@ namespace Library.Service.Interfaces {
             int patronId, int page, int perPage);
         Task<PagedServiceResult<CheckoutDto>> GetCheckouts(
             int patronId, int page, int perPage);
-        
         Task<ServiceResult<PatronDto>> Get(int patronId);
-        Task<ServiceResult<int>> Add(Patron newPatron);
+        Task<ServiceResult<int>> Add(PatronDto newPatron);
     }
 }

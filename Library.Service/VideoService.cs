@@ -102,12 +102,16 @@ namespace Library.Service {
         /// <summary>
         /// Creates a new Video Library Asset
         /// </summary>
-        /// <param name="video"></param>
+        /// <param name="videoDto"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public async Task<ServiceResult<int>> Add(VideoDto video) {
+        public async Task<ServiceResult<int>> Add(VideoDto videoDto) {
+
+            var video = _mapper.Map<Video>(videoDto);
+                        
             await _context.AddAsync(video);
+            
             var videoId = await _context.SaveChangesAsync();
+            
             return new ServiceResult<int> {
                 Data = videoId,
                 Error = null
