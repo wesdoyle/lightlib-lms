@@ -1,10 +1,6 @@
 # Library Mgmt System Update Checklist
 
-- Make service layer, web async
-- Caching
-
-- Generic Repository
-- Write new tests
+- Make Controllers async
 
 - ERROR HANDLING
   - First() etc. everywhere
@@ -12,10 +8,18 @@
   - Flesh out the idea of a Service-Level Error in ServiceResult objects
 
 - Establish types for magic strings (enums)
-- More expressive return types from CheckoutService on success
+
+- More expressive return types from service layer on success / error
   - Replace all ServiceResult<bool> type ServiceResults with add+ info
 
+- Query String validation middleware
+
 - Logging (NLog)
+
 - Monitoring (Prometheus + Grafana)
 
+- Generic Repository
 
+- Write new tests
+
+- Caching

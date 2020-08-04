@@ -68,6 +68,7 @@ namespace Library.Service {
         /// <param name="perPage"></param>
         /// <returns></returns>
         public async Task<PagedServiceResult<LibraryAssetDto>> GetAll(int page, int perPage) {
+            
             var assets = _context.LibraryAssets
                 .Include(a => a.Status)
                 .Include(a => a.Location);
@@ -227,26 +228,6 @@ namespace Library.Service {
                 Data = true,
                 Error = null
             };
-        }
-
-        public async Task<ServiceResult<string>> GetDeweyIndex(int id) {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceResult<string>> GetType(int id) {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceResult<string>> GetTitle(int id) {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ServiceResult<string>> GetIsbn(int id) {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ServiceResult<LibraryCardDto>> GetLibraryCardByAssetId(int id) {
-            throw new NotImplementedException();
         }
     }
 }

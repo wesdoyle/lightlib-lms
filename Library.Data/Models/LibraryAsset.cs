@@ -19,6 +19,7 @@ namespace Library.Data.Models {
         public decimal Cost { get; set; }
         public string ImageUrl { get; set; }
         public int NumberOfCopies { get; set; }
+        public string AssetType { get; set; }
         public virtual LibraryBranch Location { get; set; }
     }
 }

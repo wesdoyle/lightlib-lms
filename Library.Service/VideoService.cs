@@ -61,7 +61,8 @@ namespace Library.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<VideoDto>> GetByDirector(string director, int page, int perPage) {
+        public async Task<PagedServiceResult<VideoDto>> GetByDirector(
+            string director, int page, int perPage) {
             var videos = _context.Videos.Where(v => v.Director.Contains(director));
 
             var pageOfVideos = await _paginator 

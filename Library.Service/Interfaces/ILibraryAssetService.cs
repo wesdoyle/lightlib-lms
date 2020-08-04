@@ -9,13 +9,8 @@ namespace Library.Service.Interfaces {
         Task<ServiceResult<int>> Add(LibraryAssetDto newDto);
         
         Task<ServiceResult<string>> GetAuthorOrDirector(int assetId);
-        Task<ServiceResult<string>> GetDeweyIndex(int id);
-        Task<ServiceResult<string>> GetType(int id);
-        Task<ServiceResult<string>> GetTitle(int id);
-        Task<ServiceResult<string>> GetIsbn(int id);
         
         Task<ServiceResult<LibraryBranchDto>> GetCurrentLocation(int id);
-        Task<ServiceResult<LibraryCardDto>> GetLibraryCardByAssetId(int id);
         
         Task<ServiceResult<int>> GetNumberOfCopies(int libraryAssetId);
         Task<ServiceResult<bool>> MarkLost(int assetId);

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Library.Models;
 
-namespace Library.Web.Models.Catalog
-{
-    public class AssetIndexModel
-    {
-        public IEnumerable<AssetIndexListingModel> Assets { get; set; }
+namespace Library.Web.Models.Catalog {
+    public class AssetIndexModel {
+        public PaginationResult<AssetIndexListingModel> Assets { get; set; }
     }
 }

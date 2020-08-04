@@ -1,13 +1,17 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Library.Models;
 using Library.Service.Interfaces;
 using Library.Web.Models.Catalog;
 using Library.Web.Models.CheckoutModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Web.Controllers
 {
-    public class CatalogController : Controller
-    {
+    public class CatalogController : Controller {
+        
         private readonly ILibraryAssetService _assetsService;
         private readonly ICheckoutService _checkoutsService;
 
@@ -18,29 +22,54 @@ namespace Library.Web.Controllers
             _checkoutsService = checkoutsService;
         }
 
-        public IActionResult Index() {
-            var assetModels = _assetsService.GetAll();
+        public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
+            
+            var paginationServiceResult = await _assetsService.GetAll(page, perPage);
 
-            var listingResult = assetModels
-                .Select(a => new AssetIndexListingModel {
-                    Id = a.Id,
-                    ImageUrl = a.ImageUrl,
-                    AuthorOrDirector = _assetsService.GetAuthorOrDirector(a.Id),
-                    Dewey = _assetsService.GetDeweyIndex(a.Id),
-                    // CopiesAvailable = _checkoutsService.GetNumberOfCopies(a.Id), // Remove
-                    Title = _assetsService.GetTitle(a.Id),
-                    Type = _assetsService.GetType(a.Id),
-                    // NumberOfCopies = _checkoutsService.GetNumberOfCopies(a.Id)
-                }).ToList();
+            if (paginationServiceResult.Error != null) {
+                var error = paginationServiceResult.Error;
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    error.Message);
+            }
 
-            var model = new AssetIndexModel {
-                Assets = listingResult
+            if (paginationServiceResult.Data != null
+                && paginationServiceResult.Data.Results.Any()) {
+
+                var assetIndexListingModels = new List<AssetIndexListingModel>();
+
+                foreach (var asset in paginationServiceResult.Data.Results) {
+                    var assetId = asset.Id;
+                    var authorOrDirector = await _assetsService.GetAuthorOrDirector(assetId);
+                    var deweyIndex = await _assetsService.GetDeweyIndex(assetId);
+                    var 
+                }
+                
+                var listingResult = assetModels
+                    .Select(a => new AssetIndexListingModel {
+                        Id = a.Id,
+                        ImageUrl = a.ImageUrl,
+                        AuthorOrDirector = authorOrDirector,
+                        Dewey = _assetsService.GetDeweyIndex(a.Id),
+                        Title = _assetsService.GetTitle(a.Id),
+                        Type = _assetsService.GetType(a.Id),
+                    }).ToList();
+
+                var model = new AssetIndexModel {
+                    Assets = listingResult
+                };
+
+                return View(model);
+            }
+            
+            var emptyModel = new AssetIndexModel {
+                Assets = new PaginationResult<AssetIndexListingModel>()
             };
-
-            return View(model);
+            
+            return View(emptyModel);
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
             var asset = _assetsService.Get(id);
 
@@ -73,7 +102,7 @@ namespace Library.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Checkout(int id)
+        public async Task<IActionResult> Checkout(int id)
         {
             var asset = _assetsService.Get(id);
 
@@ -88,7 +117,7 @@ namespace Library.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Hold(int id)
+        public async Task<IActionResult> Hold(int id)
         {
             var asset = _assetsService.Get(id);
 
@@ -103,33 +132,33 @@ namespace Library.Web.Controllers
             return View(model);
         }
 
-        public IActionResult CheckIn(int id)
+        public async Task<IActionResult> CheckIn(int id)
         {
             _checkoutsService.CheckInItem(id);
             return RedirectToAction("Detail", new {id});
         }
 
-        public IActionResult MarkLost(int id)
+        public async Task<IActionResult> MarkLost(int id)
         {
             _checkoutsService.MarkLost(id);
             return RedirectToAction("Detail", new {id});
         }
 
-        public IActionResult MarkFound(int id)
+        public async Task<IActionResult> MarkFound(int id)
         {
             _checkoutsService.MarkFound(id);
             return RedirectToAction("Detail", new {id});
         }
 
         [HttpPost]
-        public IActionResult PlaceCheckout(int assetId, int libraryCardId)
+        public async Task<IActionResult> PlaceCheckout(int assetId, int libraryCardId)
         {
             _checkoutsService.CheckoutItem(assetId, libraryCardId);
             return RedirectToAction("Detail", new {id = assetId});
         }
 
         [HttpPost]
-        public IActionResult PlaceHold(int assetId, int libraryCardId)
+        public async Task<IActionResult> PlaceHold(int assetId, int libraryCardId)
         {
             _checkoutsService.PlaceHold(assetId, libraryCardId);
             return RedirectToAction("Detail", new {id = assetId});

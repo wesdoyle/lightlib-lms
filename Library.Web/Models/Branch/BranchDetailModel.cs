@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Web.Models.Branch
-{
-    public class BranchDetailModel
-    {
+namespace Library.Web.Models.Branch {
+    public class BranchDetailModel {
         public int Id { get; set; }
         public string Address { get; set; }
         public string BranchName { get; set; }

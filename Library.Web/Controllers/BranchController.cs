@@ -1,10 +1,16 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Library.Models;
 using Library.Service.Interfaces;
 using Library.Web.Models.Branch;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Web.Controllers
-{
+namespace Library.Web.Controllers {
+    /// <summary>
+    /// Handles requests for Library Branch resources
+    /// </summary>
     public class BranchController : Controller {
         private readonly ILibraryBranchService _branchService;
 
@@ -12,42 +18,107 @@ namespace Library.Web.Controllers
             _branchService = branchService;
         }
 
-        public IActionResult Index() {
-            var branchModels = _branchService.GetAll()
-                .Select(br => new BranchDetailModel {
-                    Id = br.Id,
-                    BranchName = br.Name,
-                    NumberOfAssets = _branchService.GetAssetCount(br.Id),
-                    NumberOfPatrons = _branchService.GetPatronCount(br.Id),
-                    IsOpen = _branchService.IsBranchOpen(br.Id)
-                }).ToList();
+        /// <summary>
+        /// Fetch a LibraryBranchIndex model, which contains a paginated collection
+        /// of Library Branch information
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
+            var paginationServiceResult = await _branchService.GetAll(page, perPage);
 
-            var model = new BranchIndexModel
-            {
-                Branches = branchModels
+            if (paginationServiceResult.Error != null) {
+                // Log the error and stack trace
+                // Branch if running in debug mode and show detailed error in view
+                var error = paginationServiceResult.Error;
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    error.Message);
+            }
+
+            if (paginationServiceResult.Data != null 
+            && paginationServiceResult.Data.Results.Any()) {
+                
+                foreach (var branch in paginationServiceResult.Data.Results) {
+                    var branchId = branch.Id;
+                    
+                    var branchOpenResult = await _branchService.IsBranchOpen(branchId);
+                    branch.IsOpen = branchOpenResult.Data;
+
+                    var assetCountResult = await _branchService.GetAssetCount(branchId);
+                    branch.NumberOfAssets = assetCountResult.Data;
+
+                    var patronCount = await _branchService.GetPatronCount(branchId);
+                    branch.NumberOfPatrons = patronCount.Data;
+                }
+
+                var branchModels = new PaginationResult<BranchDetailModel>();
+
+                var model = new BranchIndexModel {
+                    Branches = branchModels
+                };
+
+                return View(model);
+            }
+            
+            var emptyModel = new BranchIndexModel {
+                Branches = new PaginationResult<BranchDetailModel>()
             };
 
-            return View(model);
+            return View(emptyModel);
         }
+        
+        /// <summary>
+        /// Fetch a LibraryBranchDetailModel, which contains data about a particular
+        /// Library Branch
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Detail(int id) {
 
-        public IActionResult Detail(int id)
-        {
-            var branch = _branchService.Get(id);
-            var model = new BranchDetailModel
-            {
-                BranchName = branch.Name,
-                Description = branch.Description,
-                Address = branch.Address,
-                Telephone = branch.Telephone,
-                BranchOpenedDate = branch.OpenDate.ToString("yyyy-MM-dd"),
-                NumberOfPatrons = _branchService.GetPatronCount(id),
-                NumberOfAssets = _branchService.GetAssetCount(id),
-                TotalAssetValue = _branchService.GetAssetsValue(id),
-                ImageUrl = branch.ImageUrl,
-                HoursOpen = _branchService.GetBranchHours(id)
+            var serviceResult = await _branchService.Get(id);
+
+            if (serviceResult.Error != null) {
+                // Log the error and stack trace
+                // Branch if running in debug mode and show detailed error in view
+                var error = serviceResult.Error;
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    error.Message);
+            }
+
+            if (serviceResult.Data == null) {
+                return NotFound($"The Library Branch with ID {id} was not found");
+            }
+
+            var patronCountResult = await _branchService.GetPatronCount(id);
+            var patronCount = patronCountResult.Data;
+            
+            var assetsCountResult = await _branchService.GetAssetCount(id);
+            var assetsCount = assetsCountResult.Data;
+            
+            var assetsValueResult = await _branchService.GetAssetsValue(id);
+            var assetsValue = assetsValueResult.Data;
+
+            var branchHoursResult = await _branchService.GetBranchHours(id);
+            var branchHours = branchHoursResult.Data ?? new List<string>();
+
+            var model = new BranchDetailModel {
+                BranchName = serviceResult.Data.Name,
+                Description = serviceResult.Data.Description,
+                Address = serviceResult.Data.Address,
+                Telephone = serviceResult.Data.Telephone,
+                BranchOpenedDate = serviceResult.Data.OpenDate.ToString("yyyy-MM-dd"),
+                NumberOfPatrons = patronCount,
+                NumberOfAssets = assetsCount,
+                TotalAssetValue = assetsValue,
+                ImageUrl = serviceResult.Data.ImageUrl,
+                HoursOpen = branchHours
             };
 
             return View(model);
+
         }
     }
 }

@@ -24,5 +24,12 @@ namespace Library.Data
         public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<LibraryAsset> LibraryAssets { get; set; }
         public virtual DbSet<Hold> Holds { get; set; }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.Entity<LibraryAsset>()
+                .HasDiscriminator<string>("AssetType")
+                .HasValue<Book>("Book")
+                .HasValue<Video>("Video");
+        }
     }
 }

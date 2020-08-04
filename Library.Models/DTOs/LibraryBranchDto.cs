@@ -14,5 +14,11 @@ namespace Library.Models.DTOs {
         public string ImageUrl { get; set; }
         public List<Patron> Patrons { get; set; }
         public List<LibraryAsset> LibraryAssets { get; set; }
+        
+        public bool IsOpen { get; set; }
+        public List<string> HoursOpen { get; set; }
+        public int NumberOfPatrons { get; set; }
+        public int NumberOfAssets { get; set; }
+        public decimal TotalAssetValue { get; set; }
     }
 }

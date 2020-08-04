@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Library.Models;
 
-namespace Library.Web.Models.Branch
-{
-    public class BranchIndexModel
-    {
-        public IEnumerable<BranchDetailModel> Branches { get; set; }
+namespace Library.Web.Models.Branch {
+    public class BranchIndexModel {
+        public PaginationResult<BranchDetailModel> Branches { get; set; }
     }
 }
