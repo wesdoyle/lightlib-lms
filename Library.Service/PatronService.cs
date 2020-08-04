@@ -12,6 +12,9 @@ using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Service {
+    /// <summary>
+    /// Handles Library Patron business logic
+    /// </summary>
     public class PatronService : IPatronService {
         
         private readonly LibraryDbContext _context;
@@ -21,14 +24,6 @@ namespace Library.Service {
         private readonly IPaginator<Checkout> _checkoutPaginator;
         private readonly IPaginator<Hold> _holdPaginator;
 
-        /// <summary>
-        /// Handles Library Patron business logic
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="mapper"></param>
-        /// <param name="patronPaginator"></param>
-        /// <param name="historyPaginator"></param>
-        /// <param name="holdPaginator"></param>
         public PatronService(
             LibraryDbContext context,
             IMapper mapper,

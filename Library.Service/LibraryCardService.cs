@@ -9,8 +9,10 @@ using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.Service
-{
+namespace Library.Service {
+    /// <summary>
+    /// Handles Library Card business logic
+    /// </summary>
     public class LibraryCardService : ILibraryCardService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
