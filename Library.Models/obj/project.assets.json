@@ -957,11 +957,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/wes/projects/library-management-system/Library.Models/Library.Models.csproj",
+      "projectUniqueName": "/Users/wes/projects/personal/library-management-system/Library.Models/Library.Models.csproj",
       "projectName": "Library.Models",
-      "projectPath": "/Users/wes/projects/library-management-system/Library.Models/Library.Models.csproj",
+      "projectPath": "/Users/wes/projects/personal/library-management-system/Library.Models/Library.Models.csproj",
       "packagesPath": "/Users/wes/.nuget/packages/",
-      "outputPath": "/Users/wes/projects/library-management-system/Library.Models/obj/",
+      "outputPath": "/Users/wes/projects/personal/library-management-system/Library.Models/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
@@ -978,8 +978,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "/Users/wes/projects/library-management-system/Library.Data/Library.Data.csproj": {
-              "projectPath": "/Users/wes/projects/library-management-system/Library.Data/Library.Data.csproj"
+            "/Users/wes/projects/personal/library-management-system/Library.Data/Library.Data.csproj": {
+              "projectPath": "/Users/wes/projects/personal/library-management-system/Library.Data/Library.Data.csproj"
             }
           }
         }

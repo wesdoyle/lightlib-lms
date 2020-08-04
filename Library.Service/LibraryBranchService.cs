@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Library.Data;
 using Library.Data.Models;
+using Library.Models;
 using Library.Models.DTOs;
 using Library.Service.Interfaces;
 using Library.Service.Models;
@@ -18,15 +19,22 @@ namespace Library.Service {
     public class LibraryBranchService : ILibraryBranchService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<LibraryBranch> _paginator;
+        
+        private readonly IPaginator<LibraryBranch> _branchPaginator;
+        private readonly IPaginator<Patron> _patronPaginator;
+        private readonly IPaginator<LibraryAsset> _assetPaginator;
 
         public LibraryBranchService(
             LibraryDbContext context, 
             IMapper mapper, 
-            IPaginator<LibraryBranch> paginator) {
+            IPaginator<Patron> patronPaginator,
+            IPaginator<LibraryAsset> assetPaginator,
+            IPaginator<LibraryBranch> branchPaginator) {
             _context = context;
             _mapper = mapper;
-            _paginator = paginator;
+            _branchPaginator = branchPaginator;
+            _patronPaginator = patronPaginator;
+            _assetPaginator = assetPaginator;
         }
 
         /// <summary>
@@ -81,7 +89,7 @@ namespace Library.Service {
             };
         }
 
-        public struct BranchHoursOpenRangeForDay {
+        private struct BranchHoursOpenRangeForDay {
             public int Start_SecondsSinceWeekStart { get; set; }
             public int End_SecondsSinceWeekStart { get; set; }
         }
@@ -103,60 +111,149 @@ namespace Library.Service {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Returns the count of all LibraryAssets at the provided Library Branch ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <returns></returns>
         public async Task<ServiceResult<int>> GetAssetCount(int branchId) {
-            throw new System.NotImplementedException();
+            var libraryBranch = await Get(branchId);
+            var assetsCount = libraryBranch.Data.LibraryAssets.Count;
+            return new ServiceResult<int> {
+                Data = assetsCount,
+                Error = null
+            };
         }
 
+        /// <summary>
+        /// Returns the count of all Patrons at the provided Library Branch ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <returns></returns>
         public async Task<ServiceResult<int>> GetPatronCount(int branchId) {
-            var branch = await Get(branchId);
-            var patronCount = branch.Data.Patrons.Count();
+            var libraryBranch = await Get(branchId);
+            var patronsCount = libraryBranch.Data.Patrons.Count;
+            return new ServiceResult<int> {
+                Data = patronsCount,
+                Error = null
+            };
         }
 
-        public async Task<ServiceResult<decimal>> GetAssetsValue(int id) {
-            throw new System.NotImplementedException();
+        /// <summary>
+        /// Get the sum of the value of all Library Assets at the provided Library Branch ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult<decimal>> GetAssetsValue(int branchId) {
+
+            var branch = await _context.LibraryBranches
+                .Include(a => a.LibraryAssets)
+                .FirstAsync(b => b.Id == branchId);
+
+            var assetsForBranch = branch.LibraryAssets;
+
+            var assetsValue = assetsForBranch.Sum(a => a.Cost);
+            
+            return new ServiceResult<decimal> {
+               Data = assetsValue,
+               Error = null
+            };
         }
 
-        public IEnumerable<LibraryBranch> GetAll()
-        {
-            return _context.LibraryBranches.Include(a => a.Patrons).Include(a => a.LibraryAssets);
+        /// <summary>
+        /// Gets a paginated collection of all Library Branches
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public async Task<PagedServiceResult<LibraryBranchDto>> GetAll(int page, int perPage) {
+            
+            var libraryBranches = _context.LibraryBranches
+                .Include(a => a.Patrons)
+                .Include(a => a.LibraryAssets);
+
+            var pageOfBranches = await _branchPaginator 
+                .BuildPageResult(libraryBranches, page, perPage, ch => ch.Id)
+                .ToListAsync();
+
+            var paginatedBranches = _mapper.Map<List<LibraryBranchDto>>(pageOfBranches);
+            
+            var paginationResult = new PaginationResult<LibraryBranchDto> {
+                Results = paginatedBranches,
+                PerPage = perPage,
+                PageNumber = page
+            };
+            
+            return new PagedServiceResult<LibraryBranchDto> {
+                Data = paginationResult,
+                Error = null
+            };
         }
 
-        public int GetAssetCount(int branchId)
-        {
-            return Get(branchId).LibraryAssets.Count();
+        /// <summary>
+        /// Get a paginated collection of Patrons for the provided Library Branch ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public async Task<PagedServiceResult<PatronDto>> GetPatrons(int branchId, int page, int perPage) {
+            
+            var branch = await _context.LibraryBranches
+                .Include(a => a.Patrons)
+                .FirstAsync(b => b.Id == branchId);
+
+            var patrons = branch.Patrons.AsQueryable();
+            
+            var pageOfPatrons = await _patronPaginator 
+                .BuildPageResult(patrons, page, perPage, ch => ch.Id)
+                .ToListAsync();
+
+            var paginatedPatrons = _mapper.Map<List<PatronDto>>(pageOfPatrons);
+            
+            var paginationResult = new PaginationResult<PatronDto> {
+                Results = paginatedPatrons,
+                PerPage = perPage,
+                PageNumber = page
+            };
+            
+            return new PagedServiceResult<PatronDto> {
+                Data = paginationResult,
+                Error = null
+            };
         }
 
-        public IEnumerable<LibraryAsset> GetAssets(int branchId)
-        {
-            return _context.LibraryBranches.Include(a => a.LibraryAssets)
-                .First(b => b.Id == branchId).LibraryAssets;
-        }
+        /// <summary>
+        /// Get a paginated collection of Library Assets for the provided Library Branch ID
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public async Task<PagedServiceResult<LibraryAssetDto>> GetAssets(int branchId, int page, int perPage) {
+            
+            var branch = await _context.LibraryBranches
+                .Include(a => a.Patrons)
+                .FirstAsync(b => b.Id == branchId);
 
-        public decimal GetAssetsValue(int branchId)
-        {
-            var assetsValue = GetAssets(branchId).Select(a => a.Cost);
-            return assetsValue.Sum();
-        }
+            var libraryAssets = branch.LibraryAssets.AsQueryable();
+            
+            var pageOfAssets = await _assetPaginator 
+                .BuildPageResult(libraryAssets, page, perPage, ch => ch.Id)
+                .ToListAsync();
 
-        public Task<PagedServiceResult<LibraryBranchDto>> GetAll(int page, int perPage) {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<PagedServiceResult<PatronDto>> GetPatrons(int page, int perPage) {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<PagedServiceResult<LibraryAssetDto>> GetAssets(int page, int perPage) {
-            throw new System.NotImplementedException();
-        }
-
-        public int GetPatronCount(int branchId)
-        {
-        }
-
-        public IEnumerable<Patron> GetPatrons(int branchId)
-        {
-            return _context.LibraryBranches.Include(a => a.Patrons).First(b => b.Id == branchId).Patrons;
+            var paginatedLibraryAssets = _mapper.Map<List<LibraryAssetDto>>(pageOfAssets);
+            
+            var paginationResult = new PaginationResult<LibraryAssetDto> {
+                Results = paginatedLibraryAssets,
+                PerPage = perPage,
+                PageNumber = page
+            };
+            
+            return new PagedServiceResult<LibraryAssetDto> {
+                Data = paginationResult,
+                Error = null
+            };
         }
     }
 }

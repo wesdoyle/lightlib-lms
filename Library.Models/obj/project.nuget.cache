@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/Gello8qjO3UKXwRUzUWUMFZtl5rO44crgAOebWGA8znErLoRG++LOsJuJAQZX+6kRbfEYjxxBgZmR2QPzlU2A==",
+  "dgSpecHash": "vctJa1rSQuDXWGMyYIFHM6ni6MbpBgz066DgCUVwHgsOTA4RGcwKpt9+AtQuTinENSKhFaIJicHaf69ZW0tdxA==",
   "success": true,
-  "projectFilePath": "/Users/wes/projects/library-management-system/Library.Models/Library.Models.csproj",
+  "projectFilePath": "/Users/wes/projects/personal/library-management-system/Library.Models/Library.Models.csproj",
   "expectedPackageFiles": [
     "/Users/wes/.nuget/packages/automapper/10.0.0/automapper.10.0.0.nupkg.sha512",
     "/Users/wes/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",

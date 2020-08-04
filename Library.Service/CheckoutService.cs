@@ -78,6 +78,7 @@ namespace Library.Service {
             int libraryAssetId, 
             int page, 
             int perPage) {
+            
             var checkoutHistories = _context.CheckoutHistories
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
