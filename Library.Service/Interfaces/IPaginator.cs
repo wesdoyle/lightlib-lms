@@ -3,6 +3,10 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace Library.Service.Interfaces {
+    /// <summary>
+    /// Definition for a Paginator
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IPaginator<T> where T : class {
         
         public IQueryable<T> BuildPageResult<TOrder>(

@@ -15,16 +15,16 @@ namespace Library.Service {
     /// <summary>
     /// Handles business logic for working with Library Books
     /// </summary>
-    public class BookService : IBookService { 
+    public class BookService : BaseLibraryService, IBookService { 
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
         private readonly IPaginator<Book> _paginator;
-
+        
         public BookService(
-        LibraryDbContext context, 
-        IMapper mapper,
-        IPaginator<Book> bookPaginator
+            LibraryDbContext context, 
+            IMapper mapper,
+            IPaginator<Book> bookPaginator
         ) {
             _context = context;
             _mapper = mapper;
@@ -39,47 +39,47 @@ namespace Library.Service {
             };
         }
 
+        /// <summary>
+        /// Gets a Book Asset
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ServiceResult<BookDto>> Get(int id) {
-            var book =  await _context
-                .Books.FirstAsync(b => b.Id == id);
-
             try {
+                var book = await _context.Books.FirstAsync(b => b.Id == id);
                 var bookDto = _mapper.Map<BookDto>(book);
-
                 return new ServiceResult<BookDto> {
                     Data = bookDto,
                     Error = null
                 };
-            } catch (Exception e) {
-                return new ServiceResult<BookDto> {
-                    Data = null,
-                    Error = new ServiceError {
-                        Message = e.Message,
-                        Stacktrace = e.StackTrace
-                    }
-                };
+            } catch (ArgumentNullException ex) {
+                return HandleDatabaseError<BookDto>(ex);
             }
         }
 
         public async Task<PagedServiceResult<BookDto>> GetAll(int page, int perPage) {
             var books = _context.Books;
 
-            var pageOfBooks = await _paginator
-                .BuildPageResult(books, page, perPage, b => b.Author)
-                .ToListAsync();
-            
-            var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
-            
-            var paginationResult = new PaginationResult<BookDto> {
-                Results = paginatedBooks,
-                PerPage = perPage,
-                PageNumber = page
-            };
-            
-            return new PagedServiceResult<BookDto> {
-                Data = paginationResult,
-                Error = null
-            };
+            try {
+                var pageOfBooks = await _paginator
+                    .BuildPageResult(books, page, perPage, b => b.Author)
+                    .ToListAsync();
+
+                var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
+
+                var paginationResult = new PaginationResult<BookDto> {
+                    Results = paginatedBooks,
+                    PerPage = perPage,
+                    PageNumber = page
+                };
+
+                return new PagedServiceResult<BookDto> {
+                    Data = paginationResult,
+                    Error = null
+                };
+            } catch (Exception ex) {
+                return HandleDatabaseCollectionError<BookDto>(ex);
+            }
         }
 
         public async Task<PagedServiceResult<BookDto>> GetByAuthor(
