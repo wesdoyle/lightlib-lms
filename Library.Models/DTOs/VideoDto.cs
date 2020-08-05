@@ -1,5 +1,5 @@
 namespace Library.Models.DTOs {
-    public class VideoDto {
+    public sealed class VideoDto {
         public int Id { get; set; }
         public string Director { get; set; }
         public string Title { get; set; }
@@ -8,6 +8,7 @@ namespace Library.Models.DTOs {
         public decimal Cost { get; set; }
         public string ImageUrl { get; set; }
         public int NumberOfCopies { get; set; }
-        public virtual LibraryBranchDto Location { get; set; }
+        public int CopiesAvailable { get; set; }
+        public LibraryBranchDto Location { get; set; }
     }
 }

@@ -1,167 +1,151 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Library.Models;
 using Library.Service.Interfaces;
 using Library.Web.Models.Catalog;
-using Library.Web.Models.CheckoutModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Web.Controllers
-{
-    public class CatalogController : Controller {
+namespace Library.Web.Controllers {
+    
+    /// <summary>
+    /// Handles web-layer requests for the Library's Catalog 
+    /// </summary>
+    public class CatalogController : LibraryController {
         
         private readonly ILibraryAssetService _assetsService;
         private readonly ICheckoutService _checkoutsService;
+        private readonly IHoldService _holdService;
 
         public CatalogController(
             ILibraryAssetService assetsService, 
+            IHoldService holdService,
             ICheckoutService checkoutsService) {
             _assetsService = assetsService;
             _checkoutsService = checkoutsService;
+            _holdService = holdService;
         }
 
+        /// <summary>
+        /// Returns a paginated view of all Library Assets
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
-            
             var paginationServiceResult = await _assetsService.GetAll(page, perPage);
-
+            
             if (paginationServiceResult.Error != null) {
-                var error = paginationServiceResult.Error;
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    error.Message);
+                return HandleServerError(paginationServiceResult.Error);
             }
 
-            if (paginationServiceResult.Data != null
-                && paginationServiceResult.Data.Results.Any()) {
+            if (paginationServiceResult.Data != null && paginationServiceResult.Data.Results.Any()) {
 
-                var assetIndexListingModels = new List<AssetIndexListingModel>();
+                var books = paginationServiceResult.Data.Results
+                    .Where(res => res.AssetType == AssetType.Book)
+                    .ToList();
 
-                foreach (var asset in paginationServiceResult.Data.Results) {
-                    var assetId = asset.Id;
-                    var authorOrDirector = await _assetsService.GetAuthorOrDirector(assetId);
+                var videos = paginationServiceResult.Data.Results
+                    .Where(res => res.AssetType == AssetType.Video)
+                    .ToList();
 
-
-                    if (asset.AssetType == "Book") {
-                        var deweyIndex = await _assetsService.GetDeweyIndex(assetId);
+                var viewModel = new AssetIndexModel {
+                    PageOfAssets = new PaginationResult<AssetIndexListingModel> {
+                        Results = new List<AssetIndexListingModel>()
                     }
-                }
-                
-                var listingResult = assetModels
-                    .Select(a => new AssetIndexListingModel {
-                        Id = a.Id,
-                        ImageUrl = a.ImageUrl,
-                        AuthorOrDirector = authorOrDirector,
-                    }).ToList();
-
-                var model = new AssetIndexModel {
-                    Assets = listingResult
                 };
 
-                return View(model);
+                return View(viewModel);
             }
             
             var emptyModel = new AssetIndexModel {
-                Assets = new PaginationResult<AssetIndexListingModel>()
+                PageOfAssets = new PaginationResult<AssetIndexListingModel>()
             };
             
             return View(emptyModel);
         }
 
-        public async Task<IActionResult> Detail(int id)
-        {
-            var asset = _assetsService.Get(id);
-
-            // var currentHolds = _checkoutsService.GetCurrentHolds(id).Select(a => new AssetHoldModel
-            // {
-            //     // HoldPlaced = _checkoutsService.GetCurrentHoldPlaced(a.Id),
-            //     // PatronName = _checkoutsService.GetCurrentHoldPatron(a.Id)
-            // });
-
-            var model = new AssetDetailModel
-            {
-                AssetId = id,
-                Title = asset.Title,
-                Type = _assetsService.GetType(id),
-                Year = asset.Year,
-                Cost = asset.Cost,
-                Status = asset.Status.Name,
-                ImageUrl = asset.ImageUrl,
-                AuthorOrDirector = _assetsService.GetAuthorOrDirector(id),
-                CurrentLocation = _assetsService.GetCurrentLocation(id)?.Name,
-                Dewey = _assetsService.GetDeweyIndex(id),
-                // CheckoutHistory = _checkoutsService.GetCheckoutHistory(id),
-                CurrentAssociatedLibraryCard = _assetsService.GetLibraryCardByAssetId(id),
-                Isbn = _assetsService.GetIsbn(id),
-                // LatestCheckout = _checkoutsService.GetLatestCheckout(id),
-                // CurrentHolds = currentHolds,
-                // PatronName = _checkoutsService.GetCurrentPatron(id)
-            };
-
-            return View(model);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IActionResult> Detail(int id) {
+            throw new NotImplementedException();
         }
 
-        public async Task<IActionResult> Checkout(int id)
-        {
-            var asset = _assetsService.Get(id);
-
-            var model = new CheckoutModel
-            {
-                AssetId = id,
-                ImageUrl = asset.ImageUrl,
-                Title = asset.Title,
-                LibraryCardId = "",
-                // IsCheckedOut = _checkoutsService.IsCheckedOut(id)
-            };
-            return View(model);
+        /// <summary>
+        /// Redirects to the Check Out Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IActionResult> VisitCheckOutPage(int id) {
+            throw new NotImplementedException();
         }
 
-        public async Task<IActionResult> Hold(int id)
-        {
-            var asset = _assetsService.Get(id);
-
-            var model = new CheckoutModel
-            {
-                AssetId = id,
-                ImageUrl = asset.ImageUrl,
-                Title = asset.Title,
-                LibraryCardId = "",
-                // HoldCount = _checkoutsService.GetCurrentHolds(id).Count()
-            };
-            return View(model);
+        /// <summary>
+        /// Checks a Library Asset in.  Automatically Handles Checking out to existing holds
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IActionResult> CheckIn(int id) {
+            throw new NotImplementedException();
         }
 
-        public async Task<IActionResult> CheckIn(int id)
-        {
-            _checkoutsService.CheckInItem(id);
-            return RedirectToAction("Detail", new {id});
+        /// <summary>
+        /// Mark an asset as Lost 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> MarkLost(int id) {
+            var lostResult = await _assetsService.MarkLost(id);
+            return lostResult.Error != null 
+                ? HandleServerError(lostResult.Error) 
+                : RedirectToAction("Detail", new {id});
         }
 
-        public async Task<IActionResult> MarkLost(int id)
-        {
-            _checkoutsService.MarkLost(id);
-            return RedirectToAction("Detail", new {id});
+        /// <summary>
+        /// Mark an asset as Found
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> MarkFound(int id) {
+            var foundResult = await _assetsService.MarkFound(id);
+            return foundResult.Error != null
+                ? HandleServerError(foundResult.Error)
+                : RedirectToAction("Detail", new {id});
         }
 
-        public async Task<IActionResult> MarkFound(int id)
-        {
-            _checkoutsService.MarkFound(id);
-            return RedirectToAction("Detail", new {id});
-        }
-
+        /// <summary>
+        /// Checks out a Library Asset to a Patron's Card 
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <param name="libraryCardId"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PlaceCheckout(int assetId, int libraryCardId)
-        {
-            _checkoutsService.CheckoutItem(assetId, libraryCardId);
-            return RedirectToAction("Detail", new {id = assetId});
+        public async Task<IActionResult> PlaceCheckout(int assetId, int libraryCardId) {
+            var checkoutResult = await _checkoutsService.CheckOutItem(assetId, libraryCardId);
+            return checkoutResult.Error != null 
+                ? HandleServerError(checkoutResult.Error) 
+                : RedirectToAction("Detail", new {id = assetId});
         }
 
+        /// <summary>
+        /// Places a Hold on a Library Asset to a Patron's Card 
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <param name="libraryCardId"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PlaceHold(int assetId, int libraryCardId)
-        {
-            _checkoutsService.PlaceHold(assetId, libraryCardId);
-            return RedirectToAction("Detail", new {id = assetId});
+        public async Task<IActionResult> PlaceHold(int assetId, int libraryCardId) {
+            var holdResult = await _holdService.PlaceHold(assetId, libraryCardId);
+            return holdResult.Error != null 
+            ? HandleServerError(holdResult.Error) 
+            : RedirectToAction("Detail", new {id = assetId});
         }
     }
 }

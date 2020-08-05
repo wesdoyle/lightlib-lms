@@ -2,6 +2,6 @@
 
 namespace Library.Web.Models.Catalog {
     public class AssetIndexModel {
-        public PaginationResult<AssetIndexListingModel> Assets { get; set; }
+        public PaginationResult<AssetIndexListingModel> PageOfAssets { get; set; }
     }
 }

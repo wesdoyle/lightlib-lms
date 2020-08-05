@@ -16,20 +16,35 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var asset in @Model.Assets)
-                {
-                    <tr class="assetRow">
-                        <td class="">
-                            <div>
-                                <a asp-controller="Catalog" asp-action="Detail" asp-route-id="@asset.Id">
-                                    <img src="@asset.ImageUrl" class="imageCell" />
-                                </a>
-                            </div>
-                        </td>
-                        <td class="">@asset.Title</td>
-                        <td class="">@asset.AuthorOrDirector</td>
-                        <td class="">@asset.Dewey</td>
-                    </tr>
+                @foreach (var assetGroup in Model.PageOfAssets.Results) {
+                    @foreach (var book in assetGroup.Books) {
+                        <tr class="assetRow">
+                            <td class="">
+                                <div>
+                                    <a asp-controller="Catalog" asp-action="Detail" asp-route-id="@book.Id">
+                                        <img src="@book.ImageUrl" class="imageCell" alt="@book.Title"/>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="">@book.Title</td>
+                            <td class="">@book.DeweyIndex</td>
+                            <td class="">@book.Author</td>
+                        </tr>
+                    }
+                    
+                    @foreach (var video in assetGroup.Videos) {
+                        <tr class="assetRow">
+                            <td class="">
+                                <div>
+                                    <a asp-controller="Catalog" asp-action="Detail" asp-route-id="@video.Id">
+                                        <img src="@video.ImageUrl" class="imageCell" alt="@video.Title"/>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="">@video.Title</td>
+                            <td class="">@video.Director</td>
+                        </tr>
+                   } 
                 }
             </tbody>
         </table>

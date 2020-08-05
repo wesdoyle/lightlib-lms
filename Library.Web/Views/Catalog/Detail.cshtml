@@ -40,13 +40,13 @@
                 {
                     @if (@Model.Status == "Available")
                     {
-                        <p><a class="btn btn-lg btn-info" role="button" asp-controller="Catalog" asp-action="Checkout" asp-route-id="@Model.AssetId">Check Out</a></p>
+                        <p><a class="btn btn-lg btn-info" role="button" asp-controller="Catalog" asp-action="VisitCheckoutPage" asp-route-id="@Model.AssetId">Check Out</a></p>
                     }
 
                     @if (@Model.Status == "Checked Out")
                     {
                         <p><a class="btn btn-lg btn-success" role="button" asp-controller="Catalog" asp-action="CheckIn" asp-route-id="@Model.AssetId">Check In</a></p>
-                        <p><a class="btn btn-lg btn-warning" role="button" asp-controller="Catalog" asp-action="Hold" asp-route-id="@Model.AssetId">Place Hold</a></p>
+                        <p><a class="btn btn-lg btn-warning" role="button" asp-controller="Catalog" asp-action="PlaceHold" asp-route-id="@Model.AssetId">Place Hold</a></p>
                     }
 
                     <p><a class="btn btn-lg btn-danger" role="button" asp-controller="Catalog" asp-action="MarkLost" asp-route-id="@Model.AssetId">Mark Item Lost</a></p>

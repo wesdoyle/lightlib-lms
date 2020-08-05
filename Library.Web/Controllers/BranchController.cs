@@ -11,7 +11,7 @@ namespace Library.Web.Controllers {
     /// <summary>
     /// Handles requests for Library Branch resources
     /// </summary>
-    public class BranchController : Controller {
+    public class BranchController : LibraryController {
         private readonly ILibraryBranchService _branchService;
 
         public BranchController(ILibraryBranchService branchService) {
@@ -29,12 +29,7 @@ namespace Library.Web.Controllers {
             var paginationServiceResult = await _branchService.GetAll(page, perPage);
 
             if (paginationServiceResult.Error != null) {
-                // Log the error and stack trace
-                // Branch if running in debug mode and show detailed error in view
-                var error = paginationServiceResult.Error;
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    error.Message);
+                return HandleServerError(paginationServiceResult.Error);
             }
 
             if (paginationServiceResult.Data != null 
@@ -56,14 +51,14 @@ namespace Library.Web.Controllers {
                 var branchModels = new PaginationResult<BranchDetailModel>();
 
                 var model = new BranchIndexModel {
-                    Branches = branchModels
+                    PageOfBranches = branchModels
                 };
 
                 return View(model);
             }
             
             var emptyModel = new BranchIndexModel {
-                Branches = new PaginationResult<BranchDetailModel>()
+                PageOfBranches = new PaginationResult<BranchDetailModel>()
             };
 
             return View(emptyModel);

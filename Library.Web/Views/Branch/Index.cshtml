@@ -14,10 +14,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var branch in Model.Branches)
-            {
+            @foreach (var branch in Model.PageOfBranches.Results) {
                 <tr>
-                    <td class="strongTd"><a asp-controller="Branch" asp-action="Detail" asp-route-id="@branch.Id">@branch.BranchName</a></td>
+                    <td class="strongTd">
+                        <a asp-controller="Branch" 
+                           asp-action="Detail" 
+                           asp-route-id="@branch.Id">@branch.BranchName</a>
+                        </td>
                     <td>@branch.IsOpen</td>
                     <td>@branch.NumberOfAssets</td>
                     <td>@branch.NumberOfPatrons</td>

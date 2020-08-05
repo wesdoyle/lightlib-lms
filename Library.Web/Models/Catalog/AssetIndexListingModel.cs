@@ -1,14 +1,9 @@
-﻿namespace Library.Web.Models.Catalog
-{
-    public class AssetIndexListingModel
-    {
-        public int Id { get; set; }
-        public string ImageUrl { get; set; }
-        public string Title { get; set; }
-        public string AuthorOrDirector { get; set; }
-        public string Type { get; set; }
-        public string Dewey { get; set; }
-        public int NumberOfCopies { get; set; }
-        public int CopiesAvailable { get; set; }
+﻿using System.Collections.Generic;
+using Library.Models.DTOs;
+
+namespace Library.Web.Models.Catalog {
+    public class AssetIndexListingModel {
+        public List<VideoDto> Videos { get; set; }
+        public List<BookDto> Books { get; set; }
     }
 }

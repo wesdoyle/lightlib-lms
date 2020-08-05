@@ -7,7 +7,7 @@ namespace Library.Models.DTOs {
         public decimal Cost { get; set; }
         public string ImageUrl { get; set; }
         public int NumberOfCopies { get; set; }
-        public string AssetType { get; set; }
+        public AssetType AssetType { get; set; }
         
         public virtual LibraryBranchDto Location { get; set; }
 

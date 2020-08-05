@@ -9,6 +9,8 @@
 
 - Establish types for magic strings (enums)
 
+- a11y
+
 - Create AutoMapper mappings
 
 - Run the latest migrations
