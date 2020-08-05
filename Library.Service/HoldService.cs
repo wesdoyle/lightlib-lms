@@ -77,7 +77,7 @@ namespace Library.Service {
             var cardId = await hold
                 .Include(a => a.LibraryCard)
                 .Select(a => a.LibraryCard.Id)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             var patron = await _context.Patrons
                 .Include(p => p.LibraryCard)
@@ -129,7 +129,7 @@ namespace Library.Service {
 
             if (asset.Status.Name == "Available") {
                 asset.Status = await _context.Statuses
-                    .FirstOrDefaultAsync(a => a.Name == "On Hold");
+                    .FirstAsync(a => a.Name == "On Hold");
             }
 
             var hold = new Hold {
@@ -161,7 +161,7 @@ namespace Library.Service {
                 .Include(hold => hold.LibraryCard)
                 .Where(hold => hold.LibraryAsset.Id == libraryAssetId)
                 .OrderBy(a => a.HoldPlaced)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             var holdDto = _mapper.Map<HoldDto>(earliestHold);
             

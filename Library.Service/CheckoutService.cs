@@ -110,7 +110,7 @@ namespace Library.Service {
         /// <returns></returns>
         public async Task<ServiceResult<CheckoutDto>> Get(int id) {
             var checkout = await _context.Checkouts
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstAsync(p => p.Id == id);
 
             var checkoutDto = _mapper.Map<CheckoutDto>(checkout);
             
@@ -129,7 +129,7 @@ namespace Library.Service {
             var latest = await _context.Checkouts
                 .Where(c => c.LibraryAsset.Id == libraryAssetId)
                 .OrderByDescending(c => c.Since)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
             
             var checkoutDto = _mapper.Map<CheckoutDto>(latest);
             

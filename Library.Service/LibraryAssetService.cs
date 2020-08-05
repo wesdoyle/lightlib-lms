@@ -53,7 +53,7 @@ namespace Library.Service {
             var asset = await _context.LibraryAssets
                 .Include(a => a.Status)
                 .Include(a => a.Location)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .FirstAsync(a => a.Id == id);
             var assetDto = _mapper.Map<LibraryAssetDto>(asset);
             return new ServiceResult<LibraryAssetDto> {
                 Data = assetDto,
@@ -143,7 +143,7 @@ namespace Library.Service {
         public async Task<ServiceResult<LibraryBranchDto>> GetCurrentLocation(int assetId) {
             var asset = await _context
                 .LibraryAssets
-                .FirstOrDefaultAsync(a => a.Id == assetId);
+                .FirstAsync(a => a.Id == assetId);
             
             var location = asset.Location;
             var locationDto = _mapper.Map<LibraryBranchDto>(location);
@@ -183,7 +183,7 @@ namespace Library.Service {
             _context.Update(item);
 
             // TODO
-            item.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Lost");
+            item.Status = _context.Statuses.First(a => a.Name == "Lost");
 
             await _context.SaveChangesAsync();
 
@@ -203,17 +203,17 @@ namespace Library.Service {
                 .FirstAsync(a => a.Id == assetId);
 
             _context.Update(libraryAsset);
-            libraryAsset.Status = _context.Statuses.FirstOrDefault(a => a.Name == "Available");
+            libraryAsset.Status = _context.Statuses.First(a => a.Name == "Available");
             var now = DateTime.UtcNow;
 
             // remove any existing checkouts on the item
             var checkout = _context.Checkouts
-                .FirstOrDefault(a => a.LibraryAsset.Id == assetId);
+                .First(a => a.LibraryAsset.Id == assetId);
             if (checkout != null) _context.Remove(checkout);
 
             // close any existing checkout history
             var history = _context.CheckoutHistories
-                .FirstOrDefault(h =>
+                .First(h =>
                     h.LibraryAsset.Id == assetId 
                     && h.CheckedIn == null);
             

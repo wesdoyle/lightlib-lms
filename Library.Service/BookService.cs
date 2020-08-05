@@ -41,7 +41,7 @@ namespace Library.Service {
 
         public async Task<ServiceResult<BookDto>> Get(int id) {
             var book =  await _context
-                .Books.FirstOrDefaultAsync(b => b.Id == id);
+                .Books.FirstAsync(b => b.Id == id);
 
             try {
                 var bookDto = _mapper.Map<BookDto>(book);
@@ -126,7 +126,7 @@ namespace Library.Service {
         /// <param name="isbn"></param>
         /// <returns></returns>
         public async Task<ServiceResult<BookDto>> GetByIsbn(string isbn) {
-            var book = await _context.Books.FirstOrDefaultAsync(a => a.ISBN == isbn);
+            var book = await _context.Books.FirstAsync(a => a.ISBN == isbn);
             var bookDto = _mapper.Map<BookDto>(book);
             return new ServiceResult<BookDto> {
                 Data = bookDto,
