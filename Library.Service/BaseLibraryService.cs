@@ -2,10 +2,7 @@ using System;
 using Library.Service.Models;
 
 namespace Library.Service {
-    public class BaseLibraryService {
-
-        protected BaseLibraryService() { }
-        
+    public abstract class BaseLibraryService {
         protected static PagedServiceResult<T> HandleDatabaseCollectionError<T>(Exception ex) {
             return new PagedServiceResult<T> {
                 Data = default,

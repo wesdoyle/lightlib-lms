@@ -5,7 +5,7 @@ using Library.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Service.Helpers {
-    public class Paginator<T> : IPaginator<T> where T: DbSet<T> {
+    public class Paginator<T> {
         /// <summary>
         /// Builds a paginated list of EF DbSet data 
         /// </summary>

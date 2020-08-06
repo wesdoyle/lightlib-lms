@@ -8,6 +8,7 @@ using Library.Service.Interfaces;
 using Library.Service;
 using Library.Data;
 using Library.Data.Mapping;
+using Library.Data.Models;
 using Library.Service.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,23 +24,31 @@ namespace Library.Web {
             services.AddMvc();
 
             services.AddSingleton(Configuration);
-            services.AddScoped<ILibraryCardService, LibraryCardService>();
-            services.AddScoped<ILibraryBranchService, LibraryBranchService>();
-            services.AddScoped<IPatronService, PatronService>();
-            services.AddScoped<ICheckoutService, CheckoutService>();
-            services.AddScoped<IHoldService, HoldService>();
-            services.AddScoped<ILibraryAssetService, LibraryAssetService>();
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<IVideoService, VideoService>();
-            services.AddScoped<IStatusService, StatusService>();
-
-            services.AddScoped(typeof(IPaginator<>), typeof(Paginator<>));
-
+            
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("LibraryConnection")));
 
             services.AddAutoMapper(
                 c => c.AddProfile<EntityMappingProfile>(), typeof(Startup));
+            
+            services.AddScoped(typeof(IPaginator<Book>), typeof(Paginator<DbSet<Book>>));
+            services.AddScoped(typeof(IPaginator<Video>), typeof(Paginator<DbSet<Video>>));
+            services.AddScoped(typeof(IPaginator<LibraryAsset>), typeof(Paginator<DbSet<LibraryAsset>>));
+            services.AddScoped(typeof(IPaginator<Patron>), typeof(Paginator<DbSet<Patron>>));
+            services.AddScoped(typeof(IPaginator<LibraryBranch>), typeof(Paginator<DbSet<LibraryBranch>>));
+            services.AddScoped(typeof(IPaginator<LibraryCard>), typeof(Paginator<DbSet<LibraryCard>>));
+            services.AddScoped(typeof(IPaginator<Hold>), typeof(Paginator<DbSet<Hold>>));
+            
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<ICheckoutService, CheckoutService>();
+            services.AddScoped<IHoldService, HoldService>();
+            services.AddScoped<ILibraryAssetService, LibraryAssetService>();
+            services.AddScoped<ILibraryBranchService, LibraryBranchService>();
+            services.AddScoped<ILibraryCardService, LibraryCardService>();
+            services.AddScoped<IPatronService, PatronService>();
+            services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<IVideoService, VideoService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
