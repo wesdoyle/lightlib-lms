@@ -1,13 +1,11 @@
 # Library Mgmt System Update Checklist
 
-- Run the latest migrations
-
-- Logging (NLog)
-
 - ERROR HANDLING
   - First() etc. everywhere
   - Handle the unhappy paths
   - Flesh out the idea of a Service-Level Error in ServiceResult objects
+
+- Logging (NLog)
 
 - More expressive return types from service layer on success / error
   - Replace all ServiceResult<bool> type ServiceResults with add+ info
