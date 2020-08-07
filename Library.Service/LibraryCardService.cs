@@ -5,6 +5,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,16 +17,14 @@ namespace Library.Service {
     public class LibraryCardService : ILibraryCardService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<LibraryCard> _paginator;
+        private readonly Paginator<LibraryCard> _paginator;
 
         public LibraryCardService(
             LibraryDbContext context,
-            IMapper mapper,
-            IPaginator<LibraryCard> paginator
-            ) {
+            IMapper mapper) {
             _context = context;
-            _paginator = paginator;
             _mapper = mapper;
+            _paginator = new Paginator<LibraryCard>();
         }
 
         /// <summary>

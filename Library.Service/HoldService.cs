@@ -8,6 +8,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,15 +21,14 @@ namespace Library.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<Hold> _holdsPaginator;
+        private readonly Paginator<Hold> _holdsPaginator;
 
         public HoldService(
             LibraryDbContext context,
-            IMapper mapper,
-            IPaginator<Hold> hp) {
+            IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _holdsPaginator = hp;
+            _holdsPaginator = new Paginator<Hold>();
         }
         
         /// <summary>

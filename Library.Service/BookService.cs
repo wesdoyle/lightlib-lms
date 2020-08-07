@@ -6,6 +6,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,16 +20,15 @@ namespace Library.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<Book> _paginator;
+        private readonly Paginator<Book> _paginator;
         
         public BookService(
             LibraryDbContext context, 
-            IMapper mapper,
-            IPaginator<Book> bookPaginator
+            IMapper mapper
         ) {
             _context = context;
             _mapper = mapper;
-            _paginator = bookPaginator;
+            _paginator = new Paginator<Book>();
         }
 
         public async Task<ServiceResult<int>> Add(BookDto newBook) {

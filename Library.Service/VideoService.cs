@@ -6,6 +6,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,12 @@ namespace Library.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<Video> _paginator;
+        private readonly Paginator<Video> _paginator;
 
-        public VideoService(LibraryDbContext context, IMapper mapper, IPaginator<Video> paginator) {
+        public VideoService(LibraryDbContext context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator= paginator;
+            _paginator= new Paginator<Video>();
         }
 
         /// <summary>

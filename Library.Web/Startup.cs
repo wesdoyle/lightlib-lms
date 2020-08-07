@@ -31,14 +31,6 @@ namespace Library.Web {
             services.AddAutoMapper(
                 c => c.AddProfile<EntityMappingProfile>(), typeof(Startup));
             
-            services.AddScoped(typeof(IPaginator<Book>), typeof(Paginator<DbSet<Book>>));
-            services.AddScoped(typeof(IPaginator<Video>), typeof(Paginator<DbSet<Video>>));
-            services.AddScoped(typeof(IPaginator<LibraryAsset>), typeof(Paginator<DbSet<LibraryAsset>>));
-            services.AddScoped(typeof(IPaginator<Patron>), typeof(Paginator<DbSet<Patron>>));
-            services.AddScoped(typeof(IPaginator<LibraryBranch>), typeof(Paginator<DbSet<LibraryBranch>>));
-            services.AddScoped(typeof(IPaginator<LibraryCard>), typeof(Paginator<DbSet<LibraryCard>>));
-            services.AddScoped(typeof(IPaginator<Hold>), typeof(Paginator<DbSet<Hold>>));
-            
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IHoldService, HoldService>();
@@ -48,7 +40,6 @@ namespace Library.Web {
             services.AddScoped<IPatronService, PatronService>();
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IVideoService, VideoService>();
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

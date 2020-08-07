@@ -1,16 +1,11 @@
 ﻿using Library.Data.Models;
-using Library.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Data {
     public class LibraryDbContext : DbContext {
-        public LibraryDbContext()
-        {
-        }
+        public LibraryDbContext() { }
 
-        public LibraryDbContext(DbContextOptions options) : base(options)
-        {
-        }
+        public LibraryDbContext(DbContextOptions options) : base(options) { }
 
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
@@ -23,12 +18,5 @@ namespace Library.Data {
         public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<LibraryAsset> LibraryAssets { get; set; }
         public virtual DbSet<Hold> Holds { get; set; }
-        
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<LibraryAsset>()
-                .HasDiscriminator<AssetType>("AssetType")
-                .HasValue<Book>(AssetType.Book)
-                .HasValue<Video>(AssetType.Video);
-        }
     }
 }

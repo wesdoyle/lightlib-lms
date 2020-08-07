@@ -7,6 +7,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,21 +21,16 @@ namespace Library.Service {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
         
-        private readonly IPaginator<LibraryBranch> _branchPaginator;
-        private readonly IPaginator<Patron> _patronPaginator;
-        private readonly IPaginator<LibraryAsset> _assetPaginator;
+        private readonly Paginator<LibraryBranch> _branchPaginator;
+        private readonly Paginator<Patron> _patronPaginator;
+        private readonly Paginator<LibraryAsset> _assetPaginator;
 
-        public LibraryBranchService(
-            LibraryDbContext context, 
-            IMapper mapper, 
-            IPaginator<Patron> patronPaginator,
-            IPaginator<LibraryAsset> assetPaginator,
-            IPaginator<LibraryBranch> branchPaginator) {
+        public LibraryBranchService(LibraryDbContext context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _branchPaginator = branchPaginator;
-            _patronPaginator = patronPaginator;
-            _assetPaginator = assetPaginator;
+            _branchPaginator = new Paginator<LibraryBranch>();
+            _patronPaginator = new Paginator<Patron>();
+            _assetPaginator = new Paginator<LibraryAsset>();
         }
 
         /// <summary>

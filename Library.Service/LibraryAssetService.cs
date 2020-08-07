@@ -7,6 +7,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +19,14 @@ namespace Library.Service {
     public class LibraryAssetService : ILibraryAssetService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<LibraryAsset> _paginator;
+        private readonly Paginator<LibraryAsset> _paginator;
 
         public LibraryAssetService(
             LibraryDbContext context, 
-            IMapper mapper, 
-            IPaginator<LibraryAsset> paginator) {
+            IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator = paginator;
+            _paginator = new Paginator<LibraryAsset>();
         }
 
         /// <summary>

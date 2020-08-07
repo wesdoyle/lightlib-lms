@@ -5,6 +5,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,16 +19,14 @@ namespace Library.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<Status> _paginator;
+        private readonly Paginator<Status> _paginator;
 
         public StatusService(
             LibraryDbContext context,
-            IMapper mapper,
-            IPaginator<Status> paginator
-            ) {
+            IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator = paginator;
+            _paginator = new Paginator<Status>();
         }
 
         /// <summary>

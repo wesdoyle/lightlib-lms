@@ -7,6 +7,7 @@ using Library.Data;
 using Library.Data.Models;
 using Library.Models;
 using Library.Models.DTOs;
+using Library.Service.Helpers;
 using Library.Service.Interfaces;
 using Library.Service.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,25 +20,21 @@ namespace Library.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaginator<Patron> _patronPaginator;
-        private readonly IPaginator<CheckoutHistory> _historyPaginator;
-        private readonly IPaginator<Checkout> _checkoutPaginator;
-        private readonly IPaginator<Hold> _holdPaginator;
+        private readonly Paginator<Patron> _patronPaginator;
+        private readonly Paginator<CheckoutHistory> _historyPaginator;
+        private readonly Paginator<Checkout> _checkoutPaginator;
+        private readonly Paginator<Hold> _holdPaginator;
 
         public PatronService(
             LibraryDbContext context,
-            IMapper mapper,
-            IPaginator<Patron> patronPaginator,
-            IPaginator<CheckoutHistory> historyPaginator ,
-            IPaginator<Checkout> checkoutPaginator ,
-            IPaginator<Hold> holdPaginator
+            IMapper mapper
             ) {
             _context = context;
             _mapper = mapper;
-            _patronPaginator = patronPaginator;
-            _historyPaginator = historyPaginator;
-            _holdPaginator = holdPaginator;
-            _checkoutPaginator = checkoutPaginator;
+            _patronPaginator = new Paginator<Patron>();
+            _historyPaginator = new Paginator<CheckoutHistory>();
+            _holdPaginator = new Paginator<Hold>();
+            _checkoutPaginator = new Paginator<Checkout>();
         }
 
         /// <summary>
