@@ -18,7 +18,6 @@ namespace Library.Tests.Services {
         public void Test_Get_Given_Null_Book_Returns_ServiceResult_With_Null_Data() {
             var mockSet = new Mock<DbSet<Book>>();
             var mockMapper = new Mock<IMapper>();
-            var mockPaginator = new Mock<IPaginator<Book>>();
             
             // SetupData from package
             
@@ -57,8 +56,7 @@ namespace Library.Tests.Services {
             
             var sut = new BookService(
                 mockCtx.Object, 
-                mockMapper.Object, 
-                mockPaginator.Object);
+                mockMapper.Object);
             
             var book = sut.Get(23);
             
