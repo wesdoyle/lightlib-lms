@@ -5,8 +5,6 @@
   - Handle the unhappy paths
   - Flesh out the idea of a Service-Level Error in ServiceResult objects
 
-- Logging (NLog)
-
 - More expressive return types from service layer on success / error
   - Replace all ServiceResult<bool> type ServiceResults with add+ info
 
@@ -15,6 +13,8 @@
 - Query String validation middleware
 - a11y
 - Monitoring (Prometheus + Grafana)
+  - Load Testing with 
 - Generic Repository
 - Write new tests
 - Caching
+- ELK
