@@ -16,3 +16,6 @@ coverage/
 coverage.bat
 .idea*
 .DS_Store
+*.cache
+**/bin
+**/obj
