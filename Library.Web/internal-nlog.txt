@@ -1,0 +1,114 @@
+2020-08-22 12:24:32.2204 Info Message Template Auto Format enabled
+2020-08-22 12:24:32.2673 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:24:32.3489 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:24:32.3541 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:24:32.6436 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 12:25:32.1196 Info Shutdown() called. Logger closing...
+2020-08-22 12:25:32.1196 Info Closing old configuration.
+2020-08-22 12:25:32.1326 Info Logger has been closed down.
+2020-08-22 12:25:32.1336 Info AppDomain Shutting down. Logger closing...
+2020-08-22 12:25:32.1351 Info Logger has been shut down.
+2020-08-22 12:25:41.7265 Info Message Template Auto Format enabled
+2020-08-22 12:25:41.7698 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:25:41.8707 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:25:41.8743 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:25:42.1975 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 12:25:44.8052 Info Shutdown() called. Logger closing...
+2020-08-22 12:25:44.8056 Info Closing old configuration.
+2020-08-22 12:25:44.8172 Info Logger has been closed down.
+2020-08-22 12:25:44.8186 Info AppDomain Shutting down. Logger closing...
+2020-08-22 12:25:44.8204 Info Logger has been shut down.
+2020-08-22 12:26:24.9048 Info Message Template Auto Format enabled
+2020-08-22 12:26:24.9885 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:26:25.1604 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:26:25.1657 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:26:25.6450 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 12:26:38.8462 Info Configuration file change detected! Reloading in 1000ms...
+2020-08-22 12:26:39.8535 Info Reloading configuration...
+2020-08-22 12:26:39.8566 Info Configuring from an XML element in /Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config...
+2020-08-22 12:26:39.8582 Info Message Template Auto Format enabled
+2020-08-22 12:26:39.8586 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:26:39.8611 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:26:39.8617 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:26:39.8663 Info Closing old configuration.
+2020-08-22 12:26:40.1483 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 12:26:58.7442 Info Shutdown() called. Logger closing...
+2020-08-22 12:26:58.7442 Info Closing old configuration.
+2020-08-22 12:26:58.7457 Info Logger has been closed down.
+2020-08-22 12:26:58.7476 Info AppDomain Shutting down. Logger closing...
+2020-08-22 12:26:58.7498 Info Logger has been shut down.
+2020-08-22 12:27:36.9466 Info Message Template Auto Format enabled
+2020-08-22 12:27:37.0229 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:27:37.1396 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:27:37.1446 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:27:37.4992 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 12:36:24.5099 Info AppDomain Shutting down. Logger closing...
+2020-08-22 12:36:24.5243 Info Logger has been shut down.
+2020-08-22 12:37:13.7282 Info Message Template Auto Format enabled
+2020-08-22 12:37:13.7580 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:37:13.8106 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:37:13.8135 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:37:14.0415 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 12:37:22.0330 Info AppDomain Shutting down. Logger closing...
+2020-08-22 12:37:22.0510 Info Logger has been shut down.
+2020-08-22 12:57:25.6812 Info Message Template Auto Format enabled
+2020-08-22 12:57:25.8132 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 12:57:26.1385 Info Adding target FileTarget(Name=allfile)
+2020-08-22 12:57:26.2037 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 12:57:26.6754 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:05:37.8505 Info Message Template Auto Format enabled
+2020-08-22 13:05:38.0192 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:05:38.2000 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:05:38.2464 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:05:38.5944 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:10:46.3447 Info Message Template Auto Format enabled
+2020-08-22 13:10:46.4480 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:10:46.6262 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:10:46.6661 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:10:47.0155 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:12:12.3154 Info Shutdown() called. Logger closing...
+2020-08-22 13:12:12.3162 Info Closing old configuration.
+2020-08-22 13:15:28.9421 Info Message Template Auto Format enabled
+2020-08-22 13:15:29.0483 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:15:29.2656 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:15:29.3098 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:15:29.7288 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:18:05.1206 Info Message Template Auto Format enabled
+2020-08-22 13:18:05.2478 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:18:05.4283 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:18:05.4648 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:18:05.8075 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:19:50.5806 Info Configuration file change detected! Reloading in 1000ms...
+2020-08-22 13:19:51.5876 Info Reloading configuration...
+2020-08-22 13:19:51.5920 Info Configuring from an XML element in /Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config...
+2020-08-22 13:19:51.5931 Info Message Template Auto Format enabled
+2020-08-22 13:19:51.5931 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:19:51.5956 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:19:51.5970 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:19:51.6018 Info Closing old configuration.
+2020-08-22 13:19:52.0410 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:19:54.8328 Info Message Template Auto Format enabled
+2020-08-22 13:19:54.9407 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:19:55.1158 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:19:55.1209 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:19:55.5558 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:23:57.2593 Info Message Template Auto Format enabled
+2020-08-22 13:23:57.3614 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:23:57.5645 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:23:57.6019 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:23:57.9722 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:26:17.5879 Info Message Template Auto Format enabled
+2020-08-22 13:26:17.6850 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:26:17.8534 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:26:17.8983 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:26:18.2492 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:30:15.4392 Info Message Template Auto Format enabled
+2020-08-22 13:30:15.5402 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:30:15.7240 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:30:15.7609 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:30:16.0911 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config
+2020-08-22 13:30:51.0328 Info Message Template Auto Format enabled
+2020-08-22 13:30:51.1278 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-22 13:30:51.2958 Info Adding target FileTarget(Name=allfile)
+2020-08-22 13:30:51.3309 Info Adding target FileTarget(Name=ownFile-web)
+2020-08-22 13:30:51.6453 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/personal/library-management-system/Library.Web/bin/Debug/netcoreapp3.1/nlog.config

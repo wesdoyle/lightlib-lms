@@ -13,7 +13,7 @@
 - Query String validation middleware
 - a11y
 - Monitoring (Prometheus + Grafana)
-  - Load Testing with 
+  - Load Testing with Locust
 - Generic Repository
 - Write new tests
 - Caching

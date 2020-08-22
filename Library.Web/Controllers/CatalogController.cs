@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Library.Models;
+using Library.Models.DTOs;
 using Library.Service.Interfaces;
 using Library.Web.Models.Catalog;
 using Microsoft.AspNetCore.Mvc;
@@ -41,18 +42,10 @@ namespace Library.Web.Controllers {
             }
 
             if (paginationServiceResult.Data != null && paginationServiceResult.Data.Results.Any()) {
-
-                var books = paginationServiceResult.Data.Results
-                    .Where(res => res.AssetType == AssetType.Book)
-                    .ToList();
-
-                var videos = paginationServiceResult.Data.Results
-                    .Where(res => res.AssetType == AssetType.Video)
-                    .ToList();
-
+                var allAssets = paginationServiceResult.Data.Results.ToList();
                 var viewModel = new AssetIndexModel {
-                    PageOfAssets = new PaginationResult<AssetIndexListingModel> {
-                        Results = new List<AssetIndexListingModel>()
+                    PageOfAssets = new PaginationResult<LibraryAssetDto> {
+                        Results = allAssets 
                     }
                 };
 
@@ -60,7 +53,11 @@ namespace Library.Web.Controllers {
             }
             
             var emptyModel = new AssetIndexModel {
-                PageOfAssets = new PaginationResult<AssetIndexListingModel>()
+                PageOfAssets = new PaginationResult<LibraryAssetDto>() {
+                    Results = new List<LibraryAssetDto>(),
+                    PerPage = perPage,
+                    PageNumber = page
+                }
             };
             
             return View(emptyModel);

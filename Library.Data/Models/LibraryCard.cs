@@ -8,7 +8,7 @@ namespace Library.Data.Models {
 
         [Display(Name = "Overdue Fees")] 
         public decimal Fees { get; set; }
-
+        
         [Display(Name = "Card Issued Date")] 
         public DateTime Created { get; set; }
 
