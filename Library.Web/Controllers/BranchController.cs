@@ -48,6 +48,7 @@ namespace Library.Web.Controllers {
                     branch.NumberOfPatrons = patronCount.Data;
                 }
 
+                // TODO
                 var branchModels = new PaginationResult<BranchDetailModel>();
 
                 var model = new BranchIndexModel {
@@ -58,7 +59,11 @@ namespace Library.Web.Controllers {
             }
             
             var emptyModel = new BranchIndexModel {
-                PageOfBranches = new PaginationResult<BranchDetailModel>()
+                PageOfBranches = new PaginationResult<BranchDetailModel> {
+                    Results = new List<BranchDetailModel>(),
+                    PageNumber = page,
+                    PerPage = perPage
+                }
             };
 
             return View(emptyModel);

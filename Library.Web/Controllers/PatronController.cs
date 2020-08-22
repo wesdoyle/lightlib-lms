@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Library.Models;
+using Library.Models.DTOs;
 using Library.Service.Interfaces;
+using Library.Web.Models.Patron;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Web.Controllers {
@@ -26,8 +31,31 @@ namespace Library.Web.Controllers {
             if (serviceResult.Error != null) {
                 return HandleServerError(serviceResult.Error);
             }
+
+            if (serviceResult.Error != null) {
+                return HandleServerError(serviceResult.Error);
+            }
+
+            if (serviceResult.Data != null && serviceResult.Data.Results.Any()) {
+                var allAssets = serviceResult.Data.Results.ToList();
+                var viewModel = new PatronIndexModel {
+                    PageOfPatrons = new PaginationResult<PatronDto> {
+                        Results = allAssets 
+                    }
+                };
+
+                return View(viewModel);
+            }
             
-            throw new NotImplementedException();
+            var emptyModel = new PatronIndexModel {
+                PageOfPatrons = new PaginationResult<PatronDto> {
+                    Results = new List<PatronDto>(),
+                    PerPage = perPage,
+                    PageNumber = page
+                }
+            };
+            
+            return View(emptyModel);
         }
 
         public async Task<IActionResult> Detail(int id) {

@@ -11,5 +11,8 @@ namespace Library.Models.DTOs {
         public string Gender { get; set; }
         public LibraryCardDto LibraryCard { get; set; }
         public LibraryBranchDto HomeLibraryBranch { get; set; }
+        public int LibraryCardId { get; set;  }
+        public decimal OverdueFees { get; set;  }
+        public string HomeLibrary { get; set;  }
     }
 }

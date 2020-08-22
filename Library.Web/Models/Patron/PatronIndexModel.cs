@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Library.Models;
+using Library.Models.DTOs;
 
-namespace Library.Web.Models.Patron
-{
-    public class PatronIndexModel
-    {
-        public IEnumerable<PatronDetailModel> Patrons { get; set; }
+namespace Library.Web.Models.Patron {
+    public class PatronIndexModel {
+        public PaginationResult<PatronDto> PageOfPatrons { get; set; }
     }
 }

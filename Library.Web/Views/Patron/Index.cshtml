@@ -16,8 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var patron in Model.Patrons)
-            {
+            @foreach (var patron in Model.PageOfPatrons.Results) {
                 <tr>
                     <td id="patronIcon"><a asp-controller="Patron" asp-action="Detail" asp-route-id="@patron.Id"><i class="fa fa-user fa-2x"></i></a></td>
                     <td>@patron.LastName</td>
