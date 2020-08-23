@@ -1,5 +1,7 @@
 # Library Mgmt System Update Checklist
 
+- Implement pagination on Razor views
+
 - ERROR HANDLING
   - First() etc. everywhere
   - Handle the unhappy paths
