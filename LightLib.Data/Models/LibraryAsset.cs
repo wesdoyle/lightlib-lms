@@ -9,7 +9,7 @@ namespace LightLib.Data.Models {
         public string Title { get; set; }
         
         [Required] 
-        public int Year { get; set; } // Just store as an int for BC
+        public int Year { get; set; }
         
         [Required] 
         public Status Status { get; set; }
@@ -17,8 +17,9 @@ namespace LightLib.Data.Models {
         [Required]
         [Display(Name = "Cost of Replacement")]
         public decimal Cost { get; set; }
+        
         public string ImageUrl { get; set; }
-        public int NumberOfCopies { get; set; }
+        
         public string AssetType { get; set; }
         public virtual LibraryBranch Location { get; set; }
     }

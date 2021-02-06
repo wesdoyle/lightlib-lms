@@ -21,12 +21,15 @@ namespace LightLib.Data.Models {
         [Required] 
         public DateTime DateOfBirth { get; set; }
 
+        [Required] 
+        public string Email { get; set; }
+        
         public string Telephone { get; set; }
-        public string Gender { get; set; }
 
         [Required]
         [Display(Name = "Library Card")]
         public LibraryCard LibraryCard { get; set; }
+        
         public LibraryBranch HomeLibraryBranch { get; set; }
     }
 }

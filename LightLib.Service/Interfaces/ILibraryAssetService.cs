@@ -9,7 +9,6 @@ namespace LightLib.Service.Interfaces {
         Task<bool> Add(LibraryAssetDto newDto);
         Task<string> GetAuthorOrDirector(int assetId);
         Task<LibraryBranchDto> GetCurrentLocation(int id);
-        Task<int> GetNumberOfCopies(int libraryAssetId);
         Task<bool> MarkLost(int assetId);
         Task<bool> MarkFound(int assetId);
     }

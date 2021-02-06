@@ -127,17 +127,6 @@ namespace LightLib.Service {
             var location = asset.Location;
             return _mapper.Map<LibraryBranchDto>(location);
         }
-
-        /// <summary>
-        /// Gets the number of copies for a given Library Asset ID
-        /// </summary>
-        /// <param name="libraryAssetId"></param>
-        /// <returns></returns>
-        public async Task<int> GetNumberOfCopies(int libraryAssetId) {
-            var libraryAsset = await _context.LibraryAssets
-                .FirstAsync(a => a.Id == libraryAssetId);
-            return libraryAsset.NumberOfCopies;
-        }
         
         /// <summary>
         /// Marks the given Library Asset ID as Lost
