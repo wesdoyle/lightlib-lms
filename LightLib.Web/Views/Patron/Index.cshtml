@@ -2,3 +2,67 @@
 @{
     ViewBag.Title = "Patrons";
 }
+
+<h2 class="lms-section-heading">
+    Library Patrons
+</h2>
+
+<div class="row">
+    <section>
+        <p>
+            <strong>Patrons</strong> make up the body of library users across all branches.
+        </p> 
+        <p>
+            Use this page to add or remove Patrons from the system, replace lost library cards, view or manage fees.
+        </p>
+    </section>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <button class="btn btn-primary btn-sm">
+            Add New Patron
+        </button>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="container container-fluid">
+        <nav aria-label="Patron Table Navigation Top">
+          <ul class="pagination justify-content-end">
+            <li class="page-item small"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item small"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+        <table class="table table-sm table-responsive-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Fees</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var patron in Model.PageOfPatrons.Results) {
+                <tr>
+                    <th scope="row">@patron.Id</th>
+                    <td>@patron.FirstName</td>
+                    <td>@patron.LastName</td>
+                    <td>$@Math.Round(patron.OverdueFees, 2)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <nav aria-label="Patron Table Navigation Bottom">
+          <ul class="pagination justify-content-end">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+    </div>
+</div>
+
+

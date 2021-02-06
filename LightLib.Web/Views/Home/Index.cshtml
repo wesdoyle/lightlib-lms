@@ -6,32 +6,44 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
           <div class="card shadow-sm">
-            <img src="@Url.Content("~/images/books_thumb.png")" class="card-img-top" alt="Manage Library Assets">
+            <a asp-controller="Catalog" asp-action="Index">
+            <img src="@Url.Content("~/images/books_thumb.png")" 
+                 class="card-img-top" 
+                 alt="Manage Library Assets">
             <div class="card-body">
-              <p class="card-text">
-                Assets
-              </p>
+              <h5 class="card-title">
+                  Assets
+              </h5>
             </div>
+            </a>
           </div>
         </div>
         <div class="col">
           <div class="card shadow-sm">
-            <img src="@Url.Content("~/images/patron_thumb.png")" class="card-img-top" alt="Manage Library Patrons">
-            <div class="card-body">
-              <p class="card-text">
-                Patrons
-              </p>
-            </div>
+            <a asp-controller="Patron" asp-action="Index">
+              <img src="@Url.Content("~/images/patron_thumb.png")" 
+                   class="card-img-top" 
+                   alt="Manage Library Patrons">
+              <div class="card-body">
+                <h5 class="card-title">
+                    Patrons
+                </h5>
+              </div>
+            </a>
           </div>
         </div>
         <div class="col">
           <div class="card shadow-sm">
-            <img src="@Url.Content("~/images/library_thumb.png")" class="card-img-top" alt="Manage Library Branches">
+            <a asp-controller="Branch" asp-action="Index">
+            <img src="@Url.Content("~/images/library_thumb.png")" 
+                 class="card-img-top" 
+                 alt="Manage Library Branches">
             <div class="card-body">
-              <p class="card-text">
-                Branches
-              </p>
+              <h5 class="card-title">
+                  Branches
+              </h5>
             </div>
+            </a>
           </div>
         </div>
       </div>
