@@ -11,7 +11,7 @@ using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LightLib.Service {
+namespace LightLib.Service.Patrons {
     /// <summary>
     /// Handles Library Patron business logic
     /// </summary>
@@ -21,7 +21,7 @@ namespace LightLib.Service {
         private readonly IMapper _mapper;
         private readonly Paginator<Patron> _patronPaginator;
         private readonly Paginator<CheckoutHistory> _historyPaginator;
-        private readonly Paginator<Checkout> _checkoutPaginator;
+        private readonly Paginator<Data.Models.Checkout> _checkoutPaginator;
         private readonly Paginator<Hold> _holdPaginator;
 
         public PatronService(
@@ -33,7 +33,7 @@ namespace LightLib.Service {
             _patronPaginator = new Paginator<Patron>();
             _historyPaginator = new Paginator<CheckoutHistory>();
             _holdPaginator = new Paginator<Hold>();
-            _checkoutPaginator = new Paginator<Checkout>();
+            _checkoutPaginator = new Paginator<Data.Models.Checkout>();
         }
 
         /// <summary>

@@ -18,16 +18,15 @@ namespace LightLib.Service.Helpers {
             IQueryable<T> dbSet, 
             int page, 
             int perPage, 
-            Expression<Func<T, TOrder>> orderByExp, bool isDescending=true) {
+            Expression<Func<T, TOrder>> orderByExp, 
+            bool isDescending=true) {
             var entsToSkip = (page - 1) * perPage;
-
             if (isDescending) {
                 return dbSet
                     .OrderByDescending(orderByExp)
                     .Skip(entsToSkip)
                     .Take(perPage);
             }
-
             return dbSet
                 .OrderBy(orderByExp)
                 .Skip(entsToSkip)

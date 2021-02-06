@@ -9,7 +9,7 @@ using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LightLib.Service {
+namespace LightLib.Service.Assets {
     
     /// <summary>
     /// Handles Asset Status business logic
@@ -18,14 +18,14 @@ namespace LightLib.Service {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly Paginator<Status> _paginator;
+        private readonly Paginator<AvailabilityStatus> _paginator;
 
         public StatusService(
             LibraryDbContext context,
             IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator = new Paginator<Status>();
+            _paginator = new Paginator<AvailabilityStatus>();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace LightLib.Service {
         /// <param name="statusDto"></param>
         /// <returns></returns>
         public async Task<bool> Add(StatusDto statusDto) {
-            var status = _mapper.Map<Status>(statusDto);
+            var status = _mapper.Map<AvailabilityStatus>(statusDto);
             await _context.AddAsync(status);
             await _context.SaveChangesAsync();
             return true;

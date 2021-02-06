@@ -613,3 +613,21 @@
 2021-02-06 15:05:48.2351 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
 2021-02-06 15:05:50.2710 Info AppDomain Shutting down. Logger closing...
 2021-02-06 15:05:50.2812 Info Logger has been shut down.
+2021-02-06 16:02:02.0697 Info Message Template Auto Format enabled
+2021-02-06 16:02:02.0932 Info Loading assembly: NLog.Web.AspNetCore
+2021-02-06 16:02:02.1322 Info Adding target FileTarget(Name=allfile)
+2021-02-06 16:02:02.1336 Info Adding target FileTarget(Name=ownFile-web)
+2021-02-06 16:02:02.2654 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/library-management-system/LightLib.Web/bin/Debug/net5.0/NLog.config
+2021-02-06 16:02:02.2813 Info Configuration initialized.
+2021-02-06 16:02:02.2813 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
+2021-02-06 16:02:03.6472 Info AppDomain Shutting down. Logger closing...
+2021-02-06 16:02:03.6573 Info Logger has been shut down.
+2021-02-06 16:02:12.8522 Info Message Template Auto Format enabled
+2021-02-06 16:02:12.8774 Info Loading assembly: NLog.Web.AspNetCore
+2021-02-06 16:02:12.9205 Info Adding target FileTarget(Name=allfile)
+2021-02-06 16:02:12.9218 Info Adding target FileTarget(Name=ownFile-web)
+2021-02-06 16:02:13.1677 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/library-management-system/LightLib.Web/bin/Debug/net5.0/NLog.config
+2021-02-06 16:02:13.2241 Info Configuration initialized.
+2021-02-06 16:02:13.2321 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
+2021-02-06 16:02:15.8006 Info AppDomain Shutting down. Logger closing...
+2021-02-06 16:02:15.8138 Info Logger has been shut down.

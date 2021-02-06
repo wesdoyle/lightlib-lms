@@ -1,5 +1,5 @@
 using AutoMapper;
-using LightLib.Data.Models;
+using LightLib.Data.Models.Assets;
 using LightLib.Models.DTOs;
 
 namespace LightLib.Data.Mapping {

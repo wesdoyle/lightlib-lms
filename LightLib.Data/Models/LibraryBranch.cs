@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using LightLib.Data.Models.Assets;
 
 namespace LightLib.Data.Models
 {

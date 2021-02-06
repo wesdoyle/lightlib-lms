@@ -5,6 +5,9 @@ namespace LightLib.Models {
     /// </summary>
     public enum AssetType {
         Book,
-        Video
+        DVD,
+        CDROM,
+        Equipment,
+        Periodical,
     }
 }

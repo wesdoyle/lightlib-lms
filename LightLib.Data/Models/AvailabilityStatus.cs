@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace LightLib.Data.Models {
-    public class Status {
+    public class AvailabilityStatus {
         public int Id { get; set; }
 
         [Required] 

@@ -1,7 +1,11 @@
 ﻿using LightLib.Data;
 using LightLib.Data.Mapping;
 using LightLib.Service;
+using LightLib.Service.Assets;
+using LightLib.Service.Branches;
+using LightLib.Service.Checkout;
 using LightLib.Service.Interfaces;
+using LightLib.Service.Patrons;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +32,6 @@ namespace LightLib.Web {
             services.AddAutoMapper(
                 c => c.AddProfile<EntityMappingProfile>(), typeof(Startup));
             
-            services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IHoldService, HoldService>();
             services.AddScoped<ILibraryAssetService, LibraryAssetService>();
@@ -36,7 +39,6 @@ namespace LightLib.Web {
             services.AddScoped<ILibraryCardService, LibraryCardService>();
             services.AddScoped<IPatronService, PatronService>();
             services.AddScoped<IStatusService, StatusService>();
-            services.AddScoped<IVideoService, VideoService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

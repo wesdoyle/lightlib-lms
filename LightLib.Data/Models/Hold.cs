@@ -1,4 +1,5 @@
 ﻿using System;
+using LightLib.Data.Models.Assets;
 
 namespace LightLib.Data.Models {
     public class Hold {

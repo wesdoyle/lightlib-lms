@@ -10,9 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LightLib.Web.Controllers {
     
-    /// <summary>
-    /// Handles web-layer requests for the Library's Catalog 
-    /// </summary>
     public class CatalogController : LibraryController {
         
         private readonly ILibraryAssetService _assetsService;
@@ -28,12 +25,6 @@ namespace LightLib.Web.Controllers {
             _holdService = holdService;
         }
 
-        /// <summary>
-        /// Returns a paginated view of all Library Assets
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
             var paginationServiceResult = await _assetsService.GetAll(page, perPage);
 
@@ -59,77 +50,41 @@ namespace LightLib.Web.Controllers {
             return View(emptyModel);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public async Task<IActionResult> Detail(int id) {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Redirects to the Check Out Page
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public async Task<IActionResult> VisitCheckOutPage(int id) {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Checks a Library Asset in.  Automatically Handles Checking out to existing holds
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public async Task<IActionResult> CheckIn(int id) {
+        public async Task<IActionResult> CheckIn(string assetId) {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Mark an asset as Lost 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> MarkLost(int id) {
-            await _assetsService.MarkLost(id);
-            return RedirectToAction("Detail", new {id});
+        public async Task<IActionResult> MarkLost(string assetId) {
+            var assetGuid = Guid.Parse(assetId);
+            await _assetsService.MarkLost(assetGuid);
+            return RedirectToAction("Detail", new {assetGuid});
         }
 
-        /// <summary>
-        /// Mark an asset as Found
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> MarkFound(int id) {
-            await _assetsService.MarkFound(id);
-            return RedirectToAction("Detail", new {id});
+        public async Task<IActionResult> MarkFound(string assetId) {
+            var assetGuid = Guid.Parse(assetId);
+            await _assetsService.MarkFound(assetGuid);
+            return RedirectToAction("Detail", new {assetGuid});
         }
 
-        /// <summary>
-        /// Checks out a Library Asset to a Patron's Card 
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <param name="libraryCardId"></param>
-        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PlaceCheckout(int assetId, int libraryCardId) {
-            await _checkoutsService.CheckOutItem(assetId, libraryCardId);
+        public async Task<IActionResult> PlaceCheckout(string assetId, int libraryCardId) {
+            var assetGuid = Guid.Parse(assetId);
+            await _checkoutsService.CheckOutItem(assetGuid, libraryCardId);
             return RedirectToAction("Detail", new {id = assetId});
         }
-
-        /// <summary>
-        /// Places a Hold on a Library Asset to a Patron's Card 
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <param name="libraryCardId"></param>
-        /// <returns></returns>
+        
         [HttpPost]
-        public async Task<IActionResult> PlaceHold(int assetId, int libraryCardId) {
-            await _holdService.PlaceHold(assetId, libraryCardId);
+        public async Task<IActionResult> PlaceHold(string assetId, int libraryCardId) {
+            var assetGuid = Guid.Parse(assetId);
+            await _holdService.PlaceHold(assetGuid, libraryCardId);
             return RedirectToAction("Detail", new {id = assetId});
         }
     }

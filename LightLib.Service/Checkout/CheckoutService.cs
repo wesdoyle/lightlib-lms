@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +12,7 @@ using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LightLib.Service {
+namespace LightLib.Service.Checkout {
     /// <summary>
     /// Handles Library Asset Checkout / Checkin / Lost / Found business logic
     /// </summary>
@@ -21,7 +20,7 @@ namespace LightLib.Service {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
         private readonly Paginator<Hold> _holdsPaginator;
-        private readonly Paginator<Checkout> _checkoutPaginator;
+        private readonly Paginator<Data.Models.Checkout> _checkoutPaginator;
         private readonly Paginator<CheckoutHistory> _checkoutHistoryPaginator;
         private readonly IHoldService _holdService;
 
@@ -33,7 +32,7 @@ namespace LightLib.Service {
             _holdService = holdService;
             _mapper = mapper;
             _holdsPaginator = new Paginator<Hold>();
-            _checkoutPaginator = new Paginator<Checkout>();
+            _checkoutPaginator = new Paginator<Data.Models.Checkout>();
             _checkoutHistoryPaginator = new Paginator<CheckoutHistory>();
         }
 
@@ -58,23 +57,23 @@ namespace LightLib.Service {
                 PageNumber = page
             };
         }
-        
+
         /// <summary>
         /// Returns an paginated Checkout History ordered by latest checked-out date
         /// </summary>
-        /// <param name="libraryAssetId"></param>
+        /// <param name="assetId"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
         public async Task<PaginationResult<CheckoutHistoryDto>> GetCheckoutHistory(
-            int libraryAssetId, 
+            Guid assetId, 
             int page, 
             int perPage) {
             
             var checkoutHistories = _context.CheckoutHistories
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
-                .Where(a => a.LibraryAsset.Id == libraryAssetId);
+                .Where(a => a.LibraryAsset.Id == assetId);
 
             var pageOfHistory = await _checkoutHistoryPaginator
                 .BuildPageResult(checkoutHistories, page, perPage, ch => ch.CheckedOut)
@@ -92,22 +91,22 @@ namespace LightLib.Service {
         /// <summary>
         /// Get the Checkout corresponding to the given ID
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="checkoutId"></param>
         /// <returns></returns>
-        public async Task<CheckoutDto> Get(int id) {
+        public async Task<CheckoutDto> Get(int checkoutId) {
             var checkout = await _context.Checkouts
-                .FirstAsync(p => p.Id == id);
+                .FirstAsync(p => p.Id == checkoutId);
             return _mapper.Map<CheckoutDto>(checkout);
         }
 
         /// <summary>
         /// Gets the latest Checkout for a given Library Asset ID
         /// </summary>
-        /// <param name="libraryAssetId"></param>
+        /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<CheckoutDto> GetLatestCheckout(int libraryAssetId) {
+        public async Task<CheckoutDto> GetLatestCheckout(Guid assetId) {
             var latest = await _context.Checkouts
-                .Where(c => c.LibraryAsset.Id == libraryAssetId)
+                .Where(c => c.LibraryAsset.Id == assetId)
                 .OrderByDescending(c => c.Since)
                 .FirstAsync();
             return _mapper.Map<CheckoutDto>(latest);
@@ -116,21 +115,21 @@ namespace LightLib.Service {
         /// <summary>
         /// Returns true if a given Library Asset ID is checked out
         /// </summary>
-        /// <param name="libraryAssetId"></param>
+        /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<bool> IsCheckedOut(int libraryAssetId) 
-            => await _context.Checkouts .AnyAsync(a => a.LibraryAsset.Id == libraryAssetId);
+        public async Task<bool> IsCheckedOut(Guid assetId) 
+            => await _context.Checkouts .AnyAsync(a => a.LibraryAsset.Id == assetId);
 
         /// <summary>
         /// Get the patron who has the given Library Asset ID checked out
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<string> GetCurrentPatron(int id) {
+        public async Task<string> GetCurrentPatron(Guid assetId) {
             var checkout = await _context.Checkouts
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
-                .FirstAsync(a => a.LibraryAsset.Id == id);
+                .FirstAsync(a => a.LibraryAsset.Id == assetId);
 
             if (checkout == null) {
                 // TODO
@@ -151,7 +150,7 @@ namespace LightLib.Service {
         /// <param name="newCheckoutDto"></param>
         /// <returns></returns>
         public async Task<bool> Add(CheckoutDto newCheckoutDto) {
-            var checkoutEntity = _mapper.Map<Checkout>(newCheckoutDto);
+            var checkoutEntity = _mapper.Map<Data.Models.Checkout>(newCheckoutDto);
             try {
                 await _context.AddAsync(checkoutEntity);
                 await _context.SaveChangesAsync();
@@ -167,7 +166,7 @@ namespace LightLib.Service {
         /// <param name="assetId"></param>
         /// <param name="libraryCardId"></param>
         /// <returns></returns>
-        public async Task<bool> CheckOutItem(int assetId, int libraryCardId) {
+        public async Task<bool> CheckOutItem(Guid assetId, int libraryCardId) {
 
             var now = DateTime.UtcNow;
 
@@ -178,20 +177,20 @@ namespace LightLib.Service {
             }
 
             var libraryAsset = await _context.LibraryAssets
-                .Include(a => a.Status)
+                .Include(a => a.AvailabilityStatus)
                 .FirstAsync(a => a.Id == assetId);
 
             _context.Update(libraryAsset);
 
             // TODO
-            libraryAsset.Status = await _context.Statuses
+            libraryAsset.AvailabilityStatus = await _context.Statuses
                 .FirstAsync(a => a.Name == "Checked Out");
 
             var libraryCard = await _context.LibraryCards
                 .Include(c => c.Checkouts)
                 .FirstAsync(a => a.Id == libraryCardId);
 
-            var checkout = new Checkout {
+            var checkout = new Data.Models.Checkout {
                 LibraryAsset = libraryAsset,
                 LibraryCard = libraryCard,
                 Since = now,
@@ -216,7 +215,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<bool> CheckInItem(int assetId) {
+        public async Task<bool> CheckInItem(Guid assetId) {
             
             var now = DateTime.UtcNow;
 
@@ -258,7 +257,7 @@ namespace LightLib.Service {
 
             // otherwise, set item status to available
             // TODO magic string
-            libraryAsset.Status = await _context.Statuses
+            libraryAsset.AvailabilityStatus = await _context.Statuses
                 .FirstAsync(a => a.Name == "Available");
 
             await _context.SaveChangesAsync();
@@ -270,7 +269,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        private async Task<bool> CheckoutToEarliestHold(int assetId) {
+        private async Task<bool> CheckoutToEarliestHold(Guid assetId) {
 
             var earliestHold = await _holdService.GetEarliestHold(assetId);
             

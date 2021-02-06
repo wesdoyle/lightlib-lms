@@ -12,7 +12,7 @@ using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LightLib.Service {
+namespace LightLib.Service.Checkout {
     /// <summary>
     /// Handles business logic for Holds
     /// </summary>
@@ -33,16 +33,16 @@ namespace LightLib.Service {
         /// <summary>
         /// Gets a paginated list of current Holds for a given Library Asset ID
         /// </summary>
-        /// <param name="libraryAssetId"></param>
+        /// <param name="assetId"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
         public async Task<PaginationResult<HoldDto>> GetCurrentHolds(
-            int libraryAssetId, int page, int perPage) {
+            Guid assetId, int page, int perPage) {
             
             var holds = _context.Holds
                 .Include(h => h.LibraryAsset)
-                .Where(a => a.LibraryAsset.Id == libraryAssetId);
+                .Where(a => a.LibraryAsset.Id == assetId);
 
             var pageOfHolds = await _holdsPaginator
                 .BuildPageResult(holds, page, perPage, h => h.HoldPlaced)
@@ -95,17 +95,17 @@ namespace LightLib.Service {
 
             return holdPlaced.ToString(CultureInfo.InvariantCulture);
         }
-        
+
         /// <summary>
         /// Place a hold on a library asset for a given Library Asset ID and Library Card
         /// </summary>
         /// <param name="assetId"></param>
         /// <param name="libraryCardId"></param>
-        public async Task<bool> PlaceHold(int assetId, int libraryCardId) {
+        public async Task<bool> PlaceHold(Guid assetId, int libraryCardId) {
             var now = DateTime.UtcNow;
 
             var asset = await _context.LibraryAssets
-                .Include(a => a.Status)
+                .Include(a => a.AvailabilityStatus)
                 .FirstAsync(a => a.Id == assetId);
 
             var card = await _context.LibraryCards
@@ -113,8 +113,8 @@ namespace LightLib.Service {
 
             _context.Update(asset);
 
-            if (asset.Status.Name == "Available") {
-                asset.Status = await _context.Statuses
+            if (asset.AvailabilityStatus.Name == "Available") {
+                asset.AvailabilityStatus = await _context.Statuses
                     .FirstAsync(a => a.Name == "On Hold");
             }
 
@@ -133,13 +133,13 @@ namespace LightLib.Service {
         /// <summary>
         /// Returns the earliest hold, if any, for a given Library Asset ID
         /// </summary>
-        /// <param name="libraryAssetId"></param>
+        /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<HoldDto> GetEarliestHold(int libraryAssetId) {
+        public async Task<HoldDto> GetEarliestHold(Guid assetId) {
             var earliestHold = await _context.Holds
                 .Include(hold => hold.LibraryAsset)
                 .Include(hold => hold.LibraryCard)
-                .Where(hold => hold.LibraryAsset.Id == libraryAssetId)
+                .Where(hold => hold.LibraryAsset.Id == assetId)
                 .OrderBy(a => a.HoldPlaced)
                 .FirstAsync();
 

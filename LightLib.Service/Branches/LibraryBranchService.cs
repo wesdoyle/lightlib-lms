@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LightLib.Data;
 using LightLib.Data.Models;
+using LightLib.Data.Models.Assets;
 using LightLib.Models;
 using LightLib.Models.DTOs;
 using LightLib.Service.Helpers;
@@ -12,7 +13,7 @@ using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using static LightLib.Service.Helpers.DataHelpers;
 
-namespace LightLib.Service {
+namespace LightLib.Service.Branches {
     /// <summary>
     /// Handles business logic related to Library Branches 
     /// </summary>

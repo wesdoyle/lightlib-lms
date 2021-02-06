@@ -9,7 +9,7 @@ using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LightLib.Service {
+namespace LightLib.Service.Patrons {
     /// <summary>
     /// Handles Library Card business logic
     /// </summary>

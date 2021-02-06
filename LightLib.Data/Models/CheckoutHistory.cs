@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using LightLib.Data.Models.Assets;
 
 namespace LightLib.Data.Models {
     public class CheckoutHistory {
