@@ -10,7 +10,6 @@ using LightLib.Models;
 using LightLib.Models.DTOs;
 using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
-using LightLib.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service {
@@ -38,7 +37,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<HoldDto>> GetCurrentHolds(
+        public async Task<PaginationResult<HoldDto>> GetCurrentHolds(
             int libraryAssetId, int page, int perPage) {
             
             var holds = _context.Holds
@@ -51,15 +50,10 @@ namespace LightLib.Service {
 
             var paginatedHolds = _mapper.Map<List<HoldDto>>(pageOfHolds);
             
-            var paginationResult = new PaginationResult<HoldDto> {
+            return new PaginationResult<HoldDto> {
                 Results = paginatedHolds,
                 PerPage = perPage,
                 PageNumber = page
-            };
-
-            return new PagedServiceResult<HoldDto> {
-                Data = paginationResult,
-                Error = null
             };
         }
         
@@ -68,7 +62,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="holdId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<string>> GetCurrentHoldPatron(int holdId) {
+        public async Task<string> GetCurrentHoldPatron(int holdId) {
             var hold = _context.Holds
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
@@ -83,12 +77,7 @@ namespace LightLib.Service {
                 .Include(p => p.LibraryCard)
                 .FirstAsync(p => p.LibraryCard.Id == cardId);
 
-            var patronFullName = patron.FirstName + " " + patron.LastName;
-            
-            return new ServiceResult<string> {
-                Data = patronFullName,
-                Error = null
-            };
+            return $"{patron.FirstName} {patron.LastName}";
         }
 
         /// <summary>
@@ -96,7 +85,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="holdId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<string>> GetCurrentHoldPlaced(int holdId) {
+        public async Task<string> GetCurrentHoldPlaced(int holdId) {
             var hold = await _context.Holds
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
@@ -104,10 +93,7 @@ namespace LightLib.Service {
 
             var holdPlaced = hold.HoldPlaced;
 
-            return new ServiceResult<string> {
-                Data = holdPlaced.ToString(CultureInfo.InvariantCulture),
-                Error = null
-            };
+            return holdPlaced.ToString(CultureInfo.InvariantCulture);
         }
         
         /// <summary>
@@ -115,7 +101,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <param name="libraryCardId"></param>
-        public async Task<ServiceResult<bool>> PlaceHold(int assetId, int libraryCardId) {
+        public async Task<bool> PlaceHold(int assetId, int libraryCardId) {
             var now = DateTime.UtcNow;
 
             var asset = await _context.LibraryAssets
@@ -139,15 +125,9 @@ namespace LightLib.Service {
             };
 
             await _context.AddAsync(hold);
+            await _context.SaveChangesAsync();
             
-            // TODO: expressive SL return types
-            var result = await _context.SaveChangesAsync();
-            
-            //TODO: Error types
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
+            return true;
         }
         
         /// <summary>
@@ -155,7 +135,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="libraryAssetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<HoldDto>> GetEarliestHold(int libraryAssetId) {
+        public async Task<HoldDto> GetEarliestHold(int libraryAssetId) {
             var earliestHold = await _context.Holds
                 .Include(hold => hold.LibraryAsset)
                 .Include(hold => hold.LibraryCard)
@@ -163,13 +143,7 @@ namespace LightLib.Service {
                 .OrderBy(a => a.HoldPlaced)
                 .FirstAsync();
 
-            var holdDto = _mapper.Map<HoldDto>(earliestHold);
-            
-            // TODO
-            return new ServiceResult<HoldDto> {
-                Data = holdDto,
-                Error = null
-            };
+            return _mapper.Map<HoldDto>(earliestHold);
         }
     }
 }

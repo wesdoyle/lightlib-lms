@@ -28,16 +28,8 @@ namespace LightLib.Web.Controllers {
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
             var serviceResult = await _patronService.GetAll(page, perPage);
 
-            if (serviceResult.Error != null) {
-                return HandleServerError(serviceResult.Error);
-            }
-
-            if (serviceResult.Error != null) {
-                return HandleServerError(serviceResult.Error);
-            }
-
-            if (serviceResult.Data != null && serviceResult.Data.Results.Any()) {
-                var allAssets = serviceResult.Data.Results.ToList();
+            if (serviceResult != null && serviceResult.Results.Any()) {
+                var allAssets = serviceResult.Results.ToList();
                 var viewModel = new PatronIndexModel {
                     PageOfPatrons = new PaginationResult<PatronDto> {
                         Results = allAssets 
@@ -60,11 +52,6 @@ namespace LightLib.Web.Controllers {
 
         public async Task<IActionResult> Detail(int id) {
             var serviceResult = await _patronService.Get(id);
-            
-            if (serviceResult.Error != null) {
-                return HandleServerError(serviceResult.Error);
-            }
-            
             throw new NotImplementedException();
         }
     }

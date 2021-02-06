@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using LightLib.Models;
 using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Branch;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LightLib.Web.Controllers {
@@ -28,24 +27,13 @@ namespace LightLib.Web.Controllers {
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
             var paginationServiceResult = await _branchService.GetAll(page, perPage);
 
-            if (paginationServiceResult.Error != null) {
-                return HandleServerError(paginationServiceResult.Error);
-            }
-
-            if (paginationServiceResult.Data != null 
-            && paginationServiceResult.Data.Results.Any()) {
+            if (paginationServiceResult.Results.Any()) {
                 
-                foreach (var branch in paginationServiceResult.Data.Results) {
+                foreach (var branch in paginationServiceResult.Results) {
                     var branchId = branch.Id;
-                    
-                    var branchOpenResult = await _branchService.IsBranchOpen(branchId);
-                    branch.IsOpen = branchOpenResult.Data;
-
-                    var assetCountResult = await _branchService.GetAssetCount(branchId);
-                    branch.NumberOfAssets = assetCountResult.Data;
-
-                    var patronCount = await _branchService.GetPatronCount(branchId);
-                    branch.NumberOfPatrons = patronCount.Data;
+                    branch.IsOpen = await _branchService.IsBranchOpen(branchId);
+                    branch.NumberOfAssets = await _branchService.GetAssetCount(branchId);
+                    branch.NumberOfPatrons = await _branchService.GetPatronCount(branchId);
                 }
 
                 // TODO
@@ -79,46 +67,26 @@ namespace LightLib.Web.Controllers {
 
             var serviceResult = await _branchService.Get(id);
 
-            if (serviceResult.Error != null) {
-                // Log the error and stack trace
-                // Branch if running in debug mode and show detailed error in view
-                var error = serviceResult.Error;
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    error.Message);
-            }
-
-            if (serviceResult.Data == null) {
-                return NotFound($"The Library Branch with ID {id} was not found");
-            }
-
-            var patronCountResult = await _branchService.GetPatronCount(id);
-            var patronCount = patronCountResult.Data;
-            
-            var assetsCountResult = await _branchService.GetAssetCount(id);
-            var assetsCount = assetsCountResult.Data;
-            
-            var assetsValueResult = await _branchService.GetAssetsValue(id);
-            var assetsValue = assetsValueResult.Data;
-
+            var patronCount = await _branchService.GetPatronCount(id);
+            var assetsCount = await _branchService.GetAssetCount(id);
+            var assetsValue = await _branchService.GetAssetsValue(id);
             var branchHoursResult = await _branchService.GetBranchHours(id);
-            var branchHours = branchHoursResult.Data ?? new List<string>();
+            var branchHours = branchHoursResult ?? new List<string>();
 
             var model = new BranchDetailModel {
-                BranchName = serviceResult.Data.Name,
-                Description = serviceResult.Data.Description,
-                Address = serviceResult.Data.Address,
-                Telephone = serviceResult.Data.Telephone,
-                BranchOpenedDate = serviceResult.Data.OpenDate.ToString("yyyy-MM-dd"),
+                BranchName = serviceResult.Name,
+                Description = serviceResult.Description,
+                Address = serviceResult.Address,
+                Telephone = serviceResult.Telephone,
+                BranchOpenedDate = serviceResult.OpenDate.ToString("yyyy-MM-dd"),
                 NumberOfPatrons = patronCount,
                 NumberOfAssets = assetsCount,
                 TotalAssetValue = assetsValue,
-                ImageUrl = serviceResult.Data.ImageUrl,
+                ImageUrl = serviceResult.ImageUrl,
                 HoursOpen = branchHours
             };
 
             return View(model);
-
         }
     }
 }

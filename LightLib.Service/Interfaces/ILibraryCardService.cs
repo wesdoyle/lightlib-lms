@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
+using LightLib.Models;
 using LightLib.Models.DTOs;
-using LightLib.Service.Models;
 
 namespace LightLib.Service.Interfaces {
     public interface ILibraryCardService {
-        Task<PagedServiceResult<LibraryCardDto>> GetAll(int page, int perPage);
-        Task<ServiceResult<LibraryCardDto>> Get(int libraryCardId);
-        Task<ServiceResult<int>> Add(LibraryCardDto libraryCardDto);
+        Task<PaginationResult<LibraryCardDto>> GetAll(int page, int perPage);
+        Task<LibraryCardDto> Get(int libraryCardId);
+        Task<bool> Add(LibraryCardDto libraryCardDto);
     }
 }

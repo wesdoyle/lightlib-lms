@@ -7,7 +7,6 @@ using LightLib.Models;
 using LightLib.Models.DTOs;
 using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
-using LightLib.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service {
@@ -34,14 +33,11 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="statusDto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<int>> Add(StatusDto statusDto) {
+        public async Task<bool> Add(StatusDto statusDto) {
             var status = _mapper.Map<Status>(statusDto);
             await _context.AddAsync(status);
-            var newStatusId = await _context.SaveChangesAsync();
-            return new ServiceResult<int> {
-                Data = newStatusId,
-                Error = null
-            };
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         /// <summary>
@@ -50,7 +46,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<StatusDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<StatusDto>> GetAll(int page, int perPage) {
             var statuses = _context.Statuses;
 
             var pageOfStatuses = await _paginator 
@@ -59,15 +55,10 @@ namespace LightLib.Service {
             
             var paginatedStatuses = _mapper.Map<List<StatusDto>>(pageOfStatuses);
             
-            var paginationResult = new PaginationResult<StatusDto> {
+            return new PaginationResult<StatusDto> {
                 Results = paginatedStatuses,
                 PerPage = perPage,
                 PageNumber = page
-            };
-            
-            return new PagedServiceResult<StatusDto> {
-                Data = paginationResult,
-                Error = null
             };
         }
 
@@ -76,16 +67,9 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="statusId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<StatusDto>> Get(int statusId) {
-            var status = await _context.Statuses
-                .FirstAsync(p => p.Id == statusId);
-
-            var statusDto = _mapper.Map<StatusDto>(status);
-            
-            return new ServiceResult<StatusDto> {
-                Data = statusDto,
-                Error = null
-            };
+        public async Task<StatusDto> Get(int statusId) {
+            var status = await _context.Statuses.FirstAsync(p => p.Id == statusId);
+            return _mapper.Map<StatusDto>(status);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LightLib.Data;
+﻿using LightLib.Data;
 using LightLib.Data.Mapping;
 using LightLib.Service;
 using LightLib.Service.Interfaces;

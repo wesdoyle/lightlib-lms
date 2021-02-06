@@ -36,13 +36,9 @@ namespace LightLib.Web.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
             var paginationServiceResult = await _assetsService.GetAll(page, perPage);
-            
-            if (paginationServiceResult.Error != null) {
-                return HandleServerError(paginationServiceResult.Error);
-            }
 
-            if (paginationServiceResult.Data != null && paginationServiceResult.Data.Results.Any()) {
-                var allAssets = paginationServiceResult.Data.Results.ToList();
+            if (paginationServiceResult != null && paginationServiceResult.Results.Any()) {
+                var allAssets = paginationServiceResult.Results.ToList();
                 var viewModel = new AssetIndexModel {
                     PageOfAssets = new PaginationResult<LibraryAssetDto> {
                         Results = allAssets 
@@ -99,10 +95,8 @@ namespace LightLib.Web.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<IActionResult> MarkLost(int id) {
-            var lostResult = await _assetsService.MarkLost(id);
-            return lostResult.Error != null 
-                ? HandleServerError(lostResult.Error) 
-                : RedirectToAction("Detail", new {id});
+            await _assetsService.MarkLost(id);
+            return RedirectToAction("Detail", new {id});
         }
 
         /// <summary>
@@ -111,10 +105,8 @@ namespace LightLib.Web.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<IActionResult> MarkFound(int id) {
-            var foundResult = await _assetsService.MarkFound(id);
-            return foundResult.Error != null
-                ? HandleServerError(foundResult.Error)
-                : RedirectToAction("Detail", new {id});
+            await _assetsService.MarkFound(id);
+            return RedirectToAction("Detail", new {id});
         }
 
         /// <summary>
@@ -125,10 +117,8 @@ namespace LightLib.Web.Controllers {
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PlaceCheckout(int assetId, int libraryCardId) {
-            var checkoutResult = await _checkoutsService.CheckOutItem(assetId, libraryCardId);
-            return checkoutResult.Error != null 
-                ? HandleServerError(checkoutResult.Error) 
-                : RedirectToAction("Detail", new {id = assetId});
+            await _checkoutsService.CheckOutItem(assetId, libraryCardId);
+            return RedirectToAction("Detail", new {id = assetId});
         }
 
         /// <summary>
@@ -139,10 +129,8 @@ namespace LightLib.Web.Controllers {
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PlaceHold(int assetId, int libraryCardId) {
-            var holdResult = await _holdService.PlaceHold(assetId, libraryCardId);
-            return holdResult.Error != null 
-            ? HandleServerError(holdResult.Error) 
-            : RedirectToAction("Detail", new {id = assetId});
+            await _holdService.PlaceHold(assetId, libraryCardId);
+            return RedirectToAction("Detail", new {id = assetId});
         }
     }
 }

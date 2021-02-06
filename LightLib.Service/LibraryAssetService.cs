@@ -9,7 +9,6 @@ using LightLib.Models;
 using LightLib.Models.DTOs;
 using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
-using LightLib.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service {
@@ -34,14 +33,11 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetDto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<int>> Add(LibraryAssetDto assetDto) {
+        public async Task<bool> Add(LibraryAssetDto assetDto) {
             var newAsset = _mapper.Map<LibraryAsset>(assetDto);
             await _context.AddAsync(newAsset);
             await _context.SaveChangesAsync();
-            return new ServiceResult<int> {
-                Data = newAsset.Id,
-                Error = null
-            };
+            return true;
         }
 
         /// <summary>
@@ -49,16 +45,12 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<LibraryAssetDto>> Get(int id) {
+        public async Task<LibraryAssetDto> Get(int id) {
             var asset = await _context.LibraryAssets
                 .Include(a => a.Status)
                 .Include(a => a.Location)
                 .FirstAsync(a => a.Id == id);
-            var assetDto = _mapper.Map<LibraryAssetDto>(asset);
-            return new ServiceResult<LibraryAssetDto> {
-                Data = assetDto,
-                Error = null
-            };
+            return _mapper.Map<LibraryAssetDto>(asset);
         }
 
         /// <summary>
@@ -67,7 +59,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<LibraryAssetDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<LibraryAssetDto>> GetAll(int page, int perPage) {
             
             var assets = _context.LibraryAssets
                 .Include(a => a.Status)
@@ -80,12 +72,10 @@ namespace LightLib.Service {
             var pageOfAssetDtos = _mapper
                 .Map<List<LibraryAssetDto>>(pageOfAssets);
             
-            return new PagedServiceResult<LibraryAssetDto> {
-                Data = new PaginationResult<LibraryAssetDto> {
+                return new PaginationResult<LibraryAssetDto> {
                     PageNumber = page,
                     PerPage = perPage,
                     Results = pageOfAssetDtos 
-                }
             };
         }
 
@@ -94,7 +84,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<string>> GetAuthorOrDirector(int assetId) {
+        public async Task<string> GetAuthorOrDirector(int assetId) {
             var isBook = await _context.LibraryAssets
                 .OfType<Book>()
                 .AnyAsync(a => a.Id == assetId);
@@ -110,14 +100,9 @@ namespace LightLib.Service {
         /// <param name="assetId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private async Task<ServiceResult<string>> GetDirector(int assetId) {
-            var assetServiceResult = await Get(assetId);
-            var asset = (VideoDto) assetServiceResult.Data;
-            var director = asset.Director;
-            return new ServiceResult<string> {
-                Data = director,
-                Error = null
-            };
+        private async Task<string> GetDirector(int assetId) {
+            // TODO
+            return "";
         }
 
         /// <summary>
@@ -125,14 +110,9 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        private async Task<ServiceResult<string>> GetAuthor(int assetId) {
-            var assetServiceResult = await Get(assetId);
-            var asset = (BookDto) assetServiceResult.Data;
-            var author = asset.Author;
-            return new ServiceResult<string> {
-                Data = author,
-                Error = null
-            };
+        private async Task<string> GetAuthor(int assetId) {
+            // TODO
+            return "";
         }
 
         /// <summary>
@@ -140,18 +120,12 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<LibraryBranchDto>> GetCurrentLocation(int assetId) {
+        public async Task<LibraryBranchDto> GetCurrentLocation(int assetId) {
             var asset = await _context
                 .LibraryAssets
                 .FirstAsync(a => a.Id == assetId);
-            
             var location = asset.Location;
-            var locationDto = _mapper.Map<LibraryBranchDto>(location);
-            
-            return new ServiceResult<LibraryBranchDto> {
-                Data = locationDto,
-                Error = null
-            };
+            return _mapper.Map<LibraryBranchDto>(location);
         }
 
         /// <summary>
@@ -159,16 +133,10 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="libraryAssetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<int>> GetNumberOfCopies(int libraryAssetId) {
+        public async Task<int> GetNumberOfCopies(int libraryAssetId) {
             var libraryAsset = await _context.LibraryAssets
                 .FirstAsync(a => a.Id == libraryAssetId);
-
-            var numberOfCopies = libraryAsset.NumberOfCopies;
-            
-            return new ServiceResult<int> {
-                Data = numberOfCopies,
-                Error = null
-            };
+            return libraryAsset.NumberOfCopies;
         }
         
         /// <summary>
@@ -176,21 +144,14 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<bool>> MarkLost(int assetId) {
+        public async Task<bool> MarkLost(int assetId) {
             var item = await _context.LibraryAssets
                 .FirstAsync(a => a.Id == assetId);
-
             _context.Update(item);
-
             // TODO
             item.Status = _context.Statuses.First(a => a.Name == "Lost");
-
             await _context.SaveChangesAsync();
-
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
+            return true;
         }
 
         /// <summary>
@@ -198,7 +159,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<bool>> MarkFound(int assetId) {
+        public async Task<bool> MarkFound(int assetId) {
             var libraryAsset = await _context.LibraryAssets
                 .FirstAsync(a => a.Id == assetId);
 
@@ -223,11 +184,7 @@ namespace LightLib.Service {
             }
 
             await _context.SaveChangesAsync();
-            
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
+            return true;
         }
     }
 }

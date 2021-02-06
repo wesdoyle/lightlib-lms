@@ -6,9 +6,9 @@ using LightLib.Data;
 using LightLib.Data.Models;
 using LightLib.Models;
 using LightLib.Models.DTOs;
+using LightLib.Models.Exceptions;
 using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
-using LightLib.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service {
@@ -31,12 +31,10 @@ namespace LightLib.Service {
             _paginator = new Paginator<Book>();
         }
 
-        public async Task<ServiceResult<int>> Add(BookDto newBook) {
+        public async Task<bool> Add(BookDto newBook) {
             _context.Add(newBook);
             await _context.SaveChangesAsync();
-            return new ServiceResult<int> {
-                Data = newBook.Id
-            };
+            return true;
         }
 
         /// <summary>
@@ -44,20 +42,16 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<BookDto>> Get(int id) {
+        public async Task<BookDto> Get(int id) {
             try {
                 var book = await _context.Books.FirstAsync(b => b.Id == id);
-                var bookDto = _mapper.Map<BookDto>(book);
-                return new ServiceResult<BookDto> {
-                    Data = bookDto,
-                    Error = null
-                };
-            } catch (ArgumentNullException ex) {
-                return HandleDatabaseError<BookDto>(ex);
+                return _mapper.Map<BookDto>(book);
+            } catch (Exception ex) {
+                throw new LibraryServiceException(Reason.UncaughtError);
             }
         }
 
-        public async Task<PagedServiceResult<BookDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<BookDto>> GetAll(int page, int perPage) {
             var books = _context.Books;
 
             try {
@@ -67,22 +61,18 @@ namespace LightLib.Service {
 
                 var paginatedBooks = _mapper.Map<List<BookDto>>(pageOfBooks);
 
-                var paginationResult = new PaginationResult<BookDto> {
+                return new PaginationResult<BookDto> {
                     Results = paginatedBooks,
                     PerPage = perPage,
                     PageNumber = page
                 };
 
-                return new PagedServiceResult<BookDto> {
-                    Data = paginationResult,
-                    Error = null
-                };
             } catch (Exception ex) {
-                return HandleDatabaseCollectionError<BookDto>(ex);
+                throw new LibraryServiceException(Reason.UncaughtError);
             }
         }
 
-        public async Task<PagedServiceResult<BookDto>> GetByAuthor(
+        public async Task<PaginationResult<BookDto>> GetByAuthor(
             string author, int page, int perPage) {
             var books = _context.Books;
 
@@ -98,25 +88,13 @@ namespace LightLib.Service {
                 var paginatedBooks = _mapper
                     .Map<List<BookDto>>(await pageOfBooks.ToListAsync());
 
-                var paginationResult = new PaginationResult<BookDto> {
+                return new PaginationResult<BookDto> {
                     Results = paginatedBooks,
                     PerPage = perPage,
                     PageNumber = page
                 };
-
-                return new PagedServiceResult<BookDto> {
-                    Data = paginationResult,
-                    Error = null
-                };
-            }
-            catch (Exception e) {
-                return new PagedServiceResult<BookDto> {
-                    Data = null,
-                    Error = new ServiceError {
-                        Message = e.Message,
-                        Stacktrace = e.StackTrace
-                    }
-                };
+            } catch (Exception e) {
+                throw new LibraryServiceException(Reason.UncaughtError);
             }
         }
 
@@ -125,13 +103,13 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="isbn"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<BookDto>> GetByIsbn(string isbn) {
-            var book = await _context.Books.FirstAsync(a => a.ISBN == isbn);
-            var bookDto = _mapper.Map<BookDto>(book);
-            return new ServiceResult<BookDto> {
-                Data = bookDto,
-                Error = null
-            };
+        public async Task<BookDto> GetByIsbn(string isbn) {
+            try {
+                var book = await _context.Books.FirstAsync(a => a.ISBN == isbn);
+                return _mapper.Map<BookDto>(book);
+            } catch (Exception e) {
+                throw new LibraryServiceException(Reason.UncaughtError);
+            }
         }
     }
 }

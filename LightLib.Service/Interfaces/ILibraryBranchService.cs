@@ -1,22 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using LightLib.Models;
 using LightLib.Models.DTOs;
-using LightLib.Service.Models;
 
 namespace LightLib.Service.Interfaces {
     public interface ILibraryBranchService {
-        Task<PagedServiceResult<LibraryBranchDto>> GetAll(int page, int perPage);
-        Task<PagedServiceResult<PatronDto>> GetPatrons(int branchId, int page, int perPage);
-        Task<PagedServiceResult<LibraryAssetDto>> GetAssets(int branchId, int page, int perPage);
-
-        Task<ServiceResult<List<string>>> GetBranchHours(int branchId);
-        Task<ServiceResult<LibraryBranchDto>> Get(int branchId);
-        
-        Task<ServiceResult<int>> Add(LibraryBranchDto newBranchDto);
-        
-        Task<ServiceResult<bool>> IsBranchOpen(int branchId);
-        Task<ServiceResult<int>> GetAssetCount(int branchId);
-        Task<ServiceResult<int>> GetPatronCount(int branchId);
-        Task<ServiceResult<decimal>> GetAssetsValue(int branchId);
+        Task<PaginationResult<LibraryBranchDto>> GetAll(int page, int perPage);
+        Task<PaginationResult<PatronDto>> GetPatrons(int branchId, int page, int perPage);
+        Task<PaginationResult<LibraryAssetDto>> GetAssets(int branchId, int page, int perPage);
+        Task<List<string>> GetBranchHours(int branchId);
+        Task<LibraryBranchDto> Get(int branchId);
+        Task<bool> Add(LibraryBranchDto newBranchDto);
+        Task<bool> IsBranchOpen(int branchId);
+        Task<int> GetAssetCount(int branchId);
+        Task<int> GetPatronCount(int branchId);
+        Task<decimal> GetAssetsValue(int branchId);
     }
 }

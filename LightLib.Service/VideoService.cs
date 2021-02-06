@@ -8,7 +8,6 @@ using LightLib.Models;
 using LightLib.Models.DTOs;
 using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
-using LightLib.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service {
@@ -34,7 +33,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<VideoDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<VideoDto>> GetAll(int page, int perPage) {
             var videos = _context.Videos;
 
             var pageOfVideos = await _paginator 
@@ -43,15 +42,10 @@ namespace LightLib.Service {
             
             var paginatedVideos = _mapper.Map<List<VideoDto>>(pageOfVideos);
             
-            var paginationResult = new PaginationResult<VideoDto> {
+            return new PaginationResult<VideoDto> {
                 Results = paginatedVideos,
                 PerPage = perPage,
                 PageNumber = page
-            };
-            
-            return new PagedServiceResult<VideoDto> {
-                Data = paginationResult,
-                Error = null
             };
         }
 
@@ -62,7 +56,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<VideoDto>> GetByDirector(
+        public async Task<PaginationResult<VideoDto>> GetByDirector(
             string director, int page, int perPage) {
             var videos = _context.Videos.Where(v => v.Director.Contains(director));
 
@@ -72,15 +66,10 @@ namespace LightLib.Service {
             
             var paginatedVideos = _mapper.Map<List<VideoDto>>(pageOfVideos);
             
-            var paginationResult = new PaginationResult<VideoDto> {
+            return new PaginationResult<VideoDto> {
                 Results = paginatedVideos,
                 PerPage = perPage,
                 PageNumber = page
-            };
-            
-            return new PagedServiceResult<VideoDto> {
-                Data = paginationResult,
-                Error = null
             };
         }
 
@@ -89,16 +78,9 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="videoId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<VideoDto>> Get(int videoId) {
-            var video = await _context.Videos
-                .FirstAsync(p => p.Id == videoId);
-
-            var videoDto = _mapper.Map<VideoDto>(video);
-            
-            return new ServiceResult<VideoDto> {
-                Data = videoDto,
-                Error = null
-            };
+        public async Task<VideoDto> Get(int videoId) {
+            var video = await _context.Videos.FirstAsync(p => p.Id == videoId);
+            return _mapper.Map<VideoDto>(video);
         }
 
         /// <summary>
@@ -106,18 +88,11 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="videoDto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<int>> Add(VideoDto videoDto) {
-
+        public async Task<bool> Add(VideoDto videoDto) {
             var video = _mapper.Map<Video>(videoDto);
-                        
             await _context.AddAsync(video);
-            
-            var videoId = await _context.SaveChangesAsync();
-            
-            return new ServiceResult<int> {
-                Data = videoId,
-                Error = null
-            };
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

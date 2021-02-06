@@ -8,9 +8,9 @@ using LightLib.Data;
 using LightLib.Data.Models;
 using LightLib.Models;
 using LightLib.Models.DTOs;
+using LightLib.Models.Exceptions;
 using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
-using LightLib.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service {
@@ -43,7 +43,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<CheckoutDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<CheckoutDto>> GetAll(int page, int perPage) {
             var checkouts = _context.Checkouts;
 
             var pageOfCheckouts = await _checkoutPaginator 
@@ -52,15 +52,10 @@ namespace LightLib.Service {
             
             var paginatedCheckouts = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts);
             
-            var paginationResult = new PaginationResult<CheckoutDto> {
+            return new PaginationResult<CheckoutDto> {
                 Results = paginatedCheckouts,
                 PerPage = perPage,
                 PageNumber = page
-            };
-            
-            return new PagedServiceResult<CheckoutDto> {
-                Data = paginationResult,
-                Error = null
             };
         }
         
@@ -71,7 +66,7 @@ namespace LightLib.Service {
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public async Task<PagedServiceResult<CheckoutHistoryDto>> GetCheckoutHistory(
+        public async Task<PaginationResult<CheckoutHistoryDto>> GetCheckoutHistory(
             int libraryAssetId, 
             int page, 
             int perPage) {
@@ -87,34 +82,22 @@ namespace LightLib.Service {
 
             var paginatedHistories = _mapper.Map<List<CheckoutHistoryDto>>(pageOfHistory);
             
-            var paginationResult = new PaginationResult<CheckoutHistoryDto> {
+            return new PaginationResult<CheckoutHistoryDto> {
                 Results = paginatedHistories,
                 PerPage = perPage,
                 PageNumber = page
             };
-            
-            return new PagedServiceResult<CheckoutHistoryDto> {
-                Data = paginationResult,
-                Error = null
-            };
         }
-
 
         /// <summary>
         /// Get the Checkout corresponding to the given ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<CheckoutDto>> Get(int id) {
+        public async Task<CheckoutDto> Get(int id) {
             var checkout = await _context.Checkouts
                 .FirstAsync(p => p.Id == id);
-
-            var checkoutDto = _mapper.Map<CheckoutDto>(checkout);
-            
-            return new ServiceResult<CheckoutDto> {
-                Data = checkoutDto,
-                Error = null
-            };
+            return _mapper.Map<CheckoutDto>(checkout);
         }
 
         /// <summary>
@@ -122,18 +105,12 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="libraryAssetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<CheckoutDto>> GetLatestCheckout(int libraryAssetId) {
+        public async Task<CheckoutDto> GetLatestCheckout(int libraryAssetId) {
             var latest = await _context.Checkouts
                 .Where(c => c.LibraryAsset.Id == libraryAssetId)
                 .OrderByDescending(c => c.Since)
                 .FirstAsync();
-            
-            var checkoutDto = _mapper.Map<CheckoutDto>(latest);
-            
-            return new ServiceResult<CheckoutDto> {
-                Data = checkoutDto,
-                Error = null
-            };
+            return _mapper.Map<CheckoutDto>(latest);
         }
 
         /// <summary>
@@ -141,33 +118,22 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="libraryAssetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<bool>> IsCheckedOut(int libraryAssetId) {
-            var isCheckedOut = await _context.Checkouts
-                .AnyAsync(a => a.LibraryAsset.Id == libraryAssetId);
-            
-            return new ServiceResult<bool> {
-                Data = isCheckedOut,
-                Error = null
-            };
-        }
+        public async Task<bool> IsCheckedOut(int libraryAssetId) 
+            => await _context.Checkouts .AnyAsync(a => a.LibraryAsset.Id == libraryAssetId);
 
         /// <summary>
         /// Get the patron who has the given Library Asset ID checked out
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<string>> GetCurrentPatron(int id) {
+        public async Task<string> GetCurrentPatron(int id) {
             var checkout = await _context.Checkouts
                 .Include(a => a.LibraryAsset)
                 .Include(a => a.LibraryCard)
                 .FirstAsync(a => a.LibraryAsset.Id == id);
 
             if (checkout == null) {
-                return new ServiceResult<string> {
-                    // TODO
-                    Error = null,
-                    Data = "Not checked out"
-                };
+                // TODO
             }
 
             var cardId = checkout.LibraryCard.Id;
@@ -176,12 +142,7 @@ namespace LightLib.Service {
                 .Include(p => p.LibraryCard)
                 .FirstAsync(c => c.LibraryCard.Id == cardId);
 
-            var patronFullName = patron.FirstName + " " + patron.LastName;
-            
-            return new ServiceResult<string> {
-                Data = patronFullName,
-                Error = null
-            };
+            return $"{patron.FirstName} {patron.LastName}";
         }
         
         /// <summary>
@@ -189,26 +150,14 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="newCheckoutDto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<int>> Add(CheckoutDto newCheckoutDto) {
+        public async Task<bool> Add(CheckoutDto newCheckoutDto) {
             var checkoutEntity = _mapper.Map<Checkout>(newCheckoutDto);
             try {
                 await _context.AddAsync(checkoutEntity);
                 await _context.SaveChangesAsync();
-                return new ServiceResult<int> {
-                    Data = checkoutEntity.Id,
-                    Error = null
-                };
-            } catch (Exception ex) when (
-                ex is DbUpdateException 
-                || ex is DBConcurrencyException) {
-                
-                return new ServiceResult<int> {
-                    Data = 0,
-                    Error = new ServiceError {
-                        Message = ex.Message,
-                        Stacktrace = ex.StackTrace
-                    }
-                };
+                return true;
+            } catch (Exception ex) {
+                throw new LibraryServiceException(Reason.UncaughtError);
             }
         }
 
@@ -218,18 +167,14 @@ namespace LightLib.Service {
         /// <param name="assetId"></param>
         /// <param name="libraryCardId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<bool>> CheckOutItem(int assetId, int libraryCardId) {
+        public async Task<bool> CheckOutItem(int assetId, int libraryCardId) {
 
             var now = DateTime.UtcNow;
 
             var isAlreadyCheckedOut = await IsCheckedOut(assetId);
                 
-            if (isAlreadyCheckedOut.Data) {
-                return new ServiceResult<bool> {
-                    Data = false,
-                    // TODO
-                    Error = null
-                };
+            if (isAlreadyCheckedOut) {
+                // TODO
             }
 
             var libraryAsset = await _context.LibraryAssets
@@ -263,11 +208,7 @@ namespace LightLib.Service {
 
             await _context.AddAsync(checkoutHistory);
             await _context.SaveChangesAsync();
-            
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
+            return true;
         }
 
         /// <summary>
@@ -275,7 +216,7 @@ namespace LightLib.Service {
         /// </summary>
         /// <param name="assetId"></param>
         /// <returns></returns>
-        public async Task<ServiceResult<bool>> CheckInItem(int assetId) {
+        public async Task<bool> CheckInItem(int assetId) {
             
             var now = DateTime.UtcNow;
 
@@ -312,10 +253,7 @@ namespace LightLib.Service {
             var wasCheckedOutToNewHold = await CheckoutToEarliestHold(assetId);
 
             if (wasCheckedOutToNewHold) {
-                return new ServiceResult<bool> {
-                    Data = true,
-                    Error = null
-                };
+                // TODO
             }
 
             // otherwise, set item status to available
@@ -324,11 +262,7 @@ namespace LightLib.Service {
                 .FirstAsync(a => a.Name == "Available");
 
             await _context.SaveChangesAsync();
-
-            return new ServiceResult<bool> {
-                Data = true,
-                Error = null
-            };
+            return true;
         }
 
         /// <summary>
@@ -340,11 +274,11 @@ namespace LightLib.Service {
 
             var earliestHold = await _holdService.GetEarliestHold(assetId);
             
-            if (earliestHold?.Data == null) {
+            if (earliestHold == null) {
                 return false;
             }
 
-            var card = earliestHold.Data.LibraryCard;
+            var card = earliestHold.LibraryCard;
             
             _context.Remove(earliestHold);
             await _context.SaveChangesAsync();
@@ -352,7 +286,7 @@ namespace LightLib.Service {
             // TODO
             var checkOutResult = await CheckOutItem(assetId, card.Id);
             
-            return checkOutResult.Data;
+            return checkOutResult;
         }
 
         /// <summary>
