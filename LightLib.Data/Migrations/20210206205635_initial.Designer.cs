@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LightLib.Data.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20210206014826_initial_migration")]
-    partial class initial_migration
+    [Migration("20210206205635_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -151,9 +151,6 @@ namespace LightLib.Data.Migrations
                     b.Property<int?>("LocationId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("NumberOfCopies")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("StatusId")
                         .HasColumnType("integer");
 
@@ -241,13 +238,14 @@ namespace LightLib.Data.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("text");
 
                     b.Property<int?>("HomeLibraryBranchId")
                         .HasColumnType("integer");

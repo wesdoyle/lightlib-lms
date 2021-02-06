@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LightLib.Data.Migrations
 {
-    public partial class initial_migration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,8 +86,8 @@ namespace LightLib.Data.Migrations
                     LastName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     Address = table.Column<string>(type: "text", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
                     Telephone = table.Column<string>(type: "text", nullable: true),
-                    Gender = table.Column<string>(type: "text", nullable: true),
                     LibraryCardId = table.Column<int>(type: "integer", nullable: true),
                     HomeLibraryBranchId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -119,7 +119,6 @@ namespace LightLib.Data.Migrations
                     StatusId = table.Column<int>(type: "integer", nullable: true),
                     Cost = table.Column<decimal>(type: "numeric", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: true),
-                    NumberOfCopies = table.Column<int>(type: "integer", nullable: false),
                     AssetType = table.Column<string>(type: "text", nullable: true),
                     LocationId = table.Column<int>(type: "integer", nullable: true),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
