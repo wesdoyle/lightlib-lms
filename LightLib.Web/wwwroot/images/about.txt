@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Londrina Solid
+- Font Author: Copyright 2011 The Londrina Solid Authors (https://github.com/marcelommp/Londrina-Typeface), with Reserved Font Name "Londrina Solid"
+- Font Source: http://fonts.gstatic.com/s/londrinasolid/v10/flUhRq6sw40kQEJxWNgkLuudGcNZIhI8tIHh.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL)
