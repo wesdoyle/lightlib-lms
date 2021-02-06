@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LightLib.Data.Models;
+using LightLib.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Data {
@@ -29,27 +30,27 @@ namespace LightLib.Data {
             var defaultStatuses = new List<Status> {
                 new() {
                     Id = 1,
-                    Name = "LOST",
+                    Name = AssetStatus.Lost,
                     Description = "The item is lost."
                 },
                 new() {
                     Id = 2,
-                    Name = "GOOD_CONDITION",
+                    Name = AssetStatus.GoodCondition,
                     Description = "The item is in good condition."
                 },
                 new() {
                     Id = 3,
-                    Name = "UNKNOWN",
+                    Name = AssetStatus.Unknown,
                     Description = "The item is in unknown whereabouts and condition."
                 },
                 new() {
                     Id = 4,
-                    Name = "DESTROYED",
+                    Name = AssetStatus.Destroyed,
                     Description = "The item has been destroyed."
                 },
             };
 
-            //Seeding a  'Administrator' role to AspNetRoles table
+            // Seeding initial Asset Statuses
             modelBuilder.Entity<Status>().HasData(defaultStatuses);
         }
     }

@@ -138,7 +138,7 @@ namespace LightLib.Service {
                 .FirstAsync(a => a.Id == assetId);
             _context.Update(item);
             // TODO
-            item.Status = _context.Statuses.First(a => a.Name == "Lost");
+            item.Status = _context.Statuses.First(a => a.Name == AssetStatus.Lost);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -153,7 +153,7 @@ namespace LightLib.Service {
                 .FirstAsync(a => a.Id == assetId);
 
             _context.Update(libraryAsset);
-            libraryAsset.Status = _context.Statuses.First(a => a.Name == "Available");
+            libraryAsset.Status = _context.Statuses.First(a => a.Name == AssetStatus.GoodCondition);
             var now = DateTime.UtcNow;
 
             // remove any existing checkouts on the item
