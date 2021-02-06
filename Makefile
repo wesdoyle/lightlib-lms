@@ -1,18 +1,25 @@
 # Project Variables
 PROJECT_NAME ?= LightLib
-ORG_NAME ?= LightLib
-REPO_NAME ?= LightLib
+ORG_NAME ?= Riverrun
 
-# Filenames
-DEV_COMPOSE_FILE := docker-compose.yml
+rootdir = $(realpath .)
+.PHONY: migrations db build release
 
-.PHONY: test build release
+migrations:
+	- cd ./LightLib.Data \
+	    && dotnet ef --startup-project ../LightLib.Web/ migrations add $(mname) \
+	    && cd ..
 
-test:
-	echo "test stage"
+db:
+	- cd ./LightLib.Data \
+	    && dotnet ef --startup-project ../LightLib.Web/ database update \
+	    && cd ..
 
 build:
-	echo "build stage"
+	- dotnet clean && dotnet build
+
+run-sonar:
+	- sonar-scanner
 
 release:
-	echo "release stage"
+	- dotnet publish ./LightLib.sln -c Release -o release
