@@ -9,6 +9,99 @@ namespace LightLib.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AudioBooks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Author = table.Column<string>(type: "text", nullable: false),
+                    ISBN = table.Column<string>(type: "text", nullable: false),
+                    PublicationYear = table.Column<int>(type: "integer", nullable: false),
+                    NumberOfDiscs = table.Column<int>(type: "integer", nullable: false),
+                    LengthMinutes = table.Column<int>(type: "integer", nullable: false),
+                    Edition = table.Column<string>(type: "text", nullable: true),
+                    Publisher = table.Column<string>(type: "text", nullable: true),
+                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: true),
+                    Summary = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AudioBooks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Author = table.Column<string>(type: "text", nullable: false),
+                    ISBN = table.Column<string>(type: "text", nullable: false),
+                    PublicationYear = table.Column<int>(type: "integer", nullable: false),
+                    LengthMinutes = table.Column<int>(type: "integer", nullable: false),
+                    Edition = table.Column<string>(type: "text", nullable: true),
+                    Publisher = table.Column<string>(type: "text", nullable: true),
+                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: true),
+                    Summary = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cdroms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    ISBN = table.Column<string>(type: "text", nullable: false),
+                    PublicationYear = table.Column<int>(type: "integer", nullable: false),
+                    Edition = table.Column<string>(type: "text", nullable: true),
+                    Label = table.Column<string>(type: "text", nullable: true),
+                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: true),
+                    Genre = table.Column<string>(type: "text", nullable: true),
+                    AlternativeTitle = table.Column<string>(type: "text", nullable: true),
+                    Summary = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cdroms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dvds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Year = table.Column<int>(type: "integer", nullable: false),
+                    Director = table.Column<string>(type: "text", nullable: false),
+                    LengthMinutes = table.Column<int>(type: "integer", nullable: false),
+                    Edition = table.Column<string>(type: "text", nullable: true),
+                    ISBN = table.Column<string>(type: "text", nullable: true),
+                    UPC = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: true),
+                    AlternativeTitle = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dvds", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LibraryBranches",
                 columns: table => new
                 {
@@ -38,6 +131,25 @@ namespace LightLib.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LibraryCards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Periodicals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UniformTitle = table.Column<string>(type: "text", nullable: false),
+                    Publisher = table.Column<string>(type: "text", nullable: false),
+                    ISSN = table.Column<string>(type: "text", nullable: false),
+                    DateOfPublication = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Periodicals", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,23 +221,62 @@ namespace LightLib.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LibraryAssets",
+                name: "Tags",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Year = table.Column<int>(type: "integer", nullable: false),
-                    StatusId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    AudioBookId = table.Column<int>(type: "integer", nullable: true),
+                    BookId = table.Column<int>(type: "integer", nullable: true),
+                    CDROMId = table.Column<int>(type: "integer", nullable: true),
+                    DVDId = table.Column<int>(type: "integer", nullable: true),
+                    PeriodicalId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_AudioBooks_AudioBookId",
+                        column: x => x.AudioBookId,
+                        principalTable: "AudioBooks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_Cdroms_CDROMId",
+                        column: x => x.CDROMId,
+                        principalTable: "Cdroms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_Dvds_DVDId",
+                        column: x => x.DVDId,
+                        principalTable: "Dvds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_Periodicals_PeriodicalId",
+                        column: x => x.PeriodicalId,
+                        principalTable: "Periodicals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LibraryAssets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AvailabilityStatusId = table.Column<int>(type: "integer", nullable: true),
                     Cost = table.Column<decimal>(type: "numeric", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: true),
-                    AssetType = table.Column<string>(type: "text", nullable: true),
-                    LocationId = table.Column<int>(type: "integer", nullable: true),
-                    Discriminator = table.Column<string>(type: "text", nullable: false),
-                    ISBN = table.Column<string>(type: "text", nullable: true),
-                    Author = table.Column<string>(type: "text", nullable: true),
-                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
-                    Director = table.Column<string>(type: "text", nullable: true)
+                    LocationId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,8 +288,8 @@ namespace LightLib.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_LibraryAssets_Statuses_StatusId",
-                        column: x => x.StatusId,
+                        name: "FK_LibraryAssets_Statuses_AvailabilityStatusId",
+                        column: x => x.AvailabilityStatusId,
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -150,7 +301,7 @@ namespace LightLib.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    LibraryAssetId = table.Column<int>(type: "integer", nullable: true),
+                    LibraryAssetId = table.Column<Guid>(type: "uuid", nullable: true),
                     LibraryCardId = table.Column<int>(type: "integer", nullable: true),
                     CheckedOut = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CheckedIn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
@@ -178,7 +329,7 @@ namespace LightLib.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    LibraryAssetId = table.Column<int>(type: "integer", nullable: true),
+                    LibraryAssetId = table.Column<Guid>(type: "uuid", nullable: true),
                     LibraryCardId = table.Column<int>(type: "integer", nullable: true),
                     Since = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Until = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
@@ -206,7 +357,7 @@ namespace LightLib.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    LibraryAssetId = table.Column<int>(type: "integer", nullable: true),
+                    LibraryAssetId = table.Column<Guid>(type: "uuid", nullable: true),
                     LibraryCardId = table.Column<int>(type: "integer", nullable: true),
                     HoldPlaced = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
@@ -225,6 +376,17 @@ namespace LightLib.Data.Migrations
                         principalTable: "LibraryCards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Statuses",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "The item is lost.", "LOST" },
+                    { 2, "The item is in good condition.", "GOOD_CONDITION" },
+                    { 3, "The item is in unknown whereabouts and condition.", "UNKNOWN_CONDITION" },
+                    { 4, "The item has been destroyed.", "DESTROYED" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -263,14 +425,14 @@ namespace LightLib.Data.Migrations
                 column: "LibraryCardId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LibraryAssets_AvailabilityStatusId",
+                table: "LibraryAssets",
+                column: "AvailabilityStatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LibraryAssets_LocationId",
                 table: "LibraryAssets",
                 column: "LocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LibraryAssets_StatusId",
-                table: "LibraryAssets",
-                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patrons_HomeLibraryBranchId",
@@ -281,6 +443,31 @@ namespace LightLib.Data.Migrations
                 name: "IX_Patrons_LibraryCardId",
                 table: "Patrons",
                 column: "LibraryCardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_AudioBookId",
+                table: "Tags",
+                column: "AudioBookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_BookId",
+                table: "Tags",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_CDROMId",
+                table: "Tags",
+                column: "CDROMId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_DVDId",
+                table: "Tags",
+                column: "DVDId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_PeriodicalId",
+                table: "Tags",
+                column: "PeriodicalId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -301,10 +488,28 @@ namespace LightLib.Data.Migrations
                 name: "Patrons");
 
             migrationBuilder.DropTable(
+                name: "Tags");
+
+            migrationBuilder.DropTable(
                 name: "LibraryAssets");
 
             migrationBuilder.DropTable(
                 name: "LibraryCards");
+
+            migrationBuilder.DropTable(
+                name: "AudioBooks");
+
+            migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Cdroms");
+
+            migrationBuilder.DropTable(
+                name: "Dvds");
+
+            migrationBuilder.DropTable(
+                name: "Periodicals");
 
             migrationBuilder.DropTable(
                 name: "LibraryBranches");
