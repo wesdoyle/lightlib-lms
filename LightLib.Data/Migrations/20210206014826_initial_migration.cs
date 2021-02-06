@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LightLib.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class initial_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,14 +12,14 @@ namespace LightLib.Data.Migrations
                 name: "LibraryBranches",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Address = table.Column<string>(nullable: false),
-                    Telephone = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    OpenDate = table.Column<DateTime>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    Telephone = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    OpenDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,10 +30,10 @@ namespace LightLib.Data.Migrations
                 name: "LibraryCards",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Fees = table.Column<decimal>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false)
+                    Fees = table.Column<decimal>(type: "numeric", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,10 +44,10 @@ namespace LightLib.Data.Migrations
                 name: "Statuses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,12 +58,12 @@ namespace LightLib.Data.Migrations
                 name: "BranchHours",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BranchId = table.Column<int>(nullable: true),
-                    DayOfWeek = table.Column<int>(nullable: false),
-                    OpenTime = table.Column<int>(nullable: false),
-                    CloseTime = table.Column<int>(nullable: false)
+                    BranchId = table.Column<int>(type: "integer", nullable: true),
+                    DayOfWeek = table.Column<int>(type: "integer", nullable: false),
+                    OpenTime = table.Column<int>(type: "integer", nullable: false),
+                    CloseTime = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,16 +80,16 @@ namespace LightLib.Data.Migrations
                 name: "Patrons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(maxLength: 30, nullable: false),
-                    LastName = table.Column<string>(maxLength: 30, nullable: false),
-                    Address = table.Column<string>(nullable: false),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
-                    Telephone = table.Column<string>(nullable: true),
-                    Gender = table.Column<string>(nullable: true),
-                    LibraryCardId = table.Column<int>(nullable: false),
-                    HomeLibraryBranchId = table.Column<int>(nullable: true)
+                    FirstName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Telephone = table.Column<string>(type: "text", nullable: true),
+                    Gender = table.Column<string>(type: "text", nullable: true),
+                    LibraryCardId = table.Column<int>(type: "integer", nullable: true),
+                    HomeLibraryBranchId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,28 +105,28 @@ namespace LightLib.Data.Migrations
                         column: x => x.LibraryCardId,
                         principalTable: "LibraryCards",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "LibraryAssets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(nullable: false),
-                    Year = table.Column<int>(nullable: false),
-                    StatusId = table.Column<int>(nullable: false),
-                    Cost = table.Column<decimal>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    NumberOfCopies = table.Column<int>(nullable: false),
-                    AssetType = table.Column<string>(nullable: true),
-                    LocationId = table.Column<int>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    ISBN = table.Column<string>(nullable: true),
-                    Author = table.Column<string>(nullable: true),
-                    DeweyIndex = table.Column<string>(nullable: true),
-                    Director = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Year = table.Column<int>(type: "integer", nullable: false),
+                    StatusId = table.Column<int>(type: "integer", nullable: true),
+                    Cost = table.Column<decimal>(type: "numeric", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    NumberOfCopies = table.Column<int>(type: "integer", nullable: false),
+                    AssetType = table.Column<string>(type: "text", nullable: true),
+                    LocationId = table.Column<int>(type: "integer", nullable: true),
+                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    ISBN = table.Column<string>(type: "text", nullable: true),
+                    Author = table.Column<string>(type: "text", nullable: true),
+                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
+                    Director = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -142,19 +142,19 @@ namespace LightLib.Data.Migrations
                         column: x => x.StatusId,
                         principalTable: "Statuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CheckoutHistories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    LibraryAssetId = table.Column<int>(nullable: false),
-                    LibraryCardId = table.Column<int>(nullable: false),
-                    CheckedOut = table.Column<DateTime>(nullable: false),
-                    CheckedIn = table.Column<DateTime>(nullable: true)
+                    LibraryAssetId = table.Column<int>(type: "integer", nullable: true),
+                    LibraryCardId = table.Column<int>(type: "integer", nullable: true),
+                    CheckedOut = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CheckedIn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -164,25 +164,25 @@ namespace LightLib.Data.Migrations
                         column: x => x.LibraryAssetId,
                         principalTable: "LibraryAssets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CheckoutHistories_LibraryCards_LibraryCardId",
                         column: x => x.LibraryCardId,
                         principalTable: "LibraryCards",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Checkouts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    LibraryAssetId = table.Column<int>(nullable: false),
-                    LibraryCardId = table.Column<int>(nullable: true),
-                    Since = table.Column<DateTime>(nullable: false),
-                    Until = table.Column<DateTime>(nullable: false)
+                    LibraryAssetId = table.Column<int>(type: "integer", nullable: true),
+                    LibraryCardId = table.Column<int>(type: "integer", nullable: true),
+                    Since = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Until = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,7 +192,7 @@ namespace LightLib.Data.Migrations
                         column: x => x.LibraryAssetId,
                         principalTable: "LibraryAssets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Checkouts_LibraryCards_LibraryCardId",
                         column: x => x.LibraryCardId,
@@ -205,11 +205,11 @@ namespace LightLib.Data.Migrations
                 name: "Holds",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    LibraryAssetId = table.Column<int>(nullable: true),
-                    LibraryCardId = table.Column<int>(nullable: true),
-                    HoldPlaced = table.Column<DateTime>(nullable: false)
+                    LibraryAssetId = table.Column<int>(type: "integer", nullable: true),
+                    LibraryCardId = table.Column<int>(type: "integer", nullable: true),
+                    HoldPlaced = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
