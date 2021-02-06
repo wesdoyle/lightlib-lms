@@ -1,19 +1,18 @@
 version: "3"
 
 services:
-  stacked-postgres:
-    image: postgres:11.3-alpine
-    container_name: stacked-postgres
+  lightlib-db:
+    image: postgres:13.1-alpine
+    container_name: lightlib-db
     environment:
-      - POSTGRES_DATABASE=library_dev
+      - POSTGRES_DATABASE=lightlib_dev
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
     ports:
       - 5432:5432
     volumes:
-      # persist data
-      - postgres-data:/var/lib/postgres/data
+      - app-data:/var/lib/postgres/data
     restart: on-failure
 
 volumes:
-  postgres-data:
+  app-data:
