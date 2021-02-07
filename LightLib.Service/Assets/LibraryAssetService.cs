@@ -16,18 +16,18 @@ namespace LightLib.Service.Assets {
     public class LibraryAssetService : ILibraryAssetService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly Paginator<LibraryAsset> _paginator;
+        private readonly Paginator<Asset> _paginator;
 
         public LibraryAssetService(
             LibraryDbContext context, 
             IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator = new Paginator<LibraryAsset>();
+            _paginator = new Paginator<Asset>();
         }
 
         public async Task<bool> Add(LibraryAssetDto assetDto) {
-            var newAsset = _mapper.Map<LibraryAsset>(assetDto);
+            var newAsset = _mapper.Map<Asset>(assetDto);
             await _context.AddAsync(newAsset);
             await _context.SaveChangesAsync();
             return true;
@@ -89,13 +89,13 @@ namespace LightLib.Service.Assets {
 
             // remove any existing checkouts on the item
             var checkout = _context.Checkouts
-                .First(a => a.LibraryAsset.Id == assetId);
+                .First(a => a.Asset.Id == assetId);
             if (checkout != null) _context.Remove(checkout);
 
             // close any existing checkout history
             var history = _context.CheckoutHistories
                 .First(h =>
-                    h.LibraryAsset.Id == assetId 
+                    h.Asset.Id == assetId 
                     && h.CheckedIn == null);
             
             if (history != null) {

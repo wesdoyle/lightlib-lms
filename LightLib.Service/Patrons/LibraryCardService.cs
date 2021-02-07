@@ -36,7 +36,7 @@ namespace LightLib.Service.Patrons {
             var libraryCards = _context.LibraryCards;
             
             var pageOfCards = await _paginator 
-                .BuildPageResult(libraryCards, page, perPage, ch => ch.Created)
+                .BuildPageResult(libraryCards, page, perPage, ch => ch.Issued)
                 .ToListAsync();
 
             var paginatedCards = _mapper.Map<List<LibraryCardDto>>(pageOfCards);

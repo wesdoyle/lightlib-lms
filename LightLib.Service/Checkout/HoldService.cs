@@ -41,8 +41,8 @@ namespace LightLib.Service.Checkout {
             Guid assetId, int page, int perPage) {
             
             var holds = _context.Holds
-                .Include(h => h.LibraryAsset)
-                .Where(a => a.LibraryAsset.Id == assetId);
+                .Include(h => h.Asset)
+                .Where(a => a.Asset.Id == assetId);
 
             var pageOfHolds = await _holdsPaginator
                 .BuildPageResult(holds, page, perPage, h => h.HoldPlaced)
@@ -64,7 +64,7 @@ namespace LightLib.Service.Checkout {
         /// <returns></returns>
         public async Task<string> GetCurrentHoldPatron(int holdId) {
             var hold = _context.Holds
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Include(a => a.LibraryCard)
                 .Where(v => v.Id == holdId);
 
@@ -87,7 +87,7 @@ namespace LightLib.Service.Checkout {
         /// <returns></returns>
         public async Task<string> GetCurrentHoldPlaced(int holdId) {
             var hold = await _context.Holds
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Include(a => a.LibraryCard)
                 .FirstAsync(v => v.Id == holdId);
 
@@ -120,7 +120,7 @@ namespace LightLib.Service.Checkout {
 
             var hold = new Hold {
                 HoldPlaced = now,
-                LibraryAsset = asset,
+                Asset = asset,
                 LibraryCard = card
             };
 
@@ -137,9 +137,9 @@ namespace LightLib.Service.Checkout {
         /// <returns></returns>
         public async Task<HoldDto> GetEarliestHold(Guid assetId) {
             var earliestHold = await _context.Holds
-                .Include(hold => hold.LibraryAsset)
+                .Include(hold => hold.Asset)
                 .Include(hold => hold.LibraryCard)
-                .Where(hold => hold.LibraryAsset.Id == assetId)
+                .Where(hold => hold.Asset.Id == assetId)
                 .OrderBy(a => a.HoldPlaced)
                 .FirstAsync();
 

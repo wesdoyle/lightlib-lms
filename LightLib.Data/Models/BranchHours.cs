@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LightLib.Data.Models {
+    [Table("branch_hours")]
     public class BranchHours {
         public int Id { get; set; }
         public LibraryBranch Branch { get; set; }

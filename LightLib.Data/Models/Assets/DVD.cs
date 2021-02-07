@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LightLib.Data.Models.Assets {
+    [Table("dvds")]
     public class DVD {
         [Key] public int Id { get; set; }
         [Required] public Guid AssetId { get; set; }
@@ -16,6 +17,6 @@ namespace LightLib.Data.Models.Assets {
         public string Description { get; set; }
         public string Language { get; set; }
         public string AlternativeTitle { get; set; }
-        public List<Tag>  Tags { get; set; }
+        public Asset Asset { get; set; }
     }
 }

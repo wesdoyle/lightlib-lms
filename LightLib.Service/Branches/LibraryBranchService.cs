@@ -22,13 +22,13 @@ namespace LightLib.Service.Branches {
         private readonly IMapper _mapper;
         private readonly Paginator<LibraryBranch> _branchPaginator;
         private readonly Paginator<Patron> _patronPaginator;
-        private readonly Paginator<LibraryAsset> _assetPaginator;
+        private readonly Paginator<Asset> _assetPaginator;
         public LibraryBranchService(LibraryDbContext context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
             _branchPaginator = new Paginator<LibraryBranch>();
             _patronPaginator = new Paginator<Patron>();
-            _assetPaginator = new Paginator<LibraryAsset>();
+            _assetPaginator = new Paginator<Asset>();
         }
 
         /// <summary>

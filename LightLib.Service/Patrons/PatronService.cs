@@ -106,7 +106,7 @@ namespace LightLib.Service.Patrons {
 
             var histories = _context.CheckoutHistories
                 .Include(a => a.LibraryCard)
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Where(a => a.LibraryCard.Id == cardId)
                 .OrderByDescending(a => a.CheckedOut);
 
@@ -143,7 +143,7 @@ namespace LightLib.Service.Patrons {
 
             var holds = _context.Holds
                 .Include(a => a.LibraryCard)
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Where(a => a.LibraryCard.Id == libraryCardId)
                 .OrderByDescending(a => a.HoldPlaced);
 
@@ -183,7 +183,7 @@ namespace LightLib.Service.Patrons {
 
             var checkouts = _context.Checkouts
                 .Include(a => a.LibraryCard)
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Where(a => a.LibraryCard.Id == libraryCardId)
                 .OrderByDescending(a => a.Since);
 

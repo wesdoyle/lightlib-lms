@@ -71,9 +71,9 @@ namespace LightLib.Service.Checkout {
             int perPage) {
             
             var checkoutHistories = _context.CheckoutHistories
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Include(a => a.LibraryCard)
-                .Where(a => a.LibraryAsset.Id == assetId);
+                .Where(a => a.Asset.Id == assetId);
 
             var pageOfHistory = await _checkoutHistoryPaginator
                 .BuildPageResult(checkoutHistories, page, perPage, ch => ch.CheckedOut)
@@ -106,7 +106,7 @@ namespace LightLib.Service.Checkout {
         /// <returns></returns>
         public async Task<CheckoutDto> GetLatestCheckout(Guid assetId) {
             var latest = await _context.Checkouts
-                .Where(c => c.LibraryAsset.Id == assetId)
+                .Where(c => c.Asset.Id == assetId)
                 .OrderByDescending(c => c.Since)
                 .FirstAsync();
             return _mapper.Map<CheckoutDto>(latest);
@@ -118,7 +118,7 @@ namespace LightLib.Service.Checkout {
         /// <param name="assetId"></param>
         /// <returns></returns>
         public async Task<bool> IsCheckedOut(Guid assetId) 
-            => await _context.Checkouts .AnyAsync(a => a.LibraryAsset.Id == assetId);
+            => await _context.Checkouts .AnyAsync(a => a.Asset.Id == assetId);
 
         /// <summary>
         /// Get the patron who has the given Library Asset ID checked out
@@ -127,9 +127,9 @@ namespace LightLib.Service.Checkout {
         /// <returns></returns>
         public async Task<string> GetCurrentPatron(Guid assetId) {
             var checkout = await _context.Checkouts
-                .Include(a => a.LibraryAsset)
+                .Include(a => a.Asset)
                 .Include(a => a.LibraryCard)
-                .FirstAsync(a => a.LibraryAsset.Id == assetId);
+                .FirstAsync(a => a.Asset.Id == assetId);
 
             if (checkout == null) {
                 // TODO
@@ -191,7 +191,7 @@ namespace LightLib.Service.Checkout {
                 .FirstAsync(a => a.Id == libraryCardId);
 
             var checkout = new Data.Models.Checkout {
-                LibraryAsset = libraryAsset,
+                Asset = libraryAsset,
                 LibraryCard = libraryCard,
                 Since = now,
                 Until = GetDefaultDateDue(now)
@@ -201,7 +201,7 @@ namespace LightLib.Service.Checkout {
 
             var checkoutHistory = new CheckoutHistory {
                 CheckedOut = now,
-                LibraryAsset = libraryAsset,
+                Asset = libraryAsset,
                 LibraryCard = libraryCard
             };
 
@@ -226,9 +226,9 @@ namespace LightLib.Service.Checkout {
 
             // remove any existing checkouts on the item
             var checkout = await _context.Checkouts
-                .Include(c => c.LibraryAsset)
+                .Include(c => c.Asset)
                 .Include(c => c.LibraryCard)
-                .FirstAsync(a => a.LibraryAsset.Id == assetId);
+                .FirstAsync(a => a.Asset.Id == assetId);
             
             if (checkout != null) {
                 _context.Remove(checkout);
@@ -236,10 +236,10 @@ namespace LightLib.Service.Checkout {
 
             // close any existing checkout history
             var history = await _context.CheckoutHistories
-                .Include(h => h.LibraryAsset)
+                .Include(h => h.Asset)
                 .Include(h => h.LibraryCard)
                 .FirstAsync(h =>
-                    h.LibraryAsset.Id == assetId 
+                    h.Asset.Id == assetId 
                     && h.CheckedIn == null);
             
             if (history != null) {
