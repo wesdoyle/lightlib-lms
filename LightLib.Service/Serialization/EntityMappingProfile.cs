@@ -5,8 +5,8 @@ using LightLib.Models.DTOs;
 using LightLib.Models.DTOs.Assets;
 
 namespace LightLib.Service.Serialization {
-    public class ResourceMappingProfiles : Profile {
-        public ResourceMappingProfiles() {
+    public class EntityMappingProfile : Profile {
+        public EntityMappingProfile() {
             CreateMap<Asset, LibraryAssetDto>().ReverseMap();
             CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<DVD, DvdDto>().ReverseMap();

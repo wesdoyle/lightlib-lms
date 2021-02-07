@@ -1,10 +1,10 @@
 ﻿using LightLib.Data;
-using LightLib.Data.Mapping;
 using LightLib.Service.Assets;
 using LightLib.Service.Branches;
 using LightLib.Service.Checkout;
 using LightLib.Service.Interfaces;
 using LightLib.Service.Patrons;
+using LightLib.Service.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +28,7 @@ namespace LightLib.Web {
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("LibraryConnection")));
 
-            services.AddAutoMapper(
-                c => c.AddProfile<EntityMappingProfile>(), typeof(Startup));
+            services.AddAutoMapper(c => c.AddProfile<EntityMappingProfile>(), typeof(Startup));
             
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IHoldService, HoldService>();
