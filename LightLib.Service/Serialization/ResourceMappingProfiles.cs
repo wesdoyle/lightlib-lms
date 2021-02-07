@@ -8,6 +8,11 @@ namespace LightLib.Service.Serialization {
     public class ResourceMappingProfiles : Profile {
         public ResourceMappingProfiles() {
             CreateMap<Asset, LibraryAssetDto>().ReverseMap();
+            CreateMap<Book, BookDto>().ReverseMap();
+            CreateMap<DVD, DvdDto>().ReverseMap();
+            CreateMap<AudioCd, AudioCdDto>().ReverseMap();
+            CreateMap<AudioBook, AudioBookDto>().ReverseMap();
+            CreateMap<Periodical, PeriodicalDto>().ReverseMap();
             CreateMap<AvailabilityStatus, StatusDto>().ReverseMap();
             CreateMap<LibraryBranch, LibraryBranchDto>().ReverseMap();
             CreateMap<Patron, PatronDto>().ReverseMap();
