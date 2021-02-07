@@ -816,3 +816,39 @@
 2021-02-06 21:57:37.2862 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
 2021-02-06 21:57:39.0070 Info AppDomain Shutting down. Logger closing...
 2021-02-06 21:57:39.0169 Info Logger has been shut down.
+2021-02-06 22:16:29.3443 Info Message Template Auto Format enabled
+2021-02-06 22:16:29.3669 Info Loading assembly: NLog.Web.AspNetCore
+2021-02-06 22:16:29.4057 Info Adding target FileTarget(Name=allfile)
+2021-02-06 22:16:29.4070 Info Adding target FileTarget(Name=ownFile-web)
+2021-02-06 22:16:29.5403 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/library-management-system/LightLib.Web/bin/Debug/net5.0/NLog.config
+2021-02-06 22:16:29.5569 Info Configuration initialized.
+2021-02-06 22:16:29.5578 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
+2021-02-06 22:16:30.8211 Info AppDomain Shutting down. Logger closing...
+2021-02-06 22:16:30.8324 Info Logger has been shut down.
+2021-02-06 22:16:38.6056 Info Message Template Auto Format enabled
+2021-02-06 22:16:38.6273 Info Loading assembly: NLog.Web.AspNetCore
+2021-02-06 22:16:38.6677 Info Adding target FileTarget(Name=allfile)
+2021-02-06 22:16:38.6689 Info Adding target FileTarget(Name=ownFile-web)
+2021-02-06 22:16:38.8023 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/library-management-system/LightLib.Web/bin/Debug/net5.0/NLog.config
+2021-02-06 22:16:38.8171 Info Configuration initialized.
+2021-02-06 22:16:38.8171 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
+2021-02-06 22:16:39.9162 Info AppDomain Shutting down. Logger closing...
+2021-02-06 22:16:39.9262 Info Logger has been shut down.
+2021-02-06 22:16:56.4963 Info Message Template Auto Format enabled
+2021-02-06 22:16:56.5188 Info Loading assembly: NLog.Web.AspNetCore
+2021-02-06 22:16:56.5568 Info Adding target FileTarget(Name=allfile)
+2021-02-06 22:16:56.5581 Info Adding target FileTarget(Name=ownFile-web)
+2021-02-06 22:16:56.6934 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/library-management-system/LightLib.Web/bin/Debug/net5.0/NLog.config
+2021-02-06 22:16:56.7076 Info Configuration initialized.
+2021-02-06 22:16:56.7084 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
+2021-02-06 22:16:57.7662 Info AppDomain Shutting down. Logger closing...
+2021-02-06 22:16:57.7765 Info Logger has been shut down.
+2021-02-06 22:17:25.0891 Info Message Template Auto Format enabled
+2021-02-06 22:17:25.1122 Info Loading assembly: NLog.Web.AspNetCore
+2021-02-06 22:17:25.1514 Info Adding target FileTarget(Name=allfile)
+2021-02-06 22:17:25.1527 Info Adding target FileTarget(Name=ownFile-web)
+2021-02-06 22:17:25.2872 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=/Users/wes/projects/library-management-system/LightLib.Web/bin/Debug/net5.0/NLog.config
+2021-02-06 22:17:25.3020 Info Configuration initialized.
+2021-02-06 22:17:25.3020 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.7.12472. Product version: 4.7.7+3755739d37c1ec92bac4de2cefad68a0f5ea7ec1. GlobalAssemblyCache: False
+2021-02-06 22:17:27.4554 Info AppDomain Shutting down. Logger closing...
+2021-02-06 22:17:27.4657 Info Logger has been shut down.

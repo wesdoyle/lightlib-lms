@@ -181,9 +181,8 @@ namespace LightLib.Data.Migrations
                     AssetId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Author = table.Column<string>(type: "text", nullable: false),
-                    ISBN = table.Column<string>(type: "text", nullable: false),
+                    ASIN = table.Column<string>(type: "text", nullable: false),
                     PublicationYear = table.Column<int>(type: "integer", nullable: false),
-                    NumberOfDiscs = table.Column<int>(type: "integer", nullable: false),
                     LengthMinutes = table.Column<int>(type: "integer", nullable: false),
                     Edition = table.Column<string>(type: "text", nullable: true),
                     Publisher = table.Column<string>(type: "text", nullable: true),
@@ -203,6 +202,33 @@ namespace LightLib.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "audio_cds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Artist = table.Column<string>(type: "text", nullable: false),
+                    PublicationYear = table.Column<int>(type: "integer", nullable: false),
+                    Label = table.Column<string>(type: "text", nullable: true),
+                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: true),
+                    Genre = table.Column<string>(type: "text", nullable: true),
+                    Summary = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_audio_cds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_audio_cds_assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "assets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "books",
                 columns: table => new
                 {
@@ -213,7 +239,6 @@ namespace LightLib.Data.Migrations
                     Author = table.Column<string>(type: "text", nullable: false),
                     ISBN = table.Column<string>(type: "text", nullable: false),
                     PublicationYear = table.Column<int>(type: "integer", nullable: false),
-                    LengthMinutes = table.Column<int>(type: "integer", nullable: false),
                     Edition = table.Column<string>(type: "text", nullable: true),
                     Publisher = table.Column<string>(type: "text", nullable: true),
                     DeweyIndex = table.Column<string>(type: "text", nullable: true),
@@ -225,35 +250,6 @@ namespace LightLib.Data.Migrations
                     table.PrimaryKey("PK_books", x => x.Id);
                     table.ForeignKey(
                         name: "FK_books_assets_AssetId",
-                        column: x => x.AssetId,
-                        principalTable: "assets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "cd_roms",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    ISBN = table.Column<string>(type: "text", nullable: false),
-                    PublicationYear = table.Column<int>(type: "integer", nullable: false),
-                    Edition = table.Column<string>(type: "text", nullable: true),
-                    Label = table.Column<string>(type: "text", nullable: true),
-                    DeweyIndex = table.Column<string>(type: "text", nullable: true),
-                    Language = table.Column<string>(type: "text", nullable: true),
-                    Genre = table.Column<string>(type: "text", nullable: true),
-                    AlternativeTitle = table.Column<string>(type: "text", nullable: true),
-                    Summary = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_cd_roms", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_cd_roms_assets_AssetId",
                         column: x => x.AssetId,
                         principalTable: "assets",
                         principalColumn: "Id",
@@ -328,7 +324,6 @@ namespace LightLib.Data.Migrations
                     Director = table.Column<string>(type: "text", nullable: false),
                     LengthMinutes = table.Column<int>(type: "integer", nullable: false),
                     Edition = table.Column<string>(type: "text", nullable: true),
-                    ISBN = table.Column<string>(type: "text", nullable: true),
                     UPC = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Language = table.Column<string>(type: "text", nullable: true),
@@ -429,6 +424,11 @@ namespace LightLib.Data.Migrations
                 column: "AssetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_audio_cds_AssetId",
+                table: "audio_cds",
+                column: "AssetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_books_AssetId",
                 table: "books",
                 column: "AssetId");
@@ -437,11 +437,6 @@ namespace LightLib.Data.Migrations
                 name: "IX_branch_hours_BranchId",
                 table: "branch_hours",
                 column: "BranchId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_cd_roms_AssetId",
-                table: "cd_roms",
-                column: "AssetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_checkout_histories_AssetId",
@@ -503,13 +498,13 @@ namespace LightLib.Data.Migrations
                 name: "audio_books");
 
             migrationBuilder.DropTable(
+                name: "audio_cds");
+
+            migrationBuilder.DropTable(
                 name: "books");
 
             migrationBuilder.DropTable(
                 name: "branch_hours");
-
-            migrationBuilder.DropTable(
-                name: "cd_roms");
 
             migrationBuilder.DropTable(
                 name: "checkout_histories");

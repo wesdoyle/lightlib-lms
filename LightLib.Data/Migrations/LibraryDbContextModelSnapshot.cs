@@ -96,6 +96,49 @@ namespace LightLib.Data.Migrations
                     b.ToTable("audio_books");
                 });
 
+            modelBuilder.Entity("LightLib.Data.Models.Assets.AudioCd", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Artist")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("AssetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DeweyIndex")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Genre")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PublicationYear")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("audio_cds");
+                });
+
             modelBuilder.Entity("LightLib.Data.Models.Assets.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -143,55 +186,6 @@ namespace LightLib.Data.Migrations
                     b.ToTable("books");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.CDROM", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<string>("AlternativeTitle")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("AssetId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DeweyIndex")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Edition")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Genre")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ISBN")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Label")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("text");
-
-                    b.Property<int>("PublicationYear")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Summary")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetId");
-
-                    b.ToTable("cd_roms");
-                });
-
             modelBuilder.Entity("LightLib.Data.Models.Assets.DVD", b =>
                 {
                     b.Property<int>("Id")
@@ -213,9 +207,6 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Edition")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ISBN")
                         .HasColumnType("text");
 
                     b.Property<string>("Language")
@@ -583,7 +574,7 @@ namespace LightLib.Data.Migrations
                     b.Navigation("Asset");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.Book", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.AudioCd", b =>
                 {
                     b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
                         .WithMany()
@@ -594,7 +585,7 @@ namespace LightLib.Data.Migrations
                     b.Navigation("Asset");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.CDROM", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Book", b =>
                 {
                     b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
                         .WithMany()
