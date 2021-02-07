@@ -5,7 +5,7 @@ using LightLib.Models.DTOs;
 
 namespace LightLib.Service.Interfaces {
     public interface ILibraryBranchService {
-        Task<PaginationResult<LibraryBranchDto>> GetAll(int page, int perPage);
+        Task<PaginationResult<LibraryBranchDto>> GetPaginated(int page, int perPage);
         Task<PaginationResult<PatronDto>> GetPatrons(int branchId, int page, int perPage);
         Task<PaginationResult<LibraryAssetDto>> GetAssets(int branchId, int page, int perPage);
         Task<List<string>> GetBranchHours(int branchId);

@@ -12,7 +12,7 @@ namespace LightLib.Service.Interfaces {
         Task<CheckoutDto> GetLatestCheckout(Guid assetId);
         Task<bool> IsCheckedOut(Guid assetId);
         Task<string> GetCurrentPatron(Guid assetId);
-        Task<PaginationResult<CheckoutDto>> GetAll(int page, int perPage);
+        Task<PaginationResult<CheckoutDto>> GetPaginated(int page, int perPage);
         Task<PaginationResult<CheckoutHistoryDto>> GetCheckoutHistory(Guid assetId, int page, int perPage);
     }
 }

@@ -8,21 +8,17 @@ using LightLib.Data.Models;
 using LightLib.Models;
 using LightLib.Models.DTOs;
 using LightLib.Models.Exceptions;
-using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service.Checkout {
-    /// <summary>
-    /// Handles Library Asset Checkout / Checkin / Lost / Found business logic
-    /// </summary>
+    
     public class CheckoutService : ICheckoutService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly Paginator<Hold> _holdsPaginator;
-        private readonly Paginator<Data.Models.Checkout> _checkoutPaginator;
-        private readonly Paginator<CheckoutHistory> _checkoutHistoryPaginator;
         private readonly IHoldService _holdService;
+        
+        private const int DefaultDateDueDays = 30;
 
         public CheckoutService(
             LibraryDbContext context,
@@ -31,40 +27,19 @@ namespace LightLib.Service.Checkout {
             _context = context;
             _holdService = holdService;
             _mapper = mapper;
-            _holdsPaginator = new Paginator<Hold>();
-            _checkoutPaginator = new Paginator<Data.Models.Checkout>();
-            _checkoutHistoryPaginator = new Paginator<CheckoutHistory>();
         }
 
-        /// <summary>
-        /// Returns a paginated result of Checkouts
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public async Task<PaginationResult<CheckoutDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<CheckoutDto>> GetPaginated(int page, int perPage) {
             var checkouts = _context.Checkouts;
-
-            var pageOfCheckouts = await _checkoutPaginator 
-                .BuildPageResult(checkouts, page, perPage, b => b.Since)
-                .ToListAsync();
-            
-            var paginatedCheckouts = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts);
-            
+            var pageOfCheckouts = await checkouts.ToPaginatedResult(page, perPage);
+            var pageOfAssetDtos = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts.Results);
             return new PaginationResult<CheckoutDto> {
-                Results = paginatedCheckouts,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfCheckouts.PageNumber,
+                    PerPage = pageOfCheckouts.PerPage,
+                    Results = pageOfAssetDtos 
             };
         }
 
-        /// <summary>
-        /// Returns an paginated Checkout History ordered by latest checked-out date
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
         public async Task<PaginationResult<CheckoutHistoryDto>> GetCheckoutHistory(
             Guid assetId, 
             int page, 
@@ -75,35 +50,20 @@ namespace LightLib.Service.Checkout {
                 .Include(a => a.LibraryCard)
                 .Where(a => a.Asset.Id == assetId);
 
-            var pageOfHistory = await _checkoutHistoryPaginator
-                .BuildPageResult(checkoutHistories, page, perPage, ch => ch.CheckedOut)
-                .ToListAsync();
-
-            var paginatedHistories = _mapper.Map<List<CheckoutHistoryDto>>(pageOfHistory);
-            
+            var pageOfHistory = await checkoutHistories.ToPaginatedResult(page, perPage);
+            var pageOfHistoryDto = _mapper.Map<List<CheckoutHistoryDto>>(pageOfHistory.Results);
             return new PaginationResult<CheckoutHistoryDto> {
-                Results = paginatedHistories,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfHistory.PageNumber,
+                    PerPage = pageOfHistory.PerPage,
+                    Results = pageOfHistoryDto 
             };
         }
 
-        /// <summary>
-        /// Get the Checkout corresponding to the given ID
-        /// </summary>
-        /// <param name="checkoutId"></param>
-        /// <returns></returns>
         public async Task<CheckoutDto> Get(int checkoutId) {
-            var checkout = await _context.Checkouts
-                .FirstAsync(p => p.Id == checkoutId);
+            var checkout = await _context.Checkouts.FirstAsync(p => p.Id == checkoutId);
             return _mapper.Map<CheckoutDto>(checkout);
         }
 
-        /// <summary>
-        /// Gets the latest Checkout for a given Library Asset ID
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
         public async Task<CheckoutDto> GetLatestCheckout(Guid assetId) {
             var latest = await _context.Checkouts
                 .Where(c => c.Asset.Id == assetId)
@@ -112,19 +72,9 @@ namespace LightLib.Service.Checkout {
             return _mapper.Map<CheckoutDto>(latest);
         }
 
-        /// <summary>
-        /// Returns true if a given Library Asset ID is checked out
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
         public async Task<bool> IsCheckedOut(Guid assetId) 
             => await _context.Checkouts .AnyAsync(a => a.Asset.Id == assetId);
 
-        /// <summary>
-        /// Get the patron who has the given Library Asset ID checked out
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
         public async Task<string> GetCurrentPatron(Guid assetId) {
             var checkout = await _context.Checkouts
                 .Include(a => a.Asset)
@@ -144,11 +94,6 @@ namespace LightLib.Service.Checkout {
             return $"{patron.FirstName} {patron.LastName}";
         }
         
-        /// <summary>
-        /// Add a checkout given a Checkout DTO representing a new instance
-        /// </summary>
-        /// <param name="newCheckoutDto"></param>
-        /// <returns></returns>
         public async Task<bool> Add(CheckoutDto newCheckoutDto) {
             var checkoutEntity = _mapper.Map<Data.Models.Checkout>(newCheckoutDto);
             try {
@@ -160,12 +105,6 @@ namespace LightLib.Service.Checkout {
             }
         }
 
-        /// <summary>
-        /// Checks the provided Library Asset out to the provided Library Card
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <param name="libraryCardId"></param>
-        /// <returns></returns>
         public async Task<bool> CheckOutItem(Guid assetId, int libraryCardId) {
 
             var now = DateTime.UtcNow;
@@ -210,11 +149,6 @@ namespace LightLib.Service.Checkout {
             return true;
         }
 
-        /// <summary>
-        /// Checks in the given Library Asset ID
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
         public async Task<bool> CheckInItem(Guid assetId) {
             
             var now = DateTime.UtcNow;
@@ -264,11 +198,6 @@ namespace LightLib.Service.Checkout {
             return true;
         }
 
-        /// <summary>
-        /// Checks the given Library Asset ID out to the next Hold
-        /// </summary>
-        /// <param name="assetId"></param>
-        /// <returns></returns>
         private async Task<bool> CheckoutToEarliestHold(Guid assetId) {
 
             var earliestHold = await _holdService.GetEarliestHold(assetId);
@@ -288,12 +217,6 @@ namespace LightLib.Service.Checkout {
             return checkOutResult;
         }
 
-        /// <summary>
-        /// Gets default date an asset is due
-        /// </summary>
-        /// <param name="now"></param>
-        /// <returns></returns>
-        /// TODO Magic Number
-        private static DateTime GetDefaultDateDue(DateTime now) => now.AddDays(30);
+        private static DateTime GetDefaultDateDue(DateTime now) => now.AddDays(DefaultDateDueDays);
     }
 }

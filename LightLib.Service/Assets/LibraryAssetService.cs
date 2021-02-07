@@ -7,7 +7,6 @@ using LightLib.Data;
 using LightLib.Data.Models.Assets;
 using LightLib.Models;
 using LightLib.Models.DTOs;
-using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,14 +15,12 @@ namespace LightLib.Service.Assets {
     public class LibraryAssetService : ILibraryAssetService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly Paginator<Asset> _paginator;
 
         public LibraryAssetService(
             LibraryDbContext context, 
             IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator = new Paginator<Asset>();
         }
 
         public async Task<bool> Add(LibraryAssetDto assetDto) {
@@ -41,22 +38,15 @@ namespace LightLib.Service.Assets {
             return _mapper.Map<LibraryAssetDto>(asset);
         }
 
-        public async Task<PaginationResult<LibraryAssetDto>> GetAll(int page, int perPage) {
-            
+        public async Task<PaginationResult<LibraryAssetDto>> GetPaginated(int page, int perPage) {
             var assets = _context.LibraryAssets
                 .Include(a => a.AvailabilityStatus)
                 .Include(a => a.Location);
-
-            var pageOfAssets = await _paginator
-                .BuildPageResult(assets, page, perPage, asset => asset.Id)
-                .ToListAsync();
-
-            var pageOfAssetDtos = _mapper
-                .Map<List<LibraryAssetDto>>(pageOfAssets);
-            
-                return new PaginationResult<LibraryAssetDto> {
-                    PageNumber = page,
-                    PerPage = perPage,
+            var pageOfAssets = await assets.ToPaginatedResult(page, perPage);
+            var pageOfAssetDtos = _mapper.Map<List<LibraryAssetDto>>(pageOfAssets.Results);
+            return new PaginationResult<LibraryAssetDto> {
+                    PageNumber = pageOfAssets.PageNumber,
+                    PerPage = pageOfAssets.PerPage,
                     Results = pageOfAssetDtos 
             };
         }
@@ -74,7 +64,8 @@ namespace LightLib.Service.Assets {
                 .FirstAsync(a => a.Id == assetId);
             _context.Update(item);
             // TODO
-            item.AvailabilityStatus = _context.Statuses.First(a => a.Name == AssetStatus.Lost);
+            item.AvailabilityStatus = _context.Statuses
+                .First(a => a.Name == AssetStatus.Lost);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -82,11 +73,11 @@ namespace LightLib.Service.Assets {
         public async Task<bool> MarkFound(Guid assetId) {
             var libraryAsset = await _context.LibraryAssets
                 .FirstAsync(a => a.Id == assetId);
-
             _context.Update(libraryAsset);
-            libraryAsset.AvailabilityStatus = _context.Statuses.First(a => a.Name == AssetStatus.GoodCondition);
+            libraryAsset.AvailabilityStatus = _context.Statuses
+                .First(a => a.Name == AssetStatus.GoodCondition);
             var now = DateTime.UtcNow;
-
+            
             // remove any existing checkouts on the item
             var checkout = _context.Checkouts
                 .First(a => a.Asset.Id == assetId);
@@ -102,7 +93,6 @@ namespace LightLib.Service.Assets {
                 _context.Update(history);
                 history.CheckedIn = now;
             }
-
             await _context.SaveChangesAsync();
             return true;
         }

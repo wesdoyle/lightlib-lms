@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,22 +6,14 @@ using LightLib.Data;
 using LightLib.Data.Models;
 using LightLib.Models;
 using LightLib.Models.DTOs;
-using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service.Patrons {
-    /// <summary>
-    /// Handles Library Patron business logic
-    /// </summary>
     public class PatronService : IPatronService {
         
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly Paginator<Patron> _patronPaginator;
-        private readonly Paginator<CheckoutHistory> _historyPaginator;
-        private readonly Paginator<Data.Models.Checkout> _checkoutPaginator;
-        private readonly Paginator<Hold> _holdPaginator;
 
         public PatronService(
             LibraryDbContext context,
@@ -30,17 +21,8 @@ namespace LightLib.Service.Patrons {
             ) {
             _context = context;
             _mapper = mapper;
-            _patronPaginator = new Paginator<Patron>();
-            _historyPaginator = new Paginator<CheckoutHistory>();
-            _holdPaginator = new Paginator<Hold>();
-            _checkoutPaginator = new Paginator<Data.Models.Checkout>();
         }
 
-        /// <summary>
-        /// Gets a Patron by ID
-        /// </summary>
-        /// <param name="patronId"></param>
-        /// <returns></returns>
         public async Task<PatronDto> Get(int patronId) {
             var patron = await _context.Patrons
                 .Include(a => a.LibraryCard)
@@ -50,49 +32,25 @@ namespace LightLib.Service.Patrons {
             return _mapper.Map<PatronDto>(patron);
         }
 
-        /// <summary>
-        /// Creates a new Patron
-        /// </summary>
-        /// <param name="newPatronDto"></param>
-        /// <returns></returns>
         public async Task<bool> Add(PatronDto newPatronDto) {
             var newPatron = _mapper.Map<Patron>(newPatronDto);
             await _context.AddAsync(newPatron);
             await _context.SaveChangesAsync();
             return true;
         }
-
-        /// <summary>
-        /// Gets a paginated collection of Patrons
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public async Task<PaginationResult<PatronDto>> GetAll(int page, int perPage) {
+        
+        public async Task<PaginationResult<PatronDto>> GetPaginated(int page, int perPage) {
             var patrons = _context.Patrons;
-
-            var pageOfPatrons = await _patronPaginator 
-                .BuildPageResult(patrons, page, perPage, b => b.Id)
-                .ToListAsync();
-            
-            var paginatedPatrons = _mapper.Map<List<PatronDto>>(pageOfPatrons);
-            
+            var pageOfPatrons = await patrons.ToPaginatedResult(page, perPage);
+            var pageOfPatronDtos = _mapper.Map<List<PatronDto>>(pageOfPatrons.Results);
             return new PaginationResult<PatronDto> {
-                Results = paginatedPatrons,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfPatrons.PageNumber,
+                    PerPage = pageOfPatrons.PerPage,
+                    Results = pageOfPatronDtos 
             };
         }
 
-        /// <summary>
-        /// Gets the paginated checkout history of a Patron by ID
-        /// </summary>
-        /// <param name="patronId"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public async Task<PaginationResult<CheckoutHistoryDto>> GetCheckoutHistory(int patronId, int page,
-            int perPage) {
+        public async Task<PaginationResult<CheckoutHistoryDto>> GetPaginatedCheckoutHistory(int patronId, int page, int perPage) {
             var patron = await _context.Patrons
                 .Include(a => a.LibraryCard)
                 .FirstAsync(a => a.Id == patronId);
@@ -109,28 +67,17 @@ namespace LightLib.Service.Patrons {
                 .Include(a => a.Asset)
                 .Where(a => a.LibraryCard.Id == cardId)
                 .OrderByDescending(a => a.CheckedOut);
-
-            var pageOfHistories = await _historyPaginator
-                .BuildPageResult(histories, page, perPage, b => b.CheckedOut)
-                .ToListAsync();
-
-            var paginatedHistory = _mapper.Map<List<CheckoutHistoryDto>>(pageOfHistories);
-
+            
+            var pageOfHistory = await histories.ToPaginatedResult(page, perPage);
+            var pageOfHistoryDto = _mapper.Map<List<CheckoutHistoryDto>>(pageOfHistory.Results);
             return new PaginationResult<CheckoutHistoryDto> {
-                Results = paginatedHistory,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfHistory.PageNumber,
+                    PerPage = pageOfHistory.PerPage,
+                    Results = pageOfHistoryDto 
             };
         }
 
-        /// <summary>
-        /// Gets the Holds currently held by a Patron
-        /// </summary>
-        /// <param name="patronId"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public async Task<PaginationResult<HoldDto>> GetHolds(int patronId, int page, int perPage) {
+        public async Task<PaginationResult<HoldDto>> GetPaginatedHolds(int patronId, int page, int perPage) {
             var patron = await _context.Patrons
                 .Include(a => a.LibraryCard)
                 .FirstAsync(a => a.Id == patronId);
@@ -147,28 +94,16 @@ namespace LightLib.Service.Patrons {
                 .Where(a => a.LibraryCard.Id == libraryCardId)
                 .OrderByDescending(a => a.HoldPlaced);
 
-            var pageOfHolds = await _holdPaginator 
-                .BuildPageResult(holds, page, perPage, b => b.Id)
-                .ToListAsync();
-
-            var paginatedHolds = _mapper.Map<List<HoldDto>>(pageOfHolds);
-
+            var pageOfHolds = await holds.ToPaginatedResult(page, perPage);
+            var pageOfHoldsDto = _mapper.Map<List<HoldDto>>(pageOfHolds.Results);
             return new PaginationResult<HoldDto> {
-                Results = paginatedHolds,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfHolds.PageNumber,
+                    PerPage = pageOfHolds.PerPage,
+                    Results = pageOfHoldsDto 
             };
         }
 
-        /// <summary>
-        /// Gets a paginated collection of the provided Patron's Checkouts 
-        /// </summary>
-        /// <param name="patronId"></param>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public async Task<PaginationResult<CheckoutDto>> GetCheckouts(int patronId, int page, int perPage) {
+        public async Task<PaginationResult<CheckoutDto>> GetPaginatedCheckouts(int patronId, int page, int perPage) {
             
             var patron = await _context.Patrons
                 .Include(a => a.LibraryCard)
@@ -187,16 +122,12 @@ namespace LightLib.Service.Patrons {
                 .Where(a => a.LibraryCard.Id == libraryCardId)
                 .OrderByDescending(a => a.Since);
 
-            var pageOfCheckouts = await _checkoutPaginator 
-                .BuildPageResult(checkouts, page, perPage, b => b.Id)
-                .ToListAsync();
-
-            var paginatedCheckouts = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts);
-
+            var pageOfCheckouts = await checkouts.ToPaginatedResult(page, perPage);
+            var pageOfCheckoutsDto = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts.Results);
             return new PaginationResult<CheckoutDto> {
-                Results = paginatedCheckouts,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfCheckouts.PageNumber,
+                    PerPage = pageOfCheckouts.PerPage,
+                    Results = pageOfCheckoutsDto 
             };
         }
     }

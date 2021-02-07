@@ -25,7 +25,7 @@ namespace LightLib.Web.Controllers {
         /// <param name="perPage"></param>
         /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
-            var paginationServiceResult = await _branchService.GetAll(page, perPage);
+            var paginationServiceResult = await _branchService.GetPaginated(page, perPage);
 
             if (paginationServiceResult.Results.Any()) {
                 

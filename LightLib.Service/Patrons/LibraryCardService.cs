@@ -5,64 +5,37 @@ using LightLib.Data;
 using LightLib.Data.Models;
 using LightLib.Models;
 using LightLib.Models.DTOs;
-using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LightLib.Service.Patrons {
-    /// <summary>
-    /// Handles Library Card business logic
-    /// </summary>
     public class LibraryCardService : ILibraryCardService {
         private readonly LibraryDbContext _context;
         private readonly IMapper _mapper;
-        private readonly Paginator<LibraryCard> _paginator;
 
         public LibraryCardService(
             LibraryDbContext context,
             IMapper mapper) {
             _context = context;
             _mapper = mapper;
-            _paginator = new Paginator<LibraryCard>();
         }
 
-        /// <summary>
-        /// Gets a paginated collection of Library Cards
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public async Task<PaginationResult<LibraryCardDto>> GetAll(int page, int perPage) {
+        public async Task<PaginationResult<LibraryCardDto>> GetPaginated(int page, int perPage) {
             var libraryCards = _context.LibraryCards;
-            
-            var pageOfCards = await _paginator 
-                .BuildPageResult(libraryCards, page, perPage, ch => ch.Issued)
-                .ToListAsync();
-
-            var paginatedCards = _mapper.Map<List<LibraryCardDto>>(pageOfCards);
-            
+            var pageOfLibraryCards = await libraryCards.ToPaginatedResult(page, perPage);
+            var pageOfLibraryCardsDto = _mapper.Map<List<LibraryCardDto>>(pageOfLibraryCards.Results);
             return new PaginationResult<LibraryCardDto> {
-                Results = paginatedCards,
-                PerPage = perPage,
-                PageNumber = page
+                    PageNumber = pageOfLibraryCards.PageNumber,
+                    PerPage = pageOfLibraryCards.PerPage,
+                    Results = pageOfLibraryCardsDto 
             };
         }
 
-        /// <summary>
-        /// Gets a Library Card by ID
-        /// </summary>
-        /// <param name="cardId"></param>
-        /// <returns></returns>
         public async Task<LibraryCardDto> Get(int cardId) {
             var libraryCard = await _context.LibraryCards.FirstAsync(p => p.Id == cardId);
             return _mapper.Map<LibraryCardDto>(libraryCard);
         }
-        
-        /// <summary>
-        /// Creates a new Library Card
-        /// </summary>
-        /// <param name="libraryCardDto"></param>
-        /// <returns></returns>
+
         public async Task<bool> Add(LibraryCardDto libraryCardDto) {
             var newLibraryCard = _mapper.Map<LibraryCard>(libraryCardDto);
             await _context.AddAsync(newLibraryCard);

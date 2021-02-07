@@ -9,9 +9,7 @@ using LightLib.Web.Models.Patron;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LightLib.Web.Controllers {
-    /// <summary>
-    /// Handles web-layer requests for Library Patrons
-    /// </summary>
+    
     public class PatronController : LibraryController {
         private readonly IPatronService _patronService;
 
@@ -19,14 +17,8 @@ namespace LightLib.Web.Controllers {
             _patronService = patronService;
         }
 
-        /// <summary>
-        /// Returns a paginated collection of all Library Patrons
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
-            var serviceResult = await _patronService.GetAll(page, perPage);
+            var serviceResult = await _patronService.GetPaginated(page, perPage);
 
             if (serviceResult != null && serviceResult.Results.Any()) {
                 var allAssets = serviceResult.Results.ToList();

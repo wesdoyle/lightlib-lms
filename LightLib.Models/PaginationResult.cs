@@ -5,5 +5,6 @@ namespace LightLib.Models {
         public List<T> Results { get; set; }
         public int PerPage { get; set; }
         public int PageNumber { get; set; }
+        public long TotalCount { get; set; }
     }
 }

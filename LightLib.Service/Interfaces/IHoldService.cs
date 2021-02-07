@@ -5,7 +5,7 @@ using LightLib.Models.DTOs;
 
 namespace LightLib.Service.Interfaces {
     public interface IHoldService {
-        Task<PaginationResult<HoldDto>> GetCurrentHolds(Guid assetId, int page, int perPage);
+        Task<PaginationResult<HoldDto>> GetCurrentHoldsPaginated(Guid assetId, int page, int perPage);
         Task<bool> PlaceHold(Guid assetId, int libraryCardId);
         Task<string> GetCurrentHoldPatron(int holdId);
         Task<string> GetCurrentHoldPlaced(int holdId);
