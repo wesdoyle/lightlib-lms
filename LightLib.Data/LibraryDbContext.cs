@@ -16,7 +16,7 @@ namespace LightLib.Data {
         public virtual DbSet<BranchHours> BranchHours { get; set; }
         public virtual DbSet<CheckoutHistory> CheckoutHistories { get; set; }
         public virtual DbSet<Checkout> Checkouts { get; set; }
-        public virtual DbSet<CDROM> Cdroms { get; set; }
+        public virtual DbSet<AudioCd> AudioCds { get; set; }
         public virtual DbSet<DVD> Dvds { get; set; }
         public virtual DbSet<Hold> Holds { get; set; }
         public virtual DbSet<Asset> LibraryAssets { get; set; }
@@ -37,7 +37,7 @@ namespace LightLib.Data {
 
          private static void LinkAssets(ModelBuilder modelBuilder) {
              modelBuilder.Entity<Book>().HasOne(book => book.Asset);
-             modelBuilder.Entity<CDROM>().HasOne(cd => cd.Asset);
+             modelBuilder.Entity<AudioCd>().HasOne(cd => cd.Asset);
              modelBuilder.Entity<DVD>().HasOne(dvd => dvd.Asset);
              modelBuilder.Entity<Periodical>().HasOne(p => p.Asset);
              modelBuilder.Entity<AudioBook>().HasOne(ab => ab.Asset);

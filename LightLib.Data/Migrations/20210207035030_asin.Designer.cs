@@ -3,15 +3,17 @@ using System;
 using LightLib.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LightLib.Data.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210207035030_asin")]
+    partial class asin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,6 +76,9 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("LengthMinutes")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NumberOfDiscs")
                         .HasColumnType("integer");
 
                     b.Property<int>("PublicationYear")

@@ -11,7 +11,6 @@ namespace LightLib.Data.Models.Assets {
         [Required] public string Author { get; set; }
         [Required] public string ISBN { get; set; }
         public int PublicationYear { get; set; } 
-        public int LengthMinutes { get; set; }
         public string Edition { get; set; }
         public string Publisher { get; set; }
         public string DeweyIndex { get; set; }

@@ -12,7 +12,6 @@ namespace LightLib.Data.Models.Assets {
         [Required] public string Director { get; set; }
         [Required] public int LengthMinutes { get; set; }
         public string Edition { get; set; }
-        public string ISBN { get; set; }
         public string UPC { get; set; }
         public string Description { get; set; }
         public string Language { get; set; }

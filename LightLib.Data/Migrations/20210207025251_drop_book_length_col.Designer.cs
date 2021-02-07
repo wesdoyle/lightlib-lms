@@ -3,15 +3,17 @@ using System;
 using LightLib.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LightLib.Data.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210207025251_drop_book_length_col")]
+    partial class drop_book_length_col
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,10 +55,6 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("ASIN")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("AssetId")
                         .HasColumnType("uuid");
 
@@ -70,10 +68,17 @@ namespace LightLib.Data.Migrations
                     b.Property<string>("Edition")
                         .HasColumnType("text");
 
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Language")
                         .HasColumnType("text");
 
                     b.Property<int>("LengthMinutes")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NumberOfDiscs")
                         .HasColumnType("integer");
 
                     b.Property<int>("PublicationYear")
