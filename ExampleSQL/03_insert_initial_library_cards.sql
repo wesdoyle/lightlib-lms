@@ -1,6 +1,6 @@
 -- Generate Initial Library Cards
 INSERT INTO library_cards
-	("Fees", "Created")
+	("CurrentFees", "Issued")
 VALUES
 	(0, NOW()), (0, NOW()), (0, NOW()), (0, NOW()), (0, NOW()),
 	(0, NOW()), (0, NOW()), (0, NOW()), (0, NOW()), (0, NOW()),
