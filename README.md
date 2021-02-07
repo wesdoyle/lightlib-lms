@@ -1,10 +1,16 @@
-# LightLib Library Management System
+# LightLib Library Management System (LMS)
 
-[![Build Status](https://travis-ci.org/wesdoyle/library-management-system.svg?branch=master)](https://travis-ci.org/wesdoyle/library-management-system) [![Codecov branch](https://img.shields.io/codecov/c/github/wesdoyle/library-management-system/master.svg?style=flat)](https://codecov.io/gh/wesdoyle/library-management-system)
+A lightweight library management system built in .NET 5.0 with Entity Framework Core.  Enables library administrators to manage Library Assets, Patrons, and Branches with basic functionality.
 
+This project is intended to serve as a long-term resource for small .NET web monoliths.
 
+## Stack
 
-A lightweight library management system built in ASP.NET Core 2.0
+- PostgreSQL 13.1 (running in Docker for development)
+- ASP.NET 5.0 MVC with Entity Framwork Core
+- Standard Razor views
+
+## Video Series
 
 I created a YouTube series when I started this application: [YouTube link](https://www.youtube.com/watch?v=WTVcLFTgDqs)
-The application has since been migrated to dotnet core 2.0.
+The application has since been migrated to .NET 5.0 with significant changes to architecture and implementation.  A new video series is in the works.
