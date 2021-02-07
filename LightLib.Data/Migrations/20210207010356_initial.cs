@@ -55,7 +55,7 @@ namespace LightLib.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "tags",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -64,7 +64,7 @@ namespace LightLib.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.PrimaryKey("PK_tags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,7 +149,7 @@ namespace LightLib.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssetTag",
+                name: "asset_tags",
                 columns: table => new
                 {
                     TagId = table.Column<int>(type: "integer", nullable: false),
@@ -157,17 +157,17 @@ namespace LightLib.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssetTag", x => new { x.AssetId, x.TagId });
+                    table.PrimaryKey("PK_asset_tags", x => new { x.AssetId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_AssetTag_assets_AssetId",
+                        name: "FK_asset_tags_assets_AssetId",
                         column: x => x.AssetId,
                         principalTable: "assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AssetTag_Tags_TagId",
+                        name: "FK_asset_tags_tags_TagId",
                         column: x => x.TagId,
-                        principalTable: "Tags",
+                        principalTable: "tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -409,6 +409,11 @@ namespace LightLib.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_asset_tags_TagId",
+                table: "asset_tags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_assets_AvailabilityStatusId",
                 table: "assets",
                 column: "AvailabilityStatusId");
@@ -417,11 +422,6 @@ namespace LightLib.Data.Migrations
                 name: "IX_assets_LocationId",
                 table: "assets",
                 column: "LocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AssetTag_TagId",
-                table: "AssetTag",
-                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_audio_books_AssetId",
@@ -497,7 +497,7 @@ namespace LightLib.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AssetTag");
+                name: "asset_tags");
 
             migrationBuilder.DropTable(
                 name: "audio_books");
@@ -530,7 +530,7 @@ namespace LightLib.Data.Migrations
                 name: "periodicals");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "tags");
 
             migrationBuilder.DropTable(
                 name: "library_cards");

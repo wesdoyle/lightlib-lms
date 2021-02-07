@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LightLib.Data.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20210207004529_initial")]
+    [Migration("20210207010356_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -299,7 +299,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("AssetTag");
+                    b.ToTable("asset_tags");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.Tags.Tag", b =>
@@ -314,7 +314,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("tags");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.AvailabilityStatus", b =>

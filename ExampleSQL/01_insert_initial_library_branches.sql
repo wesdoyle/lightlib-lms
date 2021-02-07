@@ -1,5 +1,5 @@
 -- Generate Initial Library Branches
-INSERT INTO "LibraryBranches"
+INSERT INTO library_branches
 	("Name", "Address", "Telephone", "Description", "OpenDate", "ImageUrl")
 VALUES
 	('Downtown', '172 Union St', '555-432-5567', 'Large history downtown Library', '1937-05-19', 'lib_downtown.png'),

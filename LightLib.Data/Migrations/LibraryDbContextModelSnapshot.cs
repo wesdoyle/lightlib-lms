@@ -297,7 +297,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("AssetTag");
+                    b.ToTable("asset_tags");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.Tags.Tag", b =>
@@ -312,7 +312,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("tags");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.AvailabilityStatus", b =>

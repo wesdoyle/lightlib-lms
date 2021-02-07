@@ -1,6 +1,6 @@
 -- Initial Patrons
-INSERT INTO "Patrons" ("FirstName", "LastName", "Address", "DateOfBirth", "Email", "Telephone", "LibraryCardId", "HomeLibraryBranchId")
-VALUES 
+INSERT INTO patrons ("FirstName", "LastName", "Address", "DateOfBirth", "Email", "Telephone", "LibraryCardId", "HomeLibraryBranchId")
+VALUES
  ('Jan', 'Carlsen', '123 Maple St.', '1980-09-04', 'jcarlsen@example.com', '555-123-4567', 1, 1),
  ('Elias', 'Carlsen', '123 Maple St.', '1981-01-12', 'ecarlsen@example.com', '555-123-4568', 2, 1),
  ('Pam', 'Smith', '224 Commerce Dr. Apt 120', '2001-01-28', 'psmith@example.com', '555-168-1232', 3, 1),
@@ -22,5 +22,5 @@ VALUES
  ('John', 'Kost', '900 Mammoth Cir', '1980-10-04', 'jcarlsen@example.com', '555-023-4560', 16, 4),
  ('Brandon', 'Fellows', '19 Gunning Way', '1985-12-12', 'ecarlsen@example.com', '555-002-4568', 17, 5),
  ('Ahmad', 'Barakat', '1132 Aberg Dr. Apt 120', '2002-11-28', 'ab_0011@example.com', '555-103-1232', 18, 5),
- ('Carol', 'Ayars', '162 N. Commerce St', '1986-09-04', 'cayers86@example.com', '555-030-1144', 19, 5),
+ ('Carol', 'Ayars', '162 N. Commerce St', '1986-09-04', 'cayers86@example.com', '555-030-1200', 19, 5),
  ('Damien', 'Brown', '1203 East Blvd. Apt 161', '1990-05-03', 'damien_brown@example.com', '555-293-2003', 20, 5);
