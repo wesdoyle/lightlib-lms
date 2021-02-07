@@ -1,0 +1,48 @@
+-- insert intial example assets
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+INSERT INTO assets
+	("Id", "AvailabilityStatusId", "Cost", "ImageUrl", "LocationId")
+VALUES 
+	(uuid_generate_v4(), 2, 12.00, 'wilderness_essays.png', 1),
+	(uuid_generate_v4(), 2, 21.00, 'art_of_living.png', 1),
+	(uuid_generate_v4(), 2, 16.00, 'origin_of_consciousness.png', 1),
+	(uuid_generate_v4(), 2, 22.00, 'thinking_fast_slow.png', 1),
+	(uuid_generate_v4(), 2, 16.00, 'memories_dreams_reflections.png', 1),
+	(uuid_generate_v4(), 2, 8.00, 'fathers_sons.png', 1),
+	(uuid_generate_v4(), 2, 32.00, 'classics_russian_lit.png', 2),
+	(uuid_generate_v4(), 2, 6.00, 'to_build_a_fire.png', 2),
+	(uuid_generate_v4(), 2, 16.00, 'zen_motorcycle.png', 2),
+	(uuid_generate_v4(), 2, 18.00, 'sandworm.png', 2),
+	(uuid_generate_v4(), 2, 32.00, 'maya_to_aztec.png', 2),
+	(uuid_generate_v4(), 2, 12.00, 'dharma_bums.png', 2),
+	(uuid_generate_v4(), 2, 22.00, 'dress_your_family.png', 3),
+	(uuid_generate_v4(), 2, 18.00, 'turings_cathedrall.png', 3),
+	(uuid_generate_v4(), 2, 18.00, 'thinking_in_systems.png', 3),
+	(uuid_generate_v4(), 2, 24.00, 'geb.png', 3),
+	(uuid_generate_v4(), 2, 28.00, 'lean_startup.png', 4),
+	(uuid_generate_v4(), 2, 16.40, 'seven_storey_mountain.png', 4),
+	(uuid_generate_v4(), 2, 25.00, 'rework.png', 4),
+	(uuid_generate_v4(), 2, 8.00, 'waves.png', 4),
+	(uuid_generate_v4(), 2, 11.00, 'collected_ficciones.png', 4),
+	(uuid_generate_v4(), 2, 9.00, 'the_new_yorker.png', 4),
+	(uuid_generate_v4(), 2, 9.00, 'the_atlantic.png', 4),
+	(uuid_generate_v4(), 2, 9.00, 'mother_jones.png', 4),
+	(uuid_generate_v4(), 2, 22.00, 'becoming.png', 4),
+	(uuid_generate_v4(), 2, 12.00, 'my_antonia.png', 4),
+	(uuid_generate_v4(), 2, 12.00, 'the_golden_apples.png', 4),
+	(uuid_generate_v4(), 2, 12.00, 'friend_of_my_youth.png', 5),
+	(uuid_generate_v4(), 2, 12.00, 'essays_and_poems_emerson.png', 5),
+	(uuid_generate_v4(), 2, 12.00, 'caged_bird.png', 5),
+	(uuid_generate_v4(), 2, 16.00, 'wilderness_essays.png', 1),
+	(uuid_generate_v4(), 2, 21.00, 'citizen_kane.png', 1),
+	(uuid_generate_v4(), 2, 28.00, 'the_commitments.png', 1),
+	(uuid_generate_v4(), 2, 22.00, 'rashomon.png', 5),
+	(uuid_generate_v4(), 2, 10.00, 'brothers_karamazov.png', 5),
+	(uuid_generate_v4(), 2, 10.00, 'crime_and_punishment.png', 2),
+	(uuid_generate_v4(), 2, 18.00, 'song_of_solomon.png', 1),
+	(uuid_generate_v4(), 2, 16.00, 'war_and_peace.png', 3),
+	(uuid_generate_v4(), 2, 8.00, 'mrs_dalloway.png', 1),
+	(uuid_generate_v4(), 2, 10.00, 'essential_mozart.png', 1),
+	(uuid_generate_v4(), 2, 15.00, 'their_eyes_were_watching_god.png', 1);
+						
