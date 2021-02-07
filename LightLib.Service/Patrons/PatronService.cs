@@ -120,7 +120,7 @@ namespace LightLib.Service.Patrons {
                 .Include(a => a.LibraryCard)
                 .Include(a => a.Asset)
                 .Where(a => a.LibraryCard.Id == libraryCardId)
-                .OrderByDescending(a => a.Since);
+                .OrderByDescending(a => a.CheckedOutSince);
 
             var pageOfCheckouts = await checkouts.ToPaginatedResult(page, perPage);
             var pageOfCheckoutsDto = _mapper.Map<List<CheckoutDto>>(pageOfCheckouts.Results);

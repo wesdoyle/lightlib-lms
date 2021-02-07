@@ -6,7 +6,8 @@ namespace LightLib.Data.Models {
     [Table("patrons")]
     public class Patron {
         public int Id { get; set; }
-
+        public DateTime CreatedOn { get; set; }
+        public DateTime UpdatedOn { get; set; }
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
         [Required] public string Address { get; set; }

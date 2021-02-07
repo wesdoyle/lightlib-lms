@@ -30,31 +30,31 @@
 
 <div class="row">
     <div class="container container-fluid">
-        <nav aria-label="Patron Table Navigation Top">
-            <ul class="pagination justify-content-end">
-                <li class="page-item small"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item small"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
-        <table class="table table-sm table-responsive-sm">
+        <table class="table table-responsive-sm table-hover">
             <thead class="thead-dark">
             <tr>
-                <th scope="col" style="width: 10%">Id</th>
+                <th scope="col" style="width: 30%">Details</th>
                 <th scope="col" style="width: 20%">Last</th>
                 <th scope="col" style="width: 20%">First</th>
-                <th scope="col" style="width: 15%">Email</th>
-                <th scope="col" style="width: 15%">Fees</th>
+                <th scope="col" style="width: 25%">Email</th>
+                <th scope="col" style="width: 5%">Fees</th>
             </tr>
             </thead>
             <tbody>
             @foreach (var patron in Model.PageOfPatrons.Results) {
-                <tr>
-                    <th scope="row">@patron.Id</th>
-                    <td>@patron.LastName</td>
-                    <td>@patron.FirstName</td>
-                    <td>@patron.Email</td>
-                    <td>$@Math.Round(patron.OverdueFees, 2)</td>
-                </tr>
+                <a asp-controller="Patron" asp-action="Detail" asp-route-id="@patron.Id">
+                    <tr>
+                        <th scope="row">
+                            <a asp-controller="Patron" asp-action="Detail" asp-route-id="@patron.Id">
+                                View Details
+                            </a>
+                        </th>
+                        <td>@patron.LastName</td>
+                        <td>@patron.FirstName</td>
+                        <td>@patron.Email</td>
+                        <td>$@Math.Round(patron.OverdueFees, 2)</td>
+                    </tr>
+                </a>
             }
             </tbody>
         </table>

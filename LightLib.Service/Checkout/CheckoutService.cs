@@ -67,7 +67,7 @@ namespace LightLib.Service.Checkout {
         public async Task<CheckoutDto> GetLatestCheckout(Guid assetId) {
             var latest = await _context.Checkouts
                 .Where(c => c.Asset.Id == assetId)
-                .OrderByDescending(c => c.Since)
+                .OrderByDescending(c => c.CheckedOutSince)
                 .FirstAsync();
             return _mapper.Map<CheckoutDto>(latest);
         }
@@ -132,8 +132,8 @@ namespace LightLib.Service.Checkout {
             var checkout = new Data.Models.Checkout {
                 Asset = libraryAsset,
                 LibraryCard = libraryCard,
-                Since = now,
-                Until = GetDefaultDateDue(now)
+                CheckedOutSince = now,
+                CheckedOutUntil = GetDefaultDateDue(now)
             };
 
             await _context.AddAsync(checkout);

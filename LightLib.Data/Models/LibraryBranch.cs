@@ -8,6 +8,8 @@ namespace LightLib.Data.Models {
     [Table("library_branches")]
     public class LibraryBranch {
         public int Id { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime UpdatedOn { get; set; }
         [Required] public string Name { get; set; }
         [Required] public string Address { get; set; }
         [Required] public string Telephone { get; set; }

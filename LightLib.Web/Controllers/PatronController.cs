@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LightLib.Models;
@@ -41,8 +40,27 @@ namespace LightLib.Web.Controllers {
         }
 
         public async Task<IActionResult> Detail(int id) {
-            var serviceResult = await _patronService.Get(id);
-            throw new NotImplementedException();
+            var patron = await _patronService.Get(id);
+            var assetsCheckedOut = await _patronService.GetPaginatedCheckouts(patron.Id, 1, 10);
+            var checkoutHistory = await _patronService.GetPaginatedCheckoutHistory(patron.Id, 1, 10);
+            var holds = await _patronService.GetPaginatedHolds(patron.Id, 1, 10);
+
+            var model = new PatronDetailModel() {
+                Id = patron.Id,
+                FirstName = patron.FirstName,
+                LastName = patron.LastName,
+                LibraryCardId = patron.LibraryCardId,
+                Address = patron.Address,
+                Telephone = patron.Telephone,
+                HomeLibrary = patron.HomeLibrary,
+                OverdueFees = patron.OverdueFees,
+                AssetsCheckedOut = assetsCheckedOut, 
+                CheckoutHistory = checkoutHistory,
+                Holds = holds,
+                MemberSince = patron.CreatedOn 
+            };
+
+            return View(model);
         }
     }
 }
