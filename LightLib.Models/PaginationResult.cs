@@ -6,5 +6,7 @@ namespace LightLib.Models {
         public int PerPage { get; set; }
         public int PageNumber { get; set; }
         public long TotalCount { get; set; }
+        public bool HasNextPage { get; set; }
+        public bool HasPreviousPage { get; set; }
     }
 }

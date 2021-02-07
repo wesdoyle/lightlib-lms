@@ -22,11 +22,8 @@ namespace LightLib.Web.Controllers {
             var patrons = await _patronService.GetPaginated(page, perPage);
 
             if (patrons != null && patrons.Results.Any()) {
-                var allAssets = patrons.Results.ToList();
                 var viewModel = new PatronIndexModel {
-                    PageOfPatrons = new PaginationResult<PatronDto> {
-                        Results = allAssets 
-                    }
+                    PageOfPatrons = patrons
                 };
 
                 return View(viewModel);

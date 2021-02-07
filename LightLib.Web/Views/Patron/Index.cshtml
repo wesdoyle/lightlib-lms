@@ -39,27 +39,40 @@
         <table class="table table-sm table-responsive-sm">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Fees</th>
+                <th scope="col" style="width: 10%">Id</th>
+                <th scope="col" style="width: 20%">Last</th>
+                <th scope="col" style="width: 20%">First</th>
+                <th scope="col" style="width: 15%">Email</th>
+                <th scope="col" style="width: 15%">Fees</th>
             </tr>
             </thead>
             <tbody>
             @foreach (var patron in Model.PageOfPatrons.Results) {
                 <tr>
                     <th scope="row">@patron.Id</th>
-                    <td>@patron.FirstName</td>
                     <td>@patron.LastName</td>
+                    <td>@patron.FirstName</td>
+                    <td>@patron.Email</td>
                     <td>$@Math.Round(patron.OverdueFees, 2)</td>
                 </tr>
             }
             </tbody>
         </table>
+        
         <nav aria-label="Patron Table Navigation Bottom">
+          @{
+              var previousPage = (Model.PageOfPatrons.PageNumber - 1);
+              var nextPage = (Model.PageOfPatrons.PageNumber + 1);
+              var prevDisabled = !Model.PageOfPatrons.HasPreviousPage ? "disabled" : "";
+              var nextDisabled = !Model.PageOfPatrons.HasNextPage ? "disabled" : "";
+          }
           <ul class="pagination justify-content-end">
-            <li class="page-item small"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item small"><a class="page-link" href="#">Next</a></li>
+              <li class="page-item small">
+                  @Html.ActionLink("Previous", "Index", "Patron", new { page = previousPage }, new { @class="page-link" })
+              </li>
+              <li class="page-item small">
+                  @Html.ActionLink("Next", "Index", "Patron", new { page = nextPage }, new { @class="page-link" })
+              </li>
           </ul>
         </nav>
     </div>
