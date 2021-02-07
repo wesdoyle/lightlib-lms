@@ -2,14 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using LightLib.Models;
+using LightLib.Models.DTOs;
 using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Branch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LightLib.Web.Controllers {
-    /// <summary>
-    /// Handles requests for Library Branch resources
-    /// </summary>
     public class BranchController : LibraryController {
         private readonly ILibraryBranchService _branchService;
 
@@ -17,38 +15,27 @@ namespace LightLib.Web.Controllers {
             _branchService = branchService;
         }
 
-        /// <summary>
-        /// Fetch a LibraryBranchIndex model, which contains a paginated collection
-        /// of Library Branch information
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
-            var paginationServiceResult = await _branchService.GetPaginated(page, perPage);
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int perPage = 10) {
+            var paginatedBranches = await _branchService.GetPaginated(page, perPage);
 
-            if (paginationServiceResult.Results.Any()) {
-                
-                foreach (var branch in paginationServiceResult.Results) {
+            if (paginatedBranches.Results.Any()) {
+                foreach (var branch in paginatedBranches.Results) {
                     var branchId = branch.Id;
                     branch.IsOpen = await _branchService.IsBranchOpen(branchId);
                     branch.NumberOfAssets = await _branchService.GetAssetCount(branchId);
                     branch.NumberOfPatrons = await _branchService.GetPatronCount(branchId);
                 }
 
-                // TODO
-                var branchModels = new PaginationResult<BranchDetailModel>();
-
                 var model = new BranchIndexModel {
-                    PageOfBranches = branchModels
+                    PageOfBranches = paginatedBranches 
                 };
 
                 return View(model);
             }
             
             var emptyModel = new BranchIndexModel {
-                PageOfBranches = new PaginationResult<BranchDetailModel> {
-                    Results = new List<BranchDetailModel>(),
+                PageOfBranches = new PaginationResult<LibraryBranchDto> {
+                    Results = new List<LibraryBranchDto>(),
                     PageNumber = page,
                     PerPage = perPage
                 }
@@ -57,12 +44,6 @@ namespace LightLib.Web.Controllers {
             return View(emptyModel);
         }
         
-        /// <summary>
-        /// Fetch a LibraryBranchDetailModel, which contains data about a particular
-        /// Library Branch
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public async Task<IActionResult> Detail(int id) {
 
             var serviceResult = await _branchService.Get(id);

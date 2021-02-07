@@ -1,6 +1,6 @@
 namespace LightLib.Models.DTOs.Assets {
     public class LibraryAssetDto {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public int Year { get; set; }
         public StatusDto Status { get; set; }

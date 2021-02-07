@@ -51,4 +51,8 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\libraries" />
+  </ItemGroup>
+
 </Project>

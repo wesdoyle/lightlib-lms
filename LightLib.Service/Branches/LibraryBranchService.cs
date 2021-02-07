@@ -56,11 +56,12 @@ namespace LightLib.Service.Branches {
         public async Task<bool> IsBranchOpen(int branchId) {
             var now = DateTime.UtcNow;
             
+            // TODO
             // Get the currentSeconds since start of current week 
             // Get the branchHours
             // Create BranchHoursOpenRangeForDay for today
             // Return true if currentSeconds falls in the range the struct 
-            throw new NotImplementedException();
+            return true;
         }
 
         public async Task<int> GetAssetCount(int branchId) {

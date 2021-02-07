@@ -1,4 +1,5 @@
-﻿@model LightLib.Web.Models.Branch.BranchIndexModel
+﻿@using LightLib.Web.Controllers
+@model LightLib.Web.Models.Branch.BranchIndexModel
 @{
     ViewBag.Title = "Branches";
 }
@@ -29,36 +30,21 @@
 <hr />
 
 <div class="row">
-    <div class="container container-fluid">
-        <nav aria-label="Branch Table Navigation Top">
-          <ul class="pagination justify-content-end">
-            <li class="page-item small"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item small"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </nav>
-        <table class="table table-sm table-responsive-sm">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Telephone</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var branch in Model.PageOfBranches.Results) {
-                <tr>
-                    <td>@branch.BranchName</td>
-                    <td>@branch.Telephone</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-        <nav aria-label="Branch Table Navigation Bottom">
-          <ul class="pagination justify-content-end">
-            <li class="page-item small"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item small"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </nav>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var branch in Model.PageOfBranches.Results) {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="@Url.Content($"~/images/libraries/{branch.ImageUrl}")" class="card-img-top" alt="Image of @branch.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@branch.Name</h5>
+                        <p class="card-text">@branch.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Number of Patrons: @branch.NumberOfPatrons</small>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
-
 
