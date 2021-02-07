@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LightLib.Data.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20210206225245_initial")]
+    [Migration("20210207004529_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,33 @@ namespace LightLib.Data.Migrations
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.2");
+
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Asset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("AvailabilityStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AvailabilityStatusId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("assets");
+                });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.AudioBook", b =>
                 {
@@ -69,7 +96,9 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AudioBooks");
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("audio_books");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.Book", b =>
@@ -117,7 +146,9 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("books");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.CDROM", b =>
@@ -164,7 +195,9 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cdroms");
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("cd_roms");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.DVD", b =>
@@ -211,34 +244,9 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dvds");
-                });
+                    b.HasIndex("AssetId");
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.LibraryAsset", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int?>("AvailabilityStatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AvailabilityStatusId");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("LibraryAssets");
+                    b.ToTable("dvds");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Assets.Periodical", b =>
@@ -274,45 +282,37 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Periodicals");
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("periodicals");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.Tag", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Tags.AssetTag", b =>
+                {
+                    b.Property<Guid>("AssetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AssetId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("AssetTag");
+                });
+
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Tags.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<int?>("AudioBookId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("BookId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("CDROMId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("DVDId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("PeriodicalId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AudioBookId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("CDROMId");
-
-                    b.HasIndex("DVDId");
-
-                    b.HasIndex("PeriodicalId");
 
                     b.ToTable("Tags");
                 });
@@ -334,7 +334,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses");
+                    b.ToTable("availability_statuses");
 
                     b.HasData(
                         new
@@ -386,7 +386,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("BranchHours");
+                    b.ToTable("branch_hours");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Checkout", b =>
@@ -396,7 +396,7 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<Guid?>("LibraryAssetId")
+                    b.Property<Guid?>("AssetId")
                         .HasColumnType("uuid");
 
                     b.Property<int?>("LibraryCardId")
@@ -410,11 +410,11 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LibraryAssetId");
+                    b.HasIndex("AssetId");
 
                     b.HasIndex("LibraryCardId");
 
-                    b.ToTable("Checkouts");
+                    b.ToTable("checkouts");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.CheckoutHistory", b =>
@@ -424,25 +424,25 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("CheckedIn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CheckedOut")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid?>("LibraryAssetId")
-                        .HasColumnType("uuid");
-
                     b.Property<int?>("LibraryCardId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LibraryAssetId");
+                    b.HasIndex("AssetId");
 
                     b.HasIndex("LibraryCardId");
 
-                    b.ToTable("CheckoutHistories");
+                    b.ToTable("checkout_histories");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Hold", b =>
@@ -452,22 +452,22 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("HoldPlaced")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("LibraryAssetId")
-                        .HasColumnType("uuid");
 
                     b.Property<int?>("LibraryCardId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LibraryAssetId");
+                    b.HasIndex("AssetId");
 
                     b.HasIndex("LibraryCardId");
 
-                    b.ToTable("Holds");
+                    b.ToTable("holds");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.LibraryBranch", b =>
@@ -489,8 +489,7 @@ namespace LightLib.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("timestamp without time zone");
@@ -501,7 +500,7 @@ namespace LightLib.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LibraryBranches");
+                    b.ToTable("library_branches");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.LibraryCard", b =>
@@ -511,15 +510,15 @@ namespace LightLib.Data.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal>("Fees")
+                    b.Property<decimal>("CurrentFees")
                         .HasColumnType("numeric");
+
+                    b.Property<DateTime>("Issued")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LibraryCards");
+                    b.ToTable("library_cards");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Patron", b =>
@@ -542,16 +541,14 @@ namespace LightLib.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("HomeLibraryBranchId")
                         .HasColumnType("integer");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("LibraryCardId")
                         .HasColumnType("integer");
@@ -565,10 +562,10 @@ namespace LightLib.Data.Migrations
 
                     b.HasIndex("LibraryCardId");
 
-                    b.ToTable("Patrons");
+                    b.ToTable("patrons");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.LibraryAsset", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Asset", b =>
                 {
                     b.HasOne("LightLib.Data.Models.AvailabilityStatus", "AvailabilityStatus")
                         .WithMany()
@@ -583,27 +580,78 @@ namespace LightLib.Data.Migrations
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.Tag", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.AudioBook", b =>
                 {
-                    b.HasOne("LightLib.Data.Models.Assets.AudioBook", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("AudioBookId");
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("LightLib.Data.Models.Assets.Book", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("BookId");
+                    b.Navigation("Asset");
+                });
 
-                    b.HasOne("LightLib.Data.Models.Assets.CDROM", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("CDROMId");
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Book", b =>
+                {
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("LightLib.Data.Models.Assets.DVD", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("DVDId");
+                    b.Navigation("Asset");
+                });
 
-                    b.HasOne("LightLib.Data.Models.Assets.Periodical", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("PeriodicalId");
+            modelBuilder.Entity("LightLib.Data.Models.Assets.CDROM", b =>
+                {
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("LightLib.Data.Models.Assets.DVD", b =>
+                {
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Periodical", b =>
+                {
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Tags.AssetTag", b =>
+                {
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
+                        .WithMany("AssetTags")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LightLib.Data.Models.Assets.Tags.Tag", "Tag")
+                        .WithMany("AssetTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.BranchHours", b =>
@@ -617,45 +665,45 @@ namespace LightLib.Data.Migrations
 
             modelBuilder.Entity("LightLib.Data.Models.Checkout", b =>
                 {
-                    b.HasOne("LightLib.Data.Models.Assets.LibraryAsset", "LibraryAsset")
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("LibraryAssetId");
+                        .HasForeignKey("AssetId");
 
                     b.HasOne("LightLib.Data.Models.LibraryCard", "LibraryCard")
                         .WithMany("Checkouts")
                         .HasForeignKey("LibraryCardId");
 
-                    b.Navigation("LibraryAsset");
+                    b.Navigation("Asset");
 
                     b.Navigation("LibraryCard");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.CheckoutHistory", b =>
                 {
-                    b.HasOne("LightLib.Data.Models.Assets.LibraryAsset", "LibraryAsset")
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("LibraryAssetId");
+                        .HasForeignKey("AssetId");
 
                     b.HasOne("LightLib.Data.Models.LibraryCard", "LibraryCard")
                         .WithMany()
                         .HasForeignKey("LibraryCardId");
 
-                    b.Navigation("LibraryAsset");
+                    b.Navigation("Asset");
 
                     b.Navigation("LibraryCard");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.Hold", b =>
                 {
-                    b.HasOne("LightLib.Data.Models.Assets.LibraryAsset", "LibraryAsset")
+                    b.HasOne("LightLib.Data.Models.Assets.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("LibraryAssetId");
+                        .HasForeignKey("AssetId");
 
                     b.HasOne("LightLib.Data.Models.LibraryCard", "LibraryCard")
                         .WithMany()
                         .HasForeignKey("LibraryCardId");
 
-                    b.Navigation("LibraryAsset");
+                    b.Navigation("Asset");
 
                     b.Navigation("LibraryCard");
                 });
@@ -675,29 +723,14 @@ namespace LightLib.Data.Migrations
                     b.Navigation("LibraryCard");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.AudioBook", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Asset", b =>
                 {
-                    b.Navigation("Tags");
+                    b.Navigation("AssetTags");
                 });
 
-            modelBuilder.Entity("LightLib.Data.Models.Assets.Book", b =>
+            modelBuilder.Entity("LightLib.Data.Models.Assets.Tags.Tag", b =>
                 {
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("LightLib.Data.Models.Assets.CDROM", b =>
-                {
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("LightLib.Data.Models.Assets.DVD", b =>
-                {
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("LightLib.Data.Models.Assets.Periodical", b =>
-                {
-                    b.Navigation("Tags");
+                    b.Navigation("AssetTags");
                 });
 
             modelBuilder.Entity("LightLib.Data.Models.LibraryBranch", b =>
