@@ -8,7 +8,7 @@ This project is intended to serve as a long-term resource for small .NET web mon
 
 - PostgreSQL 13.1 (running in Docker for development)
 - ASP.NET 5.0 MVC with Entity Framwork Core
-- Standard Razor views
+- Standard Razor views with Bootstrap 5
 
 ## Video Series
 
