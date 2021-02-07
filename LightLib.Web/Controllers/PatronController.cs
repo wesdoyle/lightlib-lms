@@ -17,11 +17,12 @@ namespace LightLib.Web.Controllers {
             _patronService = patronService;
         }
 
-        public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
-            var serviceResult = await _patronService.GetPaginated(page, perPage);
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int perPage = 10) {
+            
+            var patrons = await _patronService.GetPaginated(page, perPage);
 
-            if (serviceResult != null && serviceResult.Results.Any()) {
-                var allAssets = serviceResult.Results.ToList();
+            if (patrons != null && patrons.Results.Any()) {
+                var allAssets = patrons.Results.ToList();
                 var viewModel = new PatronIndexModel {
                     PageOfPatrons = new PaginationResult<PatronDto> {
                         Results = allAssets 

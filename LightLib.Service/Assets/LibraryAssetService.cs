@@ -7,6 +7,7 @@ using LightLib.Data;
 using LightLib.Data.Models.Assets;
 using LightLib.Models;
 using LightLib.Models.DTOs;
+using LightLib.Models.DTOs.Assets;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

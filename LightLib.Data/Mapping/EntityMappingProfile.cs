@@ -1,6 +1,7 @@
 using AutoMapper;
 using LightLib.Data.Models.Assets;
 using LightLib.Models.DTOs;
+using LightLib.Models.DTOs.Assets;
 
 namespace LightLib.Data.Mapping {
     /// <summary>

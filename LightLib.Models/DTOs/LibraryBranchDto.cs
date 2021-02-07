@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LightLib.Models.DTOs.Assets;
 
 namespace LightLib.Models.DTOs {
     public class LibraryBranchDto {

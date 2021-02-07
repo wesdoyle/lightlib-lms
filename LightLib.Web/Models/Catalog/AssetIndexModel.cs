@@ -1,5 +1,5 @@
 ﻿using LightLib.Models;
-using LightLib.Models.DTOs;
+using LightLib.Models.DTOs.Assets;
 
 namespace LightLib.Web.Models.Catalog {
     public class AssetIndexModel {

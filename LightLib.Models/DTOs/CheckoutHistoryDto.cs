@@ -1,4 +1,5 @@
 using System;
+using LightLib.Models.DTOs.Assets;
 
 namespace LightLib.Models.DTOs {
     public class CheckoutHistoryDto {

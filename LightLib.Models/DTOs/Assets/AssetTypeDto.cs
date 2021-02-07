@@ -1,4 +1,4 @@
-namespace LightLib.Models.DTOs {
+namespace LightLib.Models.DTOs.Assets {
     public class AssetTypeDto {
         public int Id { get; set; }
         public string Name { get; set; }
