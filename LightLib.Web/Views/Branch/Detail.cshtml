@@ -1,0 +1,97 @@
+﻿@model LightLib.Web.Models.Branch.BranchDetailModel
+@{
+    ViewBag.Title = $"{@Model.BranchName} Branch";
+}
+
+<section>
+  <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark" 
+       style="background-image: 
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.95)), 
+                url(@Url.Content($"~/images/libraries/{Model.ImageUrl}"));
+                background-position: center;
+                background-repeat: repeat;
+                background-size: auto;">
+    <div class="row">
+    <div class="col-md-8 px-0">
+      <h1 class="display-1 fw-bold">@Model.BranchName</h1>
+      <p class="lead my-3">@Model.Description</p>
+    </div>
+    <div class="col-md-4 px-0">
+      <figure class="figure">
+        <img
+          src="@Url.Content($"~/images/libraries/{Model.ImageUrl}")"
+          class="figure-img rounded img-thumbnail img-fluid"
+          alt="Image of @Model.BranchName">
+        <figcaption class="figure-caption text-light">
+          Photo of @Model.BranchName
+        </figcaption>
+      </figure>
+    </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<section>
+  <div class="container">
+    <div class="row">
+      <h3>Branch Data</h3>
+      <div class="col-6">
+        <h4>Branch Info</h4>
+        <table class="table table-sm">
+          <tr>
+            <td>Address</td>
+            <td>@Model.Address</td>
+          </tr>
+          <tr>
+            <td>Telephone</td>
+            <td>@Model.Telephone</td>
+          </tr>
+          <tr>
+            <td>Date Established</td>
+            <td>@Model.BranchOpenedDate</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-6">
+        <h4>Branch Asset Summary</h4>
+        <table class="table table-sm">
+          <tr>
+            <td>Registered Patrons</td>
+            <td>@Model.NumberOfPatrons</td>
+          </tr>
+          <tr>
+            <td>Total Asset Count</td>
+            <td>@Model.NumberOfAssets</td>
+          </tr>
+          <tr>
+            <td>Total Asset Value</td>
+            <td>@Model.TotalAssetValue</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<section>
+  <div class="container">
+  <div class="row">
+    <h3>Schedule</h3>
+    <div class="col-lg-12">
+      <div id="branchHours">
+      <table class="table table-sm">
+          @foreach (var day in @Model.HoursOpen) {
+            <tr>
+                <td>@day</td>
+            </tr>
+          }
+      </table>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>

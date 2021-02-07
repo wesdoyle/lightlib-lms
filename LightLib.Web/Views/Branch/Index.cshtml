@@ -1,0 +1,54 @@
+﻿@using LightLib.Web.Controllers
+@model LightLib.Web.Models.Branch.BranchIndexModel
+@{
+    ViewBag.Title = "Branches";
+}
+
+<h2 class="lms-section-heading">
+    Library Branches 
+</h2>
+
+<div class="row">
+    <section>
+        <p>
+            <strong>Branches</strong> consist of individual library locations.
+        </p> 
+        <p>
+            Use this page view details about each Branch in the system.
+        </p>
+    </section>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <button class="btn btn-primary btn-sm">
+            Register New Library Branch 
+        </button>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var branch in Model.PageOfBranches.Results) {
+            <div class="col">
+                <div class="card h-100">
+                    <a asp-controller="Branch" asp-action="Detail" asp-route-id="@branch.Id">
+                        <img src="@Url.Content($"~/images/libraries/{branch.ImageUrl}")" class="card-img-top" alt="Image of @branch.Name">
+                    </a>
+                    <div class="card-body">
+                        <a asp-controller="Branch" asp-action="Detail" asp-route-id="@branch.Id">
+                            <h5 class="card-title">@branch.Name</h5>
+                        </a>
+                        <p class="card-text">@branch.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Number of Patrons: @branch.NumberOfPatrons</small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+  <div class="album py-5">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+          <div class="card h-100">
+            <a asp-controller="Catalog" asp-action="Index">
+            <img src="@Url.Content("~/images/books_thumb.png")" 
+                 class="card-img-top" 
+                 alt="Manage Library Assets">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">
+                  Assets
+              </h5>
+              <p class="card-text">
+                Search and manage current library assets, current checkouts, and holds
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <a asp-controller="Patron" asp-action="Index">
+              <img src="@Url.Content("~/images/patron_thumb.png")" 
+                   class="card-img-top" 
+                   alt="Manage Library Patrons">
+            </a>
+              <div class="card-body">
+                <h5 class="card-title">
+                    Patrons
+                </h5>
+                <p class="card-text">
+                  Manage library patrons, including checking out assets, updating contact information, and handling fees
+                </p>
+              </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <a asp-controller="Branch" asp-action="Index">
+            <img src="@Url.Content("~/images/library_thumb.png")" 
+                 class="card-img-top" 
+                 alt="Manage Library Branches">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">
+                  Branches
+              </h5>
+              <p class="card-text">
+                Manage library branches and branch hours. View number of patrons, total assets, and contact information
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

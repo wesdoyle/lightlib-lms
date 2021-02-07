@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  lightlib-db:
+    image: postgres:13.1-alpine
+    container_name: lightlib-db
+    environment:
+      - POSTGRES_DATABASE=lightlib_dev
+      - POSTGRES_USER=library_admin
+      - POSTGRES_PASSWORD=library_admin
+    ports:
+      - 5432:5432
+    volumes:
+      - app-data:/var/lib/postgres/data
+    restart: on-failure
+
+volumes:
+  app-data:
