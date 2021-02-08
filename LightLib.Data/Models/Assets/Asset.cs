@@ -14,5 +14,11 @@ namespace LightLib.Data.Models.Assets {
         public string ImageUrl { get; set; }
         public LibraryBranch Location { get; set; }
         public List<AssetTag> AssetTags { get; set; }
+        
+        public virtual Book Book { get; set; }
+        public virtual AudioBook AudioBook { get; set; }
+        public virtual AudioCd AudioCd { get; set; }
+        public virtual DVD DVD { get; set; }
+        public virtual Periodical Periodical { get; set; }
     }
 }

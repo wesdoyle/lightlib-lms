@@ -36,11 +36,11 @@ namespace LightLib.Data {
          }
 
          private static void LinkAssets(ModelBuilder modelBuilder) {
-             modelBuilder.Entity<Book>().HasOne(book => book.Asset);
-             modelBuilder.Entity<AudioCd>().HasOne(cd => cd.Asset);
-             modelBuilder.Entity<DVD>().HasOne(dvd => dvd.Asset);
-             modelBuilder.Entity<Periodical>().HasOne(p => p.Asset);
-             modelBuilder.Entity<AudioBook>().HasOne(ab => ab.Asset);
+             modelBuilder.Entity<Book>().HasOne(book => book.Asset).WithOne(a => a.Book);
+             modelBuilder.Entity<AudioBook>().HasOne(ab => ab.Asset).WithOne(a => a.AudioBook);
+             modelBuilder.Entity<AudioCd>().HasOne(cd => cd.Asset).WithOne(a => a.AudioCd);
+             modelBuilder.Entity<DVD>().HasOne(dvd => dvd.Asset).WithOne(a => a.DVD);
+             modelBuilder.Entity<Periodical>().HasOne(p => p.Asset).WithOne(a => a.Periodical);
          }
 
          private static void LinkAssetTags(ModelBuilder modelBuilder) {

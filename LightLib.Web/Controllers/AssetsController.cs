@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LightLib.Models;
+using LightLib.Models.DTOs;
 using LightLib.Models.DTOs.Assets;
 using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Catalog;
@@ -25,11 +26,11 @@ namespace LightLib.Web.Controllers {
             _holdService = holdService;
         }
 
-        public async Task<IActionResult> Index([FromQuery] int page, [FromQuery] int perPage) {
-            var paginationServiceResult = await _assetsService.GetPaginated(page, perPage);
-
-            if (paginationServiceResult != null && paginationServiceResult.Results.Any()) {
-                var allAssets = paginationServiceResult.Results.ToList();
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int perPage = 8) {
+            var pageOfAssets = await _assetsService.GetPaginated(page, perPage);
+            
+            if (pageOfAssets != null && pageOfAssets.Results.Any()) {
+                var allAssets = pageOfAssets.Results.ToList();
                 var viewModel = new AssetIndexModel {
                     PageOfAssets = new PaginationResult<LibraryAssetDto> {
                         Results = allAssets 
@@ -50,8 +51,51 @@ namespace LightLib.Web.Controllers {
             return View(emptyModel);
         }
 
-        public async Task<IActionResult> Detail(int id) {
-            throw new NotImplementedException();
+        public async Task<IActionResult> Detail(
+            string assetId, 
+            [FromQuery] int checkoutHistoryPage = 1, 
+            [FromQuery] int checkoutHistoryPerPage = 5,
+            [FromQuery] int holdsPage = 1,
+            [FromQuery] int holdsPerPage = 5) {
+            
+            var assetGuid = Guid.Parse(assetId);
+            var asset = await _assetsService.Get(assetGuid);
+            var currentBranch = await _assetsService.GetCurrentLocation(assetGuid);
+            var currentPatron = await _checkoutsService.GetCurrentCheckoutPatronForAsset(assetGuid);
+            var latestCheckout = await _checkoutsService.GetLatestCheckoutForAsset(assetGuid);
+            
+            var checkoutHistory = await _checkoutsService.GetCheckoutHistory(
+                assetGuid, 
+                checkoutHistoryPage, 
+                checkoutHistoryPerPage);
+            
+            var currentHolds = await _holdService.GetCurrentHoldsPaginated(
+                assetGuid, 
+                holdsPage, 
+                holdsPerPage);
+
+            var model = new AssetDetailModel() {
+                AssetId = asset.Id,
+                ImageUrl = asset.ImageUrl,
+                ItemStatus = asset.Status.Name,
+                Cost = asset.Cost,
+                CurrentBranchLocation = currentBranch.Name,
+                PatronName = currentPatron,
+                LatestCheckout = latestCheckout,
+                CheckoutHistory = checkoutHistory,
+                CurrentHolds = currentHolds,
+                
+                // TODO: Tags feature
+                Tags = new List<string>(),
+                
+                Book = new BookDto(),
+                DVD = new DvdDto(),
+                Periodical = new PeriodicalDto(),
+                AudioBook = new AudioBookDto(),
+                AudioCD = new AudioCdDto()
+            };
+
+            return View(model);
         }
 
         public async Task<IActionResult> VisitCheckOutPage(int id) {

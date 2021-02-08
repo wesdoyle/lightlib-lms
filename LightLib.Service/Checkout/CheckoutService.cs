@@ -64,7 +64,7 @@ namespace LightLib.Service.Checkout {
             return _mapper.Map<CheckoutDto>(checkout);
         }
 
-        public async Task<CheckoutDto> GetLatestCheckout(Guid assetId) {
+        public async Task<CheckoutDto> GetLatestCheckoutForAsset(Guid assetId) {
             var latest = await _context.Checkouts
                 .Where(c => c.Asset.Id == assetId)
                 .OrderByDescending(c => c.CheckedOutSince)
@@ -75,7 +75,7 @@ namespace LightLib.Service.Checkout {
         public async Task<bool> IsCheckedOut(Guid assetId) 
             => await _context.Checkouts .AnyAsync(a => a.Asset.Id == assetId);
 
-        public async Task<string> GetCurrentPatron(Guid assetId) {
+        public async Task<string> GetCurrentCheckoutPatronForAsset(Guid assetId) {
             var checkout = await _context.Checkouts
                 .Include(a => a.Asset)
                 .Include(a => a.LibraryCard)
@@ -85,7 +85,7 @@ namespace LightLib.Service.Checkout {
                 // TODO
             }
 
-            var cardId = checkout.LibraryCard.Id;
+            var cardId = checkout?.LibraryCard.Id;
 
             var patron = await _context.Patrons
                 .Include(p => p.LibraryCard)

@@ -9,9 +9,9 @@ namespace LightLib.Service.Interfaces {
         Task<CheckoutDto> Get(int checkoutId);
         Task<bool> CheckInItem(Guid assetId);
         Task<bool> CheckOutItem(Guid assetId, int libraryCardId);
-        Task<CheckoutDto> GetLatestCheckout(Guid assetId);
+        Task<CheckoutDto> GetLatestCheckoutForAsset(Guid assetId);
         Task<bool> IsCheckedOut(Guid assetId);
-        Task<string> GetCurrentPatron(Guid assetId);
+        Task<string> GetCurrentCheckoutPatronForAsset(Guid assetId);
         Task<PaginationResult<CheckoutDto>> GetPaginated(int page, int perPage);
         Task<PaginationResult<CheckoutHistoryDto>> GetCheckoutHistory(Guid assetId, int page, int perPage);
     }
