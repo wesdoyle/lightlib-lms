@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LightLib.Models;
-using LightLib.Models.DTOs;
 using LightLib.Models.DTOs.Assets;
 using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Catalog;
@@ -33,7 +32,12 @@ namespace LightLib.Web.Controllers {
                 var allAssets = pageOfAssets.Results.ToList();
                 var viewModel = new AssetIndexModel {
                     PageOfAssets = new PaginationResult<LibraryAssetDto> {
-                        Results = allAssets 
+                        Results = allAssets,
+                        PageNumber = page,
+                        PerPage = perPage,
+                        // TODO
+                        HasNextPage = true,
+                        HasPreviousPage = true
                     }
                 };
 
@@ -77,7 +81,7 @@ namespace LightLib.Web.Controllers {
             var model = new AssetDetailModel() {
                 AssetId = asset.Id,
                 ImageUrl = asset.ImageUrl,
-                ItemStatus = asset.Status.Name,
+                ItemStatus = asset.AvailabilityStatus.Name,
                 Cost = asset.Cost,
                 CurrentBranchLocation = currentBranch.Name,
                 PatronName = currentPatron,
@@ -88,11 +92,11 @@ namespace LightLib.Web.Controllers {
                 // TODO: Tags feature
                 Tags = new List<string>(),
                 
-                Book = new BookDto(),
-                DVD = new DvdDto(),
-                Periodical = new PeriodicalDto(),
-                AudioBook = new AudioBookDto(),
-                AudioCD = new AudioCdDto()
+                Book = asset.Book,
+                DVD = asset.DVD,
+                Periodical = asset.Periodical,
+                AudioBook = asset.AudioBook,
+                AudioCD = asset.AudioCD,
             };
 
             return View(model);

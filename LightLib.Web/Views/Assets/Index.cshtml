@@ -1,4 +1,35 @@
+@using LightLib.Models
 @model LightLib.Web.Models.Catalog.AssetIndexModel
+
+@functions  
+{
+    private string GetIconForType(AssetType? assetType) {
+        if (assetType == AssetType.Book) {
+            return "book";
+        }
+
+        if (assetType == AssetType.Periodical) {
+            return "newspaper";
+        }
+        
+        if (assetType == AssetType.DVD) {
+            return "play-btn-fill";
+        }
+
+        if (assetType == AssetType.AudioCD) {
+            
+            return "music-note";
+        }
+        
+        if (assetType == AssetType.AudioBook) {
+            
+            return "headphones";
+        }
+
+        return "patch-question-fill";
+    }
+} 
+
 @{
     ViewBag.Title = "Library Assets";
 }
@@ -39,7 +70,8 @@
         <table class="table table-sm table-responsive-sm">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Id</th>
+                <th scope="col">Asset Type</th>
+                <th scope="col">Author / Creator</th>
                 <th scope="col">Title</th>
                 <th scope="col">Status</th>
                 <th scope="col">Location</th>
@@ -48,18 +80,39 @@
             <tbody>
             @foreach (var asset in Model.PageOfAssets.Results) {
                 <tr>
-                    <th scope="row">@asset.Id</th>
-                    <td>@asset.Title</td>
-                    <td>@asset.Status.Name</td>
-                    <td>@asset.Location.Name</td>
+                    <th scope="row">
+                        <i class="bi bi-@GetIconForType(asset.ViewAssetType)"></i>
+                    </th>
+                    <td>
+                        @asset.ViewAuthor
+                    </td>
+                    <td>
+                        @asset.ViewTitle
+                    </td>
+                    <td>
+                        @asset.AvailabilityStatus.Name
+                    </td>
+                    <td>
+                        @asset.Location.Name
+                    </td>
                 </tr>
             }
             </tbody>
         </table>
         <nav aria-label="Asset Table Navigation Bottom">
+          @{
+              var previousPage = (Model.PageOfAssets.PageNumber - 1);
+              var nextPage = (Model.PageOfAssets.PageNumber + 1);
+              var prevDisabled = !Model.PageOfAssets.HasPreviousPage ? "disabled" : "";
+              var nextDisabled = !Model.PageOfAssets.HasNextPage ? "disabled" : "";
+          }
           <ul class="pagination justify-content-end">
-            <li class="page-item small"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item small"><a class="page-link" href="#">Next</a></li>
+              <li class="page-item small">
+                  @Html.ActionLink("Previous", "Index", "Assets", new { page = previousPage }, new { @class="page-link" })
+              </li>
+              <li class="page-item small">
+                  @Html.ActionLink("Next", "Index", "Assets", new { page = nextPage }, new { @class="page-link" })
+              </li>
           </ul>
         </nav>
     </div>

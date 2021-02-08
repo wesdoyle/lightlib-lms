@@ -35,6 +35,11 @@ namespace LightLib.Service.Assets {
             var asset = await _context.LibraryAssets
                 .Include(a => a.AvailabilityStatus)
                 .Include(a => a.Location)
+                .Include(a => a.Book)
+                .Include(a => a.AudioBook)
+                .Include(a => a.AudioCd)
+                .Include(a => a.Periodical)
+                .Include(a => a.DVD)
                 .FirstAsync(a => a.Id == assetId);
             return _mapper.Map<LibraryAssetDto>(asset);
         }
@@ -42,6 +47,13 @@ namespace LightLib.Service.Assets {
         public async Task<PaginationResult<LibraryAssetDto>> GetPaginated(int page, int perPage) {
             var assets = _context.LibraryAssets
                 .Include(a => a.AvailabilityStatus)
+                .Include(a => a.AvailabilityStatus)
+                .Include(a => a.Location)
+                .Include(a => a.Book)
+                .Include(a => a.AudioBook)
+                .Include(a => a.AudioCd)
+                .Include(a => a.Periodical)
+                .Include(a => a.DVD)
                 .Include(a => a.Location);
             var pageOfAssets = await assets.ToPaginatedResult(page, perPage);
             var pageOfAssetDtos = _mapper.Map<List<LibraryAssetDto>>(pageOfAssets.Results);
