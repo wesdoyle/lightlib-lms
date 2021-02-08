@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LightLib.Models;
 using LightLib.Models.DTOs;
+using LightLib.Service.Helpers;
 using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Patron;
 using Microsoft.AspNetCore.Mvc;
@@ -44,11 +46,13 @@ namespace LightLib.Web.Controllers {
             var assetsCheckedOut = await _patronService.GetPaginatedCheckouts(patron.Id, 1, 10);
             var checkoutHistory = await _patronService.GetPaginatedCheckoutHistory(patron.Id, 1, 10);
             var holds = await _patronService.GetPaginatedHolds(patron.Id, 1, 10);
+            var memberLengthOfTime = TimeSpanHumanizer.GetReadableTimespan(DateTime.UtcNow - patron.CreatedOn);
 
             var model = new PatronDetailModel() {
                 Id = patron.Id,
                 FirstName = patron.FirstName,
                 LastName = patron.LastName,
+                Email = patron.Email,
                 LibraryCardId = patron.LibraryCardId,
                 Address = patron.Address,
                 Telephone = patron.Telephone,
@@ -57,7 +61,7 @@ namespace LightLib.Web.Controllers {
                 AssetsCheckedOut = assetsCheckedOut, 
                 CheckoutHistory = checkoutHistory,
                 Holds = holds,
-                MemberSince = patron.CreatedOn 
+                HasBeenMemberFor = memberLengthOfTime 
             };
 
             return View(model);

@@ -8,21 +8,11 @@
     <div class="row">
       <div class="col-md-8 px-0">
         <h1 class="display-1 fw-bold">@Model.FirstName @Model.LastName</h1>
-        <p class="lead my-3">Member Since: @Model.MemberSince</p>
+        <p class="lead my-3">Member for @Model.HasBeenMemberFor</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<hr />
-
-<section>
-  <div class="container">
-    <div class="row">
-      <h3>Patron Data</h3>
-      <div class="col-6">
+      <div class="col-4">
         <h4>Patron Info</h4>
-        <table class="table table-sm">
+        <table class="table table-sm table-dark text-white">
           <tr>
             <td>Address</td>
             <td>@Model.Address</td>
@@ -37,10 +27,36 @@
           </tr>
         </table>
       </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<section>
+  <div class="container">
+    <div class="row">
       <div class="col-6">
-        <h4>Patron Checkouts</h4>
-        <table class="table table-sm">
-        </table>
+        <h4>Current Checked Out Assets</h4>
+        @if (!Model.AssetsCheckedOut.Results.Any()) {
+          <p>
+            No items checked out.
+          </p>
+        } else {
+          <table class="table table-sm">
+          </table>
+        }
+      </div>
+      <div class="col-6">
+        <h4>Current Holds</h4>
+        @if (!Model.Holds.Results.Any()) {
+          <p>
+            No items currently on hold.
+          </p>
+        } else {
+          <table class="table table-sm">
+          </table>
+        }
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@ namespace LightLib.Web.Models.Patron {
         public string Email { get; set; }
         public string HomeLibrary { get; set; }
         public decimal? OverdueFees { get; set; }
-        public DateTime? MemberSince { get; set; }
+        public string HasBeenMemberFor { get; set; }
         public PaginationResult<CheckoutDto> AssetsCheckedOut { get; set; }
         public PaginationResult<CheckoutHistoryDto> CheckoutHistory { get; set; }
         public PaginationResult<HoldDto> Holds { get; set; }

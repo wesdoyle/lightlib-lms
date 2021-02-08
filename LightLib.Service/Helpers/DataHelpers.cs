@@ -5,8 +5,7 @@ using LightLib.Data.Models;
 namespace LightLib.Service.Helpers {
     public static class DataHelpers {
         
-        public static IEnumerable<string> HumanizeBusinessHours(IEnumerable<BranchHours> branchHours) {
-            
+        public static IEnumerable<string> HumanizeBusinessHours(IEnumerable<BranchHours> branchHours) { 
             var hours = new List<string>();
 
             foreach (var time in branchHours) {
@@ -20,10 +19,8 @@ namespace LightLib.Service.Helpers {
             return hours;
         }
 
-        private static string HumanizeDayOfWeek(int number) 
-            => Enum.GetName(typeof(DayOfWeek), number);
+        private static string HumanizeDayOfWeek(int number) => Enum.GetName(typeof(DayOfWeek), number);
 
-        private static string HumanizeTime(int time) 
-            => TimeSpan.FromHours(time).ToString("hh':'mm");
+        private static string HumanizeTime(int time) => TimeSpan.FromHours(time).ToString("hh':'mm");
     }
 }
