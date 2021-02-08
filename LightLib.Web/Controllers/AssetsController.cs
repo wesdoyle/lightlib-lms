@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LightLib.Web.Controllers {
     
-    public class CatalogController : LibraryController {
+    public class AssetsController : LibraryController {
         
         private readonly ILibraryAssetService _assetsService;
         private readonly ICheckoutService _checkoutsService;
         private readonly IHoldService _holdService;
 
-        public CatalogController(
+        public AssetsController(
             ILibraryAssetService assetsService, 
             IHoldService holdService,
             ICheckoutService checkoutsService) {
