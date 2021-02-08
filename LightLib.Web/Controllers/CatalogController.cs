@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LightLib.Models;
-using LightLib.Models.DTOs;
 using LightLib.Models.DTOs.Assets;
 using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Catalog;

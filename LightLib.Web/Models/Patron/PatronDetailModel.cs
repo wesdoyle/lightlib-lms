@@ -1,5 +1,4 @@
-﻿using System;
-using LightLib.Models;
+﻿using LightLib.Models;
 using LightLib.Models.DTOs;
 
 namespace LightLib.Web.Models.Patron {
